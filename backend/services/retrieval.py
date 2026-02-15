@@ -40,20 +40,30 @@ def retrieve_context(question, limit=10):
     where = ' OR '.join(conditions)
     params.append(limit)
 
+    # Build parameterized relevance scoring
+    relevance_parts = []
+    relevance_params = []
+    for w in words:
+        pattern = f'%{w}%'
+        relevance_parts.append(
+            "(CASE WHEN p.title LIKE ? THEN 2 ELSE 0 END) + "
+            "(CASE WHEN p.description LIKE ? THEN 1 ELSE 0 END) + "
+            "(CASE WHEN p.summary_text LIKE ? THEN 1 ELSE 0 END)"
+        )
+        relevance_params.extend([pattern, pattern, pattern])
+
+    relevance_expr = ' + '.join(relevance_parts)
+    all_params = relevance_params + params
+
     rows = db.execute(f'''
         SELECT p.*, s.name as state_name, s.code as state_code,
-               ({' + '.join(
-                    f"(CASE WHEN p.title LIKE '%{w}%' THEN 2 ELSE 0 END) + "
-                    f"(CASE WHEN p.description LIKE '%{w}%' THEN 1 ELSE 0 END) + "
-                    f"(CASE WHEN p.summary_text LIKE '%{w}%' THEN 1 ELSE 0 END)"
-                    for w in words
-                )}) as relevance
+               ({relevance_expr}) as relevance
         FROM policies p
         LEFT JOIN states s ON p.state_id = s.id
         WHERE {where}
         ORDER BY relevance DESC, p.date_introduced DESC
         LIMIT ?
-    ''', params).fetchall()
+    ''', all_params).fetchall()
     db.close()
     return [dict(r) for r in rows]
 
