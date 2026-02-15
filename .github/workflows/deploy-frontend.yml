@@ -36,7 +36,7 @@ jobs:
         run: npm run build
         working-directory: frontend
         env:
-          VITE_API_URL: https://statescope.onrender.com/api
+          VITE_API_URL: https://statescope-1.onrender.com/api
 
       - uses: actions/configure-pages@v4
 
