@@ -4,7 +4,7 @@ services:
     runtime: python
     region: oregon
     buildCommand: pip install -r backend/requirements.txt && python backend/scripts/init_db.py && python backend/scripts/seed_data.py
-    startCommand: gunicorn --chdir backend --bind 0.0.0.0:$PORT app:app
+    startCommand: python -m gunicorn --chdir backend --bind 0.0.0.0:$PORT app:app
     envVars:
       - key: ANTHROPIC_API_KEY
         sync: false
