@@ -451,8 +451,8 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 220px;
-  height: 200px;
+  width: clamp(100px, 22%, 220px);
+  height: clamp(90px, 33%, 200px);
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -1113,7 +1113,15 @@
   }
 
   .northeast-inset {
-    display: none;
+    bottom: 8px;
+    right: 8px;
+    border-radius: 6px;
+  }
+
+  .northeast-inset-label {
+    font-size: 0.5rem;
+    top: 4px;
+    left: 6px;
   }
 
   .state-tooltip {
