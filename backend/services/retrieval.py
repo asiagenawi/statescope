@@ -71,7 +71,7 @@ def retrieve_context(question, limit=10):
 def format_context(policies):
     """Format retrieved policies into a text block for the Claude prompt."""
     if not policies:
-        return "No relevant policies found in the database."
+        return "No specific policies matched this query."
 
     parts = []
     for i, p in enumerate(policies, 1):

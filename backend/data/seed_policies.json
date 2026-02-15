@@ -1078,6 +1078,66 @@
       "summary_text": "Published by OSPI, making Washington the fifth state to issue state-level AI guidance. Developed by a diverse advisory group of educators, technology experts, and researchers. Now on version 3.0 with ongoing updates. Covers ethical considerations and responsible classroom use.",
       "source_url": "https://ospi.k12.wa.us/student-success/resources-subject-area/human-centered-artificial-intelligence-schools",
       "topics": ["Teacher Training", "Equity & Access", "Data Governance"]
+    },
+    {
+      "state": "NY",
+      "title": "A6874 - AI Literacy in the Digital Equity Competitive Grant Program",
+      "description": "Establishes an AI literacy grant program to expand equitable access to AI education in New York.",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": "2025-03-18",
+      "date_enacted": null,
+      "bill_number": "A6874",
+      "sponsor": "Assemblymember Ritchie Torres",
+      "summary_text": "Establishes a competitive AI literacy grant program under the Digital Equity framework. Provides grants to public schools, community colleges, higher education institutions, and nonprofits to expand AI education, improve digital literacy, and reduce technology access disparities. Companion bill S7691 in the Senate.",
+      "source_url": "https://www.nysenate.gov/legislation/bills/2025/A6874",
+      "topics": ["AI Literacy", "Equity & Access", "Workforce Development"]
+    },
+    {
+      "state": "NJ",
+      "title": "S2862 - AI Instruction in Schools",
+      "description": "Requires school districts to provide AI instruction and requires the Secretary of Higher Education to develop AI model curricula.",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": "2026-01-13",
+      "date_enacted": null,
+      "bill_number": "S2862",
+      "sponsor": null,
+      "summary_text": "Reintroduction of S3876 from the 2024-2025 session. Requires school districts to incorporate AI instruction in grades K-12 as part of the NJ Student Learning Standards in Computer Science and Design Thinking. Requires public higher education institutions to offer AI certificate and degree programs.",
+      "source_url": "https://www.njleg.state.nj.us/bill-search/2026/S2862",
+      "topics": ["AI Literacy", "Curriculum"]
+    },
+    {
+      "state": "LA",
+      "title": "HB 114 - AI Education in Public Schools",
+      "description": "Requires local public school boards to promote AI education for students and encourage AI professional development for staff.",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": "2025-03-10",
+      "date_enacted": "2025-06-30",
+      "bill_number": "HB 114",
+      "sponsor": "Representative Phelps",
+      "summary_text": "Requires local public school boards to promote artificial intelligence education for students and to encourage professional development relative to artificial intelligence for faculty and staff.",
+      "source_url": "https://www.legis.la.gov/Legis/ViewDocument.aspx?d=1398300",
+      "topics": ["AI Literacy", "Teacher Training"]
+    },
+    {
+      "state": null,
+      "title": "NSF AI Education Act of 2025",
+      "description": "Federal bill to strengthen AI education through NSF fellowships, scholarships, and community college Centers of Excellence.",
+      "policy_type": "bill",
+      "level": "federal",
+      "status": "introduced",
+      "date_introduced": "2025-09-15",
+      "date_enacted": null,
+      "bill_number": "H.R. 5351",
+      "sponsor": "Representative Vince Fong",
+      "summary_text": "Calls on the National Science Foundation to create fellowships for students and instructors, expand AI education through scholarships, and establish regional Centers of Excellence at community colleges. Bipartisan bill co-sponsored by Representatives Salinas and Pettersen.",
+      "source_url": "https://www.congress.gov/bill/119th-congress/house-bill/5351",
+      "topics": ["AI Literacy", "Workforce Development", "Research"]
     }
   ]
 }

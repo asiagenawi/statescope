@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { postJSON } from '../utils/api'
+import ChatMarkdown from './ChatMarkdown'
 
 const PLACEHOLDERS = [
   'Which states have AI literacy laws?',
@@ -156,7 +157,7 @@ function GlobalChat() {
         )}
         {messages.map((msg, i) => (
           <div key={i} className={`panel-chat-msg panel-chat-msg--${msg.role}`}>
-            {msg.content}
+            {msg.role === 'user' ? msg.content : <ChatMarkdown content={msg.content} />}
           </div>
         ))}
         {loading && (

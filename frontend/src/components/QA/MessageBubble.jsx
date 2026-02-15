@@ -1,10 +1,18 @@
+import ChatMarkdown from '../ChatMarkdown'
+
 function MessageBubble({ message }) {
   const isUser = message.role === 'user'
 
   return (
     <div className={`message ${isUser ? 'message-user' : 'message-assistant'}`}>
       <div className="message-bubble">
-        <p className="message-content">{message.content}</p>
+        {isUser ? (
+          <p className="message-content">{message.content}</p>
+        ) : (
+          <div className="message-content">
+            <ChatMarkdown content={message.content} />
+          </div>
+        )}
         {!isUser && message.sources && message.sources.length > 0 && (
           <div className="message-sources">
             <p className="sources-label">Sources:</p>
