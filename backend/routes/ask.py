@@ -34,29 +34,32 @@ def ask():
     if not question:
         return {'error': 'Question is required'}, 400
 
-    # Retrieve relevant policies
-    policies = retrieve_context(question, limit=8)
-    context_text = format_context(policies)
+    try:
+        # Retrieve relevant policies
+        policies = retrieve_context(question, limit=8)
+        context_text = format_context(policies)
 
-    # Ask Claude
-    result = ask_claude(question, context_text)
+        # Ask Claude
+        result = ask_claude(question, context_text)
 
-    # Build source list from retrieved policies
-    sources = []
-    for p in policies:
-        source = {
-            'id': p['id'],
-            'title': p['title'],
-            'state': p.get('state_name') or 'Federal',
-            'status': p['status'],
+        # Build source list from retrieved policies
+        sources = []
+        for p in policies:
+            source = {
+                'id': p['id'],
+                'title': p['title'],
+                'state': p.get('state_name') or 'Federal',
+                'status': p['status'],
+            }
+            if p.get('source_url'):
+                source['url'] = p['source_url']
+            sources.append(source)
+
+        return {
+            'question': question,
+            'answer': result['answer'],
+            'sources': sources,
+            'model': result.get('model'),
         }
-        if p.get('source_url'):
-            source['url'] = p['source_url']
-        sources.append(source)
-
-    return {
-        'question': question,
-        'answer': result['answer'],
-        'sources': sources,
-        'model': result.get('model'),
-    }
+    except Exception as e:
+        return {'error': str(e)}, 500
