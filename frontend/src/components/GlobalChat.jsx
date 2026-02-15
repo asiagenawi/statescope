@@ -29,6 +29,7 @@ function GlobalChat() {
   const [loading, setLoading] = useState(false)
   const [placeholderIdx, setPlaceholderIdx] = useState(0)
   const [showList, setShowList] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const messagesEndRef = useRef(null)
 
   const active = convos.find(c => c.id === activeId)
@@ -106,7 +107,15 @@ function GlobalChat() {
   }
 
   return (
-    <div className="global-chat">
+    <div className={`global-chat ${mobileOpen ? 'global-chat--mobile-open' : ''}`}>
+      <button className="global-chat-mobile-toggle" onClick={() => setMobileOpen(o => !o)}>
+        {mobileOpen ? '✕ Close' : (
+          <>
+            <span className="mobile-toggle-handle"></span>
+            <span className="mobile-toggle-label">Let's chat — AI</span>
+          </>
+        )}
+      </button>
       <div className="global-chat-header">
         <button className="global-chat-tab-toggle" onClick={() => setShowList(s => !s)}>
           Continue Previous Conversations

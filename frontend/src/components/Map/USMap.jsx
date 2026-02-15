@@ -50,10 +50,11 @@ function USMap() {
       <div className="map-wrapper">
         <ComposableMap
           projection="geoAlbersUsa"
-          projectionConfig={{ scale: 1100 }}
+          projectionConfig={{ scale: 1000 }}
           width={960}
           height={600}
-          style={{ width: '100%', height: '100%' }}
+          viewBox="0 0 960 600"
+          className="composable-map"
         >
             <Geographies geography={GEO_URL}>
               {({ geographies }) =>
@@ -91,18 +92,20 @@ function USMap() {
           onMouseMove={(evt) => setTooltipPos({ x: evt.clientX, y: evt.clientY })}
           onClick={handleClick}
         />
-        <MapLegend />
-        <div className="map-description">
-          As states race to regulate artificial intelligence in classrooms, keeping track of who's doing what has become a challenge in itself. StateScope makes it simple — explore legislation, trends, and guidance on one interactive dashboard.
+        <div className="map-overlay-stack">
+          <MapLegend />
+          <div className="map-description">
+            As states race to regulate artificial intelligence in classrooms, keeping track of who's doing what has become a challenge in itself. StateScope makes it simple — explore legislation, trends, and guidance on one interactive dashboard. Click on any state to view its policies, or use the chat to ask questions about AI education policy across the country.
+          </div>
         </div>
         {hoveredState && <StateTooltip state={hoveredState} position={tooltipPos} />}
       </div>
-      {selectedState && (
-        <StatePolicyPanel
-          state={selectedState}
-          onClose={() => setSelectedState(null)}
-        />
-      )}
+      <StatePolicyPanel
+        state={selectedState}
+        states={states}
+        onClose={() => setSelectedState(null)}
+        onSelectState={(s) => setSelectedState(s)}
+      />
     </div>
   )
 }
