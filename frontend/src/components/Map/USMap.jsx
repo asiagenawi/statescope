@@ -7,7 +7,7 @@ import NortheastInset from './NortheastInset'
 import StateTooltip from './StateTooltip'
 import StatePolicyPanel from '../PolicyPanel/StatePolicyPanel'
 
-const GEO_URL = '/us-states-10m.json'
+const GEO_URL = `${import.meta.env.BASE_URL}us-states-10m.json`
 
 function USMap() {
   const { states, loading, error } = useStates()

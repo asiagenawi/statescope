@@ -1,7 +1,7 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { STATUS_COLORS } from '../../utils/colors'
 
-const GEO_URL = '/us-states-10m.json'
+const GEO_URL = `${import.meta.env.BASE_URL}us-states-10m.json`
 
 const NORTHEAST_FIPS = new Set([
   '09', // CT
