@@ -6,6 +6,7 @@ const STATUS_TINTS = {
   enacted: '#2A9D8F15',
   pending: '#E9A82015',
   guidance: '#6C7EC415',
+  failed: '#F4B4B415',
   none: '#E8E4DF20',
 }
 

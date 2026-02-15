@@ -2,6 +2,7 @@ import { STATUS_COLORS } from '../../utils/colors'
 
 const LEGEND_ITEMS = [
   { status: 'none', label: 'No policy' },
+  { status: 'failed', label: 'Failed' },
   { status: 'guidance', label: 'Guidance only' },
   { status: 'pending', label: 'Pending' },
   { status: 'enacted', label: 'Enacted' },

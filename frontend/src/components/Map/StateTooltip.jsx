@@ -4,6 +4,7 @@ const STATUS_LABELS = {
   enacted: 'Enacted legislation',
   pending: 'Pending bills',
   guidance: 'Guidance only',
+  failed: 'Failed legislation',
   none: 'No policy yet',
 }
 

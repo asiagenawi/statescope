@@ -6,9 +6,10 @@ def get_all_states():
     rows = db.execute('''
         SELECT s.*,
                COUNT(p.id) as policy_count,
-               MAX(CASE WHEN p.status = 'enacted' THEN 1 ELSE 0 END) as has_enacted,
+               MAX(CASE WHEN p.status = 'enacted' OR (p.policy_type = 'executive_order' AND p.status = 'active') THEN 1 ELSE 0 END) as has_enacted,
                MAX(CASE WHEN p.status = 'introduced' THEN 1 ELSE 0 END) as has_pending,
-               MAX(CASE WHEN p.policy_type = 'guidance' THEN 1 ELSE 0 END) as has_guidance
+               MAX(CASE WHEN p.policy_type = 'guidance' OR p.status = 'active' THEN 1 ELSE 0 END) as has_guidance,
+               MAX(CASE WHEN p.status = 'failed' THEN 1 ELSE 0 END) as has_failed
         FROM states s
         LEFT JOIN policies p ON p.state_id = s.id
         GROUP BY s.id
@@ -24,11 +25,14 @@ def get_all_states():
             d['policy_status'] = 'pending'
         elif d['has_guidance']:
             d['policy_status'] = 'guidance'
+        elif d['has_failed']:
+            d['policy_status'] = 'failed'
         else:
             d['policy_status'] = 'none'
         del d['has_enacted']
         del d['has_pending']
         del d['has_guidance']
+        del d['has_failed']
         results.append(d)
     return results
 

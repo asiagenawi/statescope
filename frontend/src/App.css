@@ -292,7 +292,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(to right, #E8E4DF 25%, #6C7EC4 25%, #6C7EC4 50%, #E9A820 50%, #E9A820 75%, #2A9D8F 75%);
+  background: linear-gradient(to right, #E8E4DF 20%, #F4B4B4 20%, #F4B4B4 40%, #6C7EC4 40%, #6C7EC4 60%, #E9A820 60%, #E9A820 80%, #2A9D8F 80%);
 }
 
 .header-left {
