@@ -6,14 +6,24 @@ import MapLegend from './MapLegend'
 import NortheastInset from './NortheastInset'
 import StateTooltip from './StateTooltip'
 import StatePolicyPanel from '../PolicyPanel/StatePolicyPanel'
+import ResizeHandle from '../Layout/ResizeHandle'
+import { useResizablePanel } from '../../hooks/useResizablePanel'
 
 const GEO_URL = `${import.meta.env.BASE_URL}us-states-10m.json`
 
-function USMap() {
+function USMap({ isMobile }) {
   const { states, loading, error } = useStates()
   const [hoveredState, setHoveredState] = useState(null)
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
   const [selectedState, setSelectedState] = useState(null)
+
+  const policyResize = useResizablePanel({
+    defaultWidth: 380,
+    minWidth: 240,
+    maxWidth: 600,
+    side: 'right',
+    disabled: isMobile,
+  })
 
   const stateByFips = useMemo(() => {
     const map = {}
@@ -46,7 +56,7 @@ function USMap() {
   }
 
   return (
-    <div className="map-container">
+    <div className={`map-container${policyResize.isResizing ? ' map-container--resizing' : ''}`}>
       <div className="map-wrapper">
         <ComposableMap
           projection="geoAlbersUsa"
@@ -100,11 +110,13 @@ function USMap() {
         </div>
         {hoveredState && <StateTooltip state={hoveredState} position={tooltipPos} />}
       </div>
+      <ResizeHandle onMouseDown={policyResize.handleProps.onMouseDown} />
       <StatePolicyPanel
         state={selectedState}
         states={states}
         onClose={() => setSelectedState(null)}
         onSelectState={(s) => setSelectedState(s)}
+        style={policyResize.width != null ? { width: policyResize.width } : undefined}
       />
     </div>
   )

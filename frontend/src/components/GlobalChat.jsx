@@ -22,7 +22,7 @@ function createConvo(name) {
   return { id: nextId++, name, messages: [] }
 }
 
-function GlobalChat() {
+function GlobalChat({ style }) {
   const [convos, setConvos] = useState([{ id: 1, name: 'New chat', messages: [] }])
   const [activeId, setActiveId] = useState(1)
   const [input, setInput] = useState('')
@@ -107,7 +107,7 @@ function GlobalChat() {
   }
 
   return (
-    <div className={`global-chat ${mobileOpen ? 'global-chat--mobile-open' : ''}`}>
+    <div className={`global-chat ${mobileOpen ? 'global-chat--mobile-open' : ''}`} style={style}>
       <button className="global-chat-mobile-toggle" onClick={() => setMobileOpen(o => !o)}>
         {mobileOpen ? '✕ Close' : (
           <>

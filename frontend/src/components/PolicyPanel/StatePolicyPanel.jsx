@@ -29,14 +29,14 @@ function StateDropdown({ states, selectedCode, onSelect }) {
   )
 }
 
-function StatePolicyPanel({ state, states = [], onClose, onSelectState }) {
+function StatePolicyPanel({ state, states = [], onClose, onSelectState, style }) {
   const { policies, loading, error } = usePolicies(state?.code)
   const isEmpty = !loading && !error && policies.length === 0
   const status = state?.policy_status || 'none'
 
   if (!state) {
     return (
-      <div className="policy-panel policy-panel--collapsed">
+      <div className="policy-panel policy-panel--collapsed" style={style}>
         <div className="policy-panel-header">
           <h3>Policies</h3>
           {states.length > 0 && <StateDropdown states={states} selectedCode={null} onSelect={onSelectState} />}
@@ -51,7 +51,7 @@ function StatePolicyPanel({ state, states = [], onClose, onSelectState }) {
   return (
     <div
       className={`policy-panel${isEmpty ? ' policy-panel--collapsed' : ''}`}
-      style={{ backgroundColor: STATUS_TINTS[status] || '#ffffff' }}
+      style={{ backgroundColor: STATUS_TINTS[status] || '#ffffff', ...style }}
     >
       <div className="policy-panel-header" style={{ backgroundColor: STATUS_TINTS[status] || '#ffffff' }}>
         <h3>{state.name}</h3>
