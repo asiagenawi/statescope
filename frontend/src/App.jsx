@@ -4,11 +4,12 @@ import USMap from './components/Map/USMap'
 import GlobalChat from './components/GlobalChat'
 import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
-import OnboardingCard from './components/Layout/OnboardingCard'
+import WelcomeGuide from './components/Layout/WelcomeGuide'
 import { useResizablePanel } from './hooks/useResizablePanel'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import { useSnapshot } from './hooks/useSnapshot'
 import { warmBackend } from './utils/api'
+import { hasSeenGuide } from './utils/guide'
 import './App.css'
 
 // Trends pulls in recharts, which has no business being in the bundle that
@@ -22,6 +23,8 @@ function App() {
   const [view, setView] = useState('map')
   const [selectedState, setSelectedState] = useState(null)
   const [chatOpen, setChatOpen] = useState(false)
+  // Shown once on a first visit; reopenable from the header afterwards.
+  const [guideOpen, setGuideOpen] = useState(() => !hasSeenGuide())
 
   const policyResize = useResizablePanel({
     defaultWidth: 400,
@@ -70,6 +73,7 @@ function App() {
         onToggleChat={() => setChatOpen(o => !o)}
         snapshot={snapshot}
         onSelectState={handleSelectState}
+        onOpenGuide={() => setGuideOpen(true)}
       />
 
       <div className={`app-body${drawersOpen ? ' app-body--drawers' : ''}`}>
@@ -81,8 +85,6 @@ function App() {
                 selectedState={selectedState}
                 onSelectState={handleSelectState}
               />
-              {/* Hidden while a drawer is open so it can't sit on the legend. */}
-              {!drawersOpen && <OnboardingCard />}
             </>
           ) : (
             <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
@@ -115,6 +117,8 @@ function App() {
           </>
         )}
       </div>
+
+      <WelcomeGuide open={guideOpen} onClose={() => setGuideOpen(false)} />
     </div>
   )
 }

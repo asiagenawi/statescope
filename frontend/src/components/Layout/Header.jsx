@@ -6,7 +6,7 @@ const VIEWS = [
   { id: 'trends', label: 'Trends' },
 ]
 
-function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState }) {
+function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onOpenGuide }) {
   return (
     <header className="app-header">
       <a className="skip-link" href="#main-content">Skip to content</a>
@@ -42,6 +42,19 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
 
       <div className="header-actions">
         <StateSearch states={snapshot.states} onSelectState={onSelectState} />
+        <button
+          className="guide-btn"
+          onClick={onOpenGuide}
+          aria-label="How to use this site"
+          title="How to use this site"
+        >
+          <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+            <circle cx="8" cy="8" r="6.4" fill="none" stroke="currentColor" strokeWidth="1.4" />
+            <path d="M6.2 6.1a1.85 1.85 0 1 1 2.1 1.85v1.2" fill="none" stroke="currentColor"
+              strokeWidth="1.4" strokeLinecap="round" />
+            <circle cx="8.3" cy="11.4" r="0.8" fill="currentColor" />
+          </svg>
+        </button>
         <button
           className={`ask-btn${chatOpen ? ' ask-btn--active' : ''}`}
           onClick={onToggleChat}
