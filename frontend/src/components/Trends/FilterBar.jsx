@@ -5,7 +5,7 @@ const POLICY_TYPES = [
 ]
 
 /** Filters sit in one row above the charts, per the chart-composition rules. */
-function FilterBar({ states, topics, filters, onChange, onReset, resultCount }) {
+function FilterBar({ states, topics, filters, onChange, onReset, onExport, resultCount }) {
   const active = Boolean(filters.state || filters.topicId || filters.policyType)
 
   return (
@@ -49,6 +49,20 @@ function FilterBar({ states, topics, filters, onChange, onReset, resultCount }) 
       {active && (
         <button className="text-btn" onClick={onReset}>Clear filters</button>
       )}
+
+      <button className="export-btn" onClick={onExport} disabled={!resultCount}>
+        <svg viewBox="0 0 14 14" width="12" height="12" aria-hidden="true">
+          <path
+            d="M7 1v8M4 6.5 7 9.5l3-3M2 11.5h10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        Export CSV
+      </button>
     </div>
   )
 }

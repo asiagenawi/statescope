@@ -5,9 +5,11 @@ import GlobalChat from './components/GlobalChat'
 import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
 import OnboardingCard from './components/Layout/OnboardingCard'
+import ErrorBoundary from './components/Layout/ErrorBoundary'
 import { useResizablePanel } from './hooks/useResizablePanel'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import { useSnapshot } from './hooks/useSnapshot'
+import { useUrlState } from './hooks/useUrlState'
 import { warmBackend } from './utils/api'
 import './App.css'
 
@@ -18,10 +20,16 @@ const TrendsView = lazy(() => import('./components/Trends/TrendsView'))
 function App() {
   const isMobile = useMediaQuery('(max-width: 900px)')
   const snapshot = useSnapshot()
+  const [urlState, setUrlState] = useUrlState()
 
-  const [view, setView] = useState('map')
-  const [selectedState, setSelectedState] = useState(null)
   const [chatOpen, setChatOpen] = useState(false)
+
+  const view = urlState.view === 'trends' ? 'trends' : 'map'
+  // Resolved from the snapshot rather than held separately, so a shared link
+  // like ?state=TX selects Texas as soon as the data lands.
+  const selectedState = urlState.state
+    ? snapshot.states.find(s => s.code === urlState.state) || null
+    : null
 
   const policyResize = useResizablePanel({
     defaultWidth: 400,
@@ -48,16 +56,23 @@ function App() {
     function onKeyDown(e) {
       if (e.key !== 'Escape') return
       if (chatOpen) setChatOpen(false)
-      else if (selectedState) setSelectedState(null)
+      else if (selectedState) setUrlState({ state: null })
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [chatOpen, selectedState])
+  }, [chatOpen, selectedState, setUrlState])
 
+  // Clicking the already-selected state deselects it.
   const handleSelectState = useCallback(state => {
-    setView('map')
-    setSelectedState(prev => (prev?.code === state?.code ? null : state))
-  }, [])
+    setUrlState({
+      view: null,
+      state: state && state.code !== urlState.state ? state.code : null,
+    })
+  }, [setUrlState, urlState.state])
+
+  const handleViewChange = useCallback(next => {
+    setUrlState({ view: next === 'trends' ? 'trends' : null })
+  }, [setUrlState])
 
   const drawersOpen = Boolean(selectedState) || chatOpen
 
@@ -65,7 +80,7 @@ function App() {
     <div className="app">
       <Header
         view={view}
-        onViewChange={setView}
+        onViewChange={handleViewChange}
         chatOpen={chatOpen}
         onToggleChat={() => setChatOpen(o => !o)}
         snapshot={snapshot}
@@ -74,44 +89,55 @@ function App() {
 
       <div className={`app-body${drawersOpen ? ' app-body--drawers' : ''}`}>
         <main className="stage" id="main-content">
-          {view === 'map' ? (
-            <>
-              <USMap
-                snapshot={snapshot}
-                selectedState={selectedState}
-                onSelectState={handleSelectState}
-              />
-              {/* Hidden while a drawer is open so it can't sit on the legend. */}
-              {!drawersOpen && <OnboardingCard />}
-            </>
-          ) : (
-            <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
-              <TrendsView snapshot={snapshot} onSelectState={handleSelectState} />
-            </Suspense>
-          )}
+          <ErrorBoundary label="map">
+            {view === 'map' ? (
+              <>
+                <USMap
+                  snapshot={snapshot}
+                  selectedState={selectedState}
+                  onSelectState={handleSelectState}
+                />
+                {/* Hidden while a drawer is open so it can't sit on the legend. */}
+                {!drawersOpen && <OnboardingCard />}
+              </>
+            ) : (
+              <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
+                <TrendsView
+                  snapshot={snapshot}
+                  urlState={urlState}
+                  setUrlState={setUrlState}
+                  onSelectState={handleSelectState}
+                />
+              </Suspense>
+            )}
+          </ErrorBoundary>
         </main>
 
         {selectedState && (
           <>
             {!isMobile && <ResizeHandle onMouseDown={policyResize.handleProps.onMouseDown} />}
-            <StatePolicyPanel
-              state={selectedState}
-              states={snapshot.states}
-              policies={snapshot.policiesByState[selectedState.code] || []}
-              onClose={() => setSelectedState(null)}
-              onSelectState={setSelectedState}
-              style={policyResize.width != null ? { width: policyResize.width } : undefined}
-            />
+            <ErrorBoundary label="policy panel">
+              <StatePolicyPanel
+                state={selectedState}
+                states={snapshot.states}
+                policies={snapshot.policiesByState[selectedState.code] || []}
+                onClose={() => setUrlState({ state: null })}
+                onSelectState={s => setUrlState({ state: s.code })}
+                style={policyResize.width != null ? { width: policyResize.width } : undefined}
+              />
+            </ErrorBoundary>
           </>
         )}
 
         {chatOpen && (
           <>
             {!isMobile && <ResizeHandle onMouseDown={chatResize.handleProps.onMouseDown} />}
-            <GlobalChat
-              onClose={() => setChatOpen(false)}
-              style={chatResize.width != null ? { width: chatResize.width } : undefined}
-            />
+            <ErrorBoundary label="chat">
+              <GlobalChat
+                onClose={() => setChatOpen(false)}
+                style={chatResize.width != null ? { width: chatResize.width } : undefined}
+              />
+            </ErrorBoundary>
           </>
         )}
       </div>

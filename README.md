@@ -48,6 +48,18 @@ React app runs at http://localhost:5173
 
 The map works with the backend stopped. Only the chat needs it.
 
+## Shareable URLs
+
+App state lives in the query string, so views are linkable and survive a reload:
+
+| URL | Opens |
+|---|---|
+| `?state=TX` | the map with Texas selected |
+| `?view=trends` | the Trends view |
+| `?view=trends&fstate=CA&type=bill` | Trends filtered to California bills |
+
+Keys: `view`, `state`, and the Trends filters `fstate`, `topic`, `type`.
+
 ## Regenerating the data snapshot
 
 Any time the seed JSON changes:

@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { useDrawerFocus } from '../../hooks/useDrawerFocus'
 import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
 import PolicyCard from './PolicyCard'
 
@@ -35,6 +36,19 @@ function StateDropdown({ states, selectedCode, onSelect }) {
 
 function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, style }) {
   const status = state?.policy_status || 'none'
+  const drawerRef = useDrawerFocus()
+  const [copied, setCopied] = useState(false)
+
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1800)
+    } catch {
+      // Clipboard blocked (insecure context, denied permission) -- the URL bar
+      // already holds the right link, so this is a convenience, not the only way.
+    }
+  }
 
   const groups = useMemo(() => {
     return GROUP_ORDER
@@ -49,15 +63,26 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
   }, [policies])
 
   return (
-    <aside className="drawer policy-drawer" style={style} aria-label={`${state.name} policies`}>
+    <aside
+      className="drawer policy-drawer"
+      style={style}
+      aria-label={`${state.name} policies`}
+      tabIndex={-1}
+      ref={drawerRef}
+    >
       <div className="drawer-header">
         <div className="drawer-title-row">
           <h2 className="drawer-title">{state.name}</h2>
-          <button className="icon-btn" onClick={onClose} aria-label="Close state panel">
-            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          </button>
+          <div className="drawer-title-actions">
+            <button className="text-btn" onClick={copyLink}>
+              {copied ? 'Link copied' : 'Copy link'}
+            </button>
+            <button className="icon-btn" onClick={onClose} aria-label="Close state panel">
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="drawer-meta">

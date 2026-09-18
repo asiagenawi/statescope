@@ -52,7 +52,7 @@ export function isBackendWarm() {
  * Falls back to the non-streaming /ask endpoint if streaming is unavailable, so
  * an older deployed backend keeps working.
  */
-export async function streamAsk(question, { onDelta, signal }) {
+export async function streamAsk(question, { onDelta, onSources, signal }) {
   let res
   try {
     res = await fetch(`${API_BASE}/ask/stream`, {
@@ -68,6 +68,7 @@ export async function streamAsk(question, { onDelta, signal }) {
 
   if (!res || !res.ok || !res.body) {
     const data = await postJSON('/ask', { question })
+    if (data.sources) onSources?.(data.sources)
     onDelta(data.answer)
     return data.answer
   }
@@ -91,6 +92,9 @@ export async function streamAsk(question, { onDelta, signal }) {
         if (!line.startsWith('data:')) continue
         const payload = JSON.parse(line.slice(5).trim())
         if (payload.error) throw new Error(payload.error)
+        // Sent before any text: the policies the answer is grounded in, in the
+        // same order as the [1], [2] citations Claude is told to use.
+        if (payload.sources) onSources?.(payload.sources)
         if (payload.text) {
           answer += payload.text
           onDelta(answer)
