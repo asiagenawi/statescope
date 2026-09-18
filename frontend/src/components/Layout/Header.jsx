@@ -3,6 +3,7 @@ import StateSearch from '../Map/StateSearch'
 
 const VIEWS = [
   { id: 'map', label: 'Map' },
+  { id: 'table', label: 'Table' },
   { id: 'trends', label: 'Trends' },
 ]
 

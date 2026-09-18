@@ -15,6 +15,7 @@ import './App.css'
 // Trends pulls in recharts, which has no business being in the bundle that
 // paints the map.
 const TrendsView = lazy(() => import('./components/Trends/TrendsView'))
+const PolicyTable = lazy(() => import('./components/Table/PolicyTable'))
 
 function App() {
   const isMobile = useMediaQuery('(max-width: 900px)')
@@ -79,13 +80,15 @@ function App() {
       <div className={`app-body${drawersOpen ? ' app-body--drawers' : ''}`}>
         <main className="stage" id="main-content">
           {view === 'map' ? (
-            <>
-              <USMap
-                snapshot={snapshot}
-                selectedState={selectedState}
-                onSelectState={handleSelectState}
-              />
-            </>
+            <USMap
+              snapshot={snapshot}
+              selectedState={selectedState}
+              onSelectState={handleSelectState}
+            />
+          ) : view === 'table' ? (
+            <Suspense fallback={<div className="view-loading">Loading policies…</div>}>
+              <PolicyTable snapshot={snapshot} onSelectState={handleSelectState} />
+            </Suspense>
           ) : (
             <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
               <TrendsView snapshot={snapshot} onSelectState={handleSelectState} />
