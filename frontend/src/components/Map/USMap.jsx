@@ -24,7 +24,7 @@ function accessibleName(state) {
   return `${state.name}. ${status}. ${policies}.`
 }
 
-function USMap({ snapshot, selectedState, onSelectState, onOpenAbout }) {
+function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFederal }) {
   const { geo, error: geoError } = useGeoData()
   const { stateByFips, error: dataError, loading: dataLoading } = snapshot
 
@@ -149,6 +149,17 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout }) {
         )}
 
         <MapLegend loading={dataLoading} />
+
+        {snapshot.federalPolicies.length > 0 && (
+          <button
+            className="federal-chip"
+            onClick={onOpenFederal}
+            aria-pressed={Boolean(selectedState?.isFederal)}
+          >
+            <span className="federal-chip-label">Federal</span>
+            <span className="federal-chip-count">{snapshot.federalPolicies.length}</span>
+          </button>
+        )}
 
         {hoveredState && <StateTooltip state={hoveredState} position={tooltipPos} />}
 

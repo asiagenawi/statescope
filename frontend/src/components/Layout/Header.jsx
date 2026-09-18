@@ -7,7 +7,7 @@ const VIEWS = [
   { id: 'compare', label: 'Compare' },
 ]
 
-function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onOpenAbout }) {
+function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onSelectPolicy, onOpenAbout }) {
   return (
     <header className="app-header">
       <a className="skip-link" href="#main-content">Skip to content</a>
@@ -42,7 +42,11 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
       <StatStrip snapshot={snapshot} />
 
       <div className="header-actions">
-        <StateSearch states={snapshot.states} onSelectState={onSelectState} />
+        <StateSearch
+          snapshot={snapshot}
+          onSelectState={onSelectState}
+          onSelectPolicy={onSelectPolicy}
+        />
         <button className="about-btn" onClick={onOpenAbout}>
           Methodology
         </button>

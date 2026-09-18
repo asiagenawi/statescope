@@ -63,6 +63,13 @@ parseable source URL, which is a claim the methodology panel makes publicly.
 CI runs these against the freshly generated snapshot before building, so a data
 or logic regression fails the deploy instead of shipping.
 
+## Social preview
+
+`npm run og` regenerates `public/og-image.png` (1200×630) from the live snapshot —
+the real choropleth and the real headline numbers, so the card cannot advertise
+something the tracker does not say. Needs a local Chrome; the PNG is committed so
+the build itself needs no browser. Re-run it when the data changes.
+
 ## Methodology
 
 The in-app **Methodology** panel (`?about=1`) documents what counts as a policy, how
@@ -77,6 +84,7 @@ App state lives in the query string, so views are linkable and survive a reload:
 | URL | Opens |
 |---|---|
 | `?state=TX` | the map with Texas selected |
+| `?state=US` | federal policy |
 | `?view=trends` | the Trends view |
 | `?view=trends&fstate=CA&type=bill` | Trends filtered to California bills |
 | `?about=1` | the methodology panel |

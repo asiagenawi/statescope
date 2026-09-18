@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "node --test test/"
+    "test": "node --test test/",
+    "og": "node scripts/make-og-image.mjs"
   },
   "dependencies": {
     "d3-geo": "^2.0.2",

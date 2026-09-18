@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useDrawerFocus } from '../../hooks/useDrawerFocus'
 import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
 import PolicyCard from './PolicyCard'
@@ -21,12 +21,14 @@ function StateDropdown({ states, selectedCode, onSelect }) {
       className="state-select"
       value={selectedCode || ''}
       onChange={e => {
-        const next = states.find(s => s.code === e.target.value)
+        const code = e.target.value
+        const next = code === 'US' ? { code: 'US' } : states.find(s => s.code === code)
         if (next) onSelect(next)
       }}
       aria-label="Jump to another state"
     >
       <option value="" disabled>Jump to state</option>
+      <option value="US">Federal</option>
       {sorted.map(s => (
         <option key={s.code} value={s.code}>{s.name}</option>
       ))}
@@ -34,10 +36,19 @@ function StateDropdown({ states, selectedCode, onSelect }) {
   )
 }
 
-function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, onCompare, style }) {
+function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, onCompare, highlightPolicyId, style }) {
   const status = state?.policy_status || 'none'
   const drawerRef = useDrawerFocus()
+  const bodyRef = useRef(null)
   const [copied, setCopied] = useState(false)
+
+  // Arriving from a policy search result: bring that policy into view rather
+  // than dropping the reader at the top of a long list to hunt for it.
+  useEffect(() => {
+    if (!highlightPolicyId) return
+    const el = bodyRef.current?.querySelector(`[data-policy-id="${highlightPolicyId}"]`)
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [highlightPolicyId, policies])
 
   async function copyLink() {
     try {
@@ -103,7 +114,7 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
         )}
       </div>
 
-      <div className="drawer-body">
+      <div className="drawer-body" ref={bodyRef}>
         {policies.length === 0 ? (
           <div className="empty-state">
             <h3 className="empty-title">No AI education policy on record</h3>
@@ -121,7 +132,9 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
                   {group.label}
                   <span className="policy-group-count">{group.items.length}</span>
                 </h3>
-                {group.items.map(p => <PolicyCard key={p.id} policy={p} />)}
+                {group.items.map(p => (
+                  <PolicyCard key={p.id} policy={p} highlighted={String(p.id) === highlightPolicyId} />
+                ))}
               </section>
             ))}
             {ungrouped.length > 0 && (
@@ -130,7 +143,9 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
                   Other
                   <span className="policy-group-count">{ungrouped.length}</span>
                 </h3>
-                {ungrouped.map(p => <PolicyCard key={p.id} policy={p} />)}
+                {ungrouped.map(p => (
+                  <PolicyCard key={p.id} policy={p} highlighted={String(p.id) === highlightPolicyId} />
+                ))}
               </section>
             )}
           </>

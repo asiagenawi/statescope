@@ -33,7 +33,7 @@ function formatDate(value) {
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
 
-function PolicyCard({ policy }) {
+function PolicyCard({ policy, highlighted }) {
   const badge = POLICY_STATUS_BADGES[policy.status] || POLICY_STATUS_BADGES.active
   const type = TYPE_LABELS[policy.policy_type] || policy.policy_type?.replace('_', ' ')
   const date = formatDate(policy.date_introduced)
@@ -44,7 +44,11 @@ function PolicyCard({ policy }) {
   const meta = [type, policy.bill_number, date].filter(Boolean)
 
   return (
-    <article className="policy-card" style={{ borderLeftColor: badge.accent }}>
+    <article
+      className={`policy-card${highlighted ? ' policy-card--highlighted' : ''}`}
+      style={{ borderLeftColor: badge.accent }}
+      data-policy-id={policy.id}
+    >
       <div className="policy-card-head">
         <h4 className="policy-card-title">{policy.title}</h4>
         <span

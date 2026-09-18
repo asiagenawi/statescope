@@ -58,6 +58,12 @@ export function useSnapshot() {
     return map
   }, [policies])
 
+  // Federal policies carry no state code, so they need their own bucket.
+  const federalPolicies = useMemo(
+    () => (policies || []).filter(p => !p.state_code),
+    [policies],
+  )
+
   return {
     states: states || [],
     policies: policies || [],
@@ -66,6 +72,7 @@ export function useSnapshot() {
     dataUpdated: data?.data_updated,
     stateByFips,
     policiesByState,
+    federalPolicies,
     loading: !data && !error,
     error,
   }

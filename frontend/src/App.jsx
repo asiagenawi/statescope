@@ -11,6 +11,7 @@ import { useResizablePanel } from './hooks/useResizablePanel'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import { useSnapshot } from './hooks/useSnapshot'
 import { useUrlState } from './hooks/useUrlState'
+import { FEDERAL_CODE, buildFederalJurisdiction } from './utils/federal'
 import { warmBackend } from './utils/api'
 import './App.css'
 
@@ -31,9 +32,15 @@ function App() {
   const aboutOpen = urlState.about === '1'
   // Resolved from the snapshot rather than held separately, so a shared link
   // like ?state=TX selects Texas as soon as the data lands.
-  const selectedState = urlState.state
-    ? snapshot.states.find(s => s.code === urlState.state) || null
-    : null
+  const selectedState = !urlState.state
+    ? null
+    : urlState.state === FEDERAL_CODE
+      ? buildFederalJurisdiction(snapshot.federalPolicies)
+      : snapshot.states.find(s => s.code === urlState.state) || null
+
+  const selectedPolicies = selectedState?.isFederal
+    ? snapshot.federalPolicies
+    : snapshot.policiesByState[selectedState?.code] || []
 
   const policyResize = useResizablePanel({
     defaultWidth: 400,
@@ -75,6 +82,15 @@ function App() {
     })
   }, [setUrlState, urlState.state])
 
+  // A policy result opens the state that owns it, with that policy called out.
+  const handleSelectPolicy = useCallback(policy => {
+    setUrlState({
+      view: null,
+      state: policy.state_code || FEDERAL_CODE,
+      policy: String(policy.id),
+    })
+  }, [setUrlState])
+
   const handleViewChange = useCallback(next => {
     setUrlState({ view: next === 'map' ? null : next })
   }, [setUrlState])
@@ -95,6 +111,7 @@ function App() {
         onToggleChat={() => setChatOpen(o => !o)}
         snapshot={snapshot}
         onSelectState={handleSelectState}
+        onSelectPolicy={handleSelectPolicy}
         onOpenAbout={() => setUrlState({ about: '1' })}
       />
 
@@ -108,6 +125,9 @@ function App() {
                   selectedState={selectedState}
                   onSelectState={handleSelectState}
                   onOpenAbout={() => setUrlState({ about: '1' })}
+                  onOpenFederal={() => setUrlState({
+                    state: urlState.state === FEDERAL_CODE ? null : FEDERAL_CODE,
+                  })}
                 />
                 {/* Hidden while a drawer is open so it can't sit on the legend. */}
                 {!drawersOpen && <OnboardingCard />}
@@ -141,7 +161,8 @@ function App() {
               <StatePolicyPanel
                 state={selectedState}
                 states={snapshot.states}
-                policies={snapshot.policiesByState[selectedState.code] || []}
+                policies={selectedPolicies}
+                highlightPolicyId={urlState.policy}
                 onClose={() => setUrlState({ state: null })}
                 onSelectState={s => setUrlState({ state: s.code })}
                 onCompare={() => handleCompare(selectedState.code)}
