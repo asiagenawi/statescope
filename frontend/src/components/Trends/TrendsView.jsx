@@ -1,9 +1,18 @@
 import { useState, useMemo } from 'react'
 import { useTrends } from '../../hooks/useTrends'
-import { POLICY_STATUS_BADGES } from '../../utils/colors'
+import { STATUS_COLORS } from '../../utils/colors'
 import PolicyTimeline from './PolicyTimeline'
 import CategoryBreakdown from './CategoryBreakdown'
 import FilterBar from './FilterBar'
+
+// Maps a raw policy status onto the map's own encoding, so a bar and a state
+// that mean the same thing are the same colour.
+const STATUS_TONE = {
+  enacted: 'enacted',
+  active: 'guidance',
+  introduced: 'pending',
+  failed: 'failed',
+}
 
 const STATUS_LABELS = {
   enacted: 'Enacted',
@@ -78,7 +87,7 @@ function TrendsView({ snapshot }) {
             <h3 className="chart-title">Status of tracked policies</h3>
             <ul className="status-list">
               {trends.statusBreakdown.map(s => {
-                const badge = POLICY_STATUS_BADGES[s.name] || POLICY_STATUS_BADGES.active
+                const tone = STATUS_TONE[s.name] || 'guidance'
                 const pct = trends.total ? (s.count / trends.total) * 100 : 0
                 return (
                   <li key={s.name} className="status-row">
@@ -88,7 +97,7 @@ function TrendsView({ snapshot }) {
                     <span className="status-row-track">
                       <span
                         className="status-row-fill"
-                        style={{ width: `${pct}%`, backgroundColor: badge.accent }}
+                        style={{ width: `${pct}%`, backgroundColor: STATUS_COLORS[tone] }}
                       />
                     </span>
                     <span className="status-row-value">{s.count}</span>

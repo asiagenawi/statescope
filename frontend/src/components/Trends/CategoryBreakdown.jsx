@@ -2,8 +2,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LabelList,
 } from 'recharts'
 import ChartTooltip from './ChartTooltip'
-
-const SERIES = '#184f95'
+import { CHART, TICK, VALUE_LABEL } from './chartTheme'
 
 /**
  * Topics ranked by how many policies touch them. Horizontal because the topic
@@ -17,7 +16,7 @@ function CategoryBreakdown({ data }) {
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ top: 4, right: 32, bottom: 4, left: 8 }}
+        margin={{ top: 4, right: 40, bottom: 4, left: 16 }}
         barCategoryGap="26%"
       >
         <XAxis type="number" hide allowDecimals={false} />
@@ -26,12 +25,12 @@ function CategoryBreakdown({ data }) {
           dataKey="name"
           tickLine={false}
           axisLine={false}
-          tick={{ fill: '#56554d', fontSize: 12 }}
-          width={150}
+          tick={TICK}
+          width={148}
         />
-        <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(24,79,149,0.06)' }} />
-        <Bar dataKey="count" fill={SERIES} radius={[0, 4, 4, 0]} maxBarSize={18} isAnimationActive={false}>
-          <LabelList dataKey="count" position="right" fill="#56554d" fontSize={12} offset={8} />
+        <Tooltip content={<ChartTooltip />} cursor={{ fill: CHART.cursor }} />
+        <Bar dataKey="count" fill={CHART.seriesStrong} maxBarSize={15} isAnimationActive={false}>
+          <LabelList dataKey="count" position="right" offset={7} {...VALUE_LABEL} />
         </Bar>
       </BarChart>
     </ResponsiveContainer>

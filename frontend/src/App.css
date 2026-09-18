@@ -362,7 +362,8 @@
   flex: 1;
   min-width: 0;
   display: flex;
-  padding: 0;
+  padding: var(--s4) var(--s4) var(--s4) var(--s4);
+  background: var(--paper);
 }
 
 .map-wrapper {
@@ -373,6 +374,7 @@
   align-items: center;
   justify-content: center;
   background: var(--surface);
+  border: 1px solid var(--rule-strong);
   overflow: hidden;
 }
 
@@ -610,7 +612,7 @@
 
 .drawer-meta {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1.55fr 1fr;
   gap: 1px;
   margin-top: var(--s3);
   background: var(--rule);
@@ -621,13 +623,17 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 7px 10px;
+  padding: 7px 9px;
   background: var(--surface);
+  font-family: var(--font-display);
   font-size: var(--text-micro);
   font-weight: 600;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
   color: var(--ink-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status-pill-dot {
@@ -640,14 +646,16 @@
 .drawer-count {
   display: flex;
   align-items: center;
-  padding: 7px 10px;
+  padding: 7px 9px;
   background: var(--surface);
+  font-family: var(--font-display);
   font-size: var(--text-micro);
   font-weight: 600;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
   color: var(--ink-secondary);
+  white-space: nowrap;
 }
 
 .drawer-body {
@@ -1148,6 +1156,7 @@
   min-width: 0;
   overflow-y: auto;
   padding: var(--s6) var(--s5) var(--s7);
+  background: var(--paper);
 }
 
 .trends-inner {
@@ -1184,8 +1193,7 @@
   margin-bottom: var(--s5);
   padding: var(--s3) var(--s4);
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--rule-strong);
 }
 
 .filter-bar .filter-select {
@@ -1211,11 +1219,10 @@
 .tile {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   padding: var(--s4);
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--rule-strong);
 }
 
 .tile-value {
@@ -1245,10 +1252,9 @@
 }
 
 .chart-panel {
-  padding: var(--s4) var(--s5) var(--s5);
+  padding: 0 0 var(--s5);
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--rule-strong);
 }
 
 .chart-panel--wide {
@@ -1256,10 +1262,16 @@
 }
 
 .chart-title {
-  margin-bottom: var(--s4);
-  font-size: var(--text-md);
+  margin: 0 0 var(--s4);
+  padding: 6px 10px;
+  background: var(--surface-sunken);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-display);
+  font-size: var(--text-micro);
   font-weight: 600;
-  color: var(--ink);
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  color: var(--ink-secondary);
 }
 
 .chart-empty {
@@ -1292,7 +1304,7 @@
 
 .status-list {
   margin: 0;
-  padding: 0;
+  padding: 0 var(--s5) 0;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -1312,17 +1324,16 @@
 }
 
 .status-row-track {
-  height: 10px;
-  border-radius: var(--radius-pill);
-  background: var(--surface-hover);
+  height: 11px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--rule);
   overflow: hidden;
 }
 
 .status-row-fill {
   display: block;
   height: 100%;
-  border-radius: var(--radius-pill);
-  min-width: 3px;
+  min-width: 2px;
 }
 
 .status-row-value {
@@ -1708,8 +1719,7 @@
 
 .table-scroll {
   overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid var(--rule-strong);
   background: var(--surface);
 }
 
@@ -1725,8 +1735,8 @@
   top: 0;
   z-index: 2;
   padding: 0;
-  background: var(--surface-sunken);
-  border-bottom: 1px solid var(--border-strong);
+  background: var(--gov-tint);
+  border-bottom: 1px solid var(--gov);
   text-align: left;
   white-space: nowrap;
 }
