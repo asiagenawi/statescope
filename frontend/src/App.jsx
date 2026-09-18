@@ -4,6 +4,7 @@ import GlobalChat from './components/GlobalChat'
 import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
 import ErrorBoundary from './components/Layout/ErrorBoundary'
+import DataError from './components/Layout/DataError'
 import AboutPanel from './components/Layout/AboutPanel'
 import { useResizablePanel } from './hooks/useResizablePanel'
 import { useMediaQuery } from './hooks/useMediaQuery'
@@ -113,6 +114,15 @@ function App() {
   }, [setUrlState])
 
   const drawersOpen = Boolean(selectedState) || chatOpen || aboutOpen
+
+  // Every view reads the same snapshot, so its failure is answered once.
+  if (snapshot.error) {
+    return (
+      <div className="app app--landing">
+        <DataError error={snapshot.error} onRetry={snapshot.retry} />
+      </div>
+    )
+  }
 
   if (view === 'home') {
     return (

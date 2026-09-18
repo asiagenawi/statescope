@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 
 /**
  * The policy dataset, shipped as a static build artifact rather than fetched
@@ -29,6 +29,7 @@ function loadSnapshot() {
 export function useSnapshot() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     let active = true
@@ -37,6 +38,13 @@ export function useSnapshot() {
       e => { if (active) setError(e) },
     )
     return () => { active = false }
+  }, [attempt])
+
+  // Drop the cached rejection so a retry actually re-requests.
+  const retry = useCallback(() => {
+    snapshotPromise = null
+    setError(null)
+    setAttempt(n => n + 1)
   }, [])
 
   const states = data?.states
@@ -75,5 +83,6 @@ export function useSnapshot() {
     federalPolicies,
     loading: !data && !error,
     error,
+    retry,
   }
 }
