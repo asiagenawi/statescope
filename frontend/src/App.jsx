@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react'
 import Header from './components/Layout/Header'
-import USMap from './components/Map/USMap'
 import GlobalChat from './components/GlobalChat'
 import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
@@ -20,6 +19,7 @@ import './App.css'
 const TrendsView = lazy(() => import('./components/Trends/TrendsView'))
 const CompareView = lazy(() => import('./components/Compare/CompareView'))
 const LandingView = lazy(() => import('./components/Landing/LandingView'))
+const USMap = lazy(() => import('./components/Map/USMap'))
 
 function App() {
   const isMobile = useMediaQuery('(max-width: 900px)')
@@ -143,15 +143,17 @@ function App() {
         <main className="stage" id="main-content">
           <ErrorBoundary label="map">
             {view === 'map' ? (
-              <USMap
-                snapshot={snapshot}
-                selectedState={selectedState}
-                onSelectState={handleSelectState}
-                onOpenAbout={() => setUrlState({ about: '1' })}
-                onOpenFederal={() => setUrlState({
-                  state: urlState.state === FEDERAL_CODE ? null : FEDERAL_CODE,
-                })}
-              />
+              <Suspense fallback={<div className="view-loading">Loading map…</div>}>
+                <USMap
+                  snapshot={snapshot}
+                  selectedState={selectedState}
+                  onSelectState={handleSelectState}
+                  onOpenAbout={() => setUrlState({ about: '1' })}
+                  onOpenFederal={() => setUrlState({
+                    state: urlState.state === FEDERAL_CODE ? null : FEDERAL_CODE,
+                  })}
+                />
+              </Suspense>
             ) : view === 'trends' ? (
               <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
                 <TrendsView

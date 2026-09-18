@@ -3,6 +3,8 @@ import { buildFindings, recentPolicies } from '../../utils/findings'
 import { formatMonth } from '../../utils/dates'
 import { STATUS_ORDER, STATUS_LABELS, statusVar } from '../../utils/colors'
 import ThemeToggle from '../Layout/ThemeToggle'
+import { useEffect } from 'react'
+import { prefetchGeo } from '../../hooks/useGeoData'
 
 const ROUTES = [
   {
@@ -51,6 +53,23 @@ function LandingView({ snapshot, onNavigate, onOpenChat, onOpenAbout, onSelectPo
   }, [snapshot, dataUpdated])
 
   const newest = useMemo(() => recentPolicies(policies, 1)[0], [policies])
+
+  // The landing draws no map, so neither the map chunk nor the 114KB topojson
+  // belong in its critical path -- but both should be ready the moment someone
+  // clicks through. Fetch them once the page is idle.
+  useEffect(() => {
+    const warm = () => {
+      prefetchGeo()
+      import('../Map/USMap')
+    }
+    const id = window.requestIdleCallback
+      ? window.requestIdleCallback(warm, { timeout: 2000 })
+      : setTimeout(warm, 600)
+    return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(id)
+      else clearTimeout(id)
+    }
+  }, [])
 
   return (
     <div className="landing">

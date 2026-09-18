@@ -41,9 +41,10 @@
       rel="stylesheet"
     />
 
-    <!-- Start both data fetches alongside the JS bundle instead of after it. -->
+    <!-- The snapshot is needed by every view, so it starts alongside the bundle.
+         The topojson is not: the landing draws no map, so it is warmed from JS
+         once that page is idle instead of blocking every first paint. -->
     <link rel="preload" as="fetch" href="./data/snapshot.json" crossorigin />
-    <link rel="preload" as="fetch" href="./us-states-10m.json" crossorigin />
   </head>
   <body>
     <!-- Stamp the saved choice before first paint, so a dark-mode reader does
