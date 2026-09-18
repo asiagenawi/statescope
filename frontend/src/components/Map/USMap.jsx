@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps'
 import { geoCentroid } from 'd3-geo'
 import { useGeoData } from '../../hooks/useGeoData'
 import { formatMonth } from '../../utils/dates'
@@ -13,6 +13,19 @@ import StateTooltip from './StateTooltip'
  * States too small to hold a label at this projection scale. They are covered
  * by the Northeast inset instead, which has the room.
  */
+const MAX_ZOOM = 6
+
+/**
+ * Stroke width divided by the zoom, so borders stay hairlines as the map scales.
+ * Geography resolves `style` as style[default|hover|pressed], so each state has
+ * to carry the value -- a plain object here silently applies nothing.
+ */
+function geographyStyle(isSelected, zoom) {
+  const base = { strokeWidth: (isSelected ? 2 : 0.75) / zoom }
+  const emphasised = { strokeWidth: (isSelected ? 2 : 1.4) / zoom }
+  return { default: base, hover: emphasised, pressed: emphasised }
+}
+
 const NO_LABEL_FIPS = new Set([
   '09', '10', '11', '24', '25', '33', '34', '44', '50',
 ])
@@ -34,6 +47,9 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
 
   // Roving tabindex: exactly one shape is tabbable, arrows move between them.
   const [focusedCode, setFocusedCode] = useState(null)
+  // Zoom is held here so the controls, the reset, and the counter-scaling of
+  // labels and strokes all read the same value.
+  const [position, setPosition] = useState({ coordinates: [-97, 38], zoom: 1 })
   const positionsRef = useRef([])
   const svgRef = useRef(null)
   const pendingFocus = useRef(null)
@@ -59,6 +75,14 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
   }, [])
 
   const handleMouseLeave = useCallback(() => setHoveredState(null), [])
+
+  const zoomBy = useCallback(factor => {
+    setPosition(p => ({ ...p, zoom: Math.min(MAX_ZOOM, Math.max(1, p.zoom * factor)) }))
+  }, [])
+
+  const resetZoom = useCallback(() => {
+    setPosition({ coordinates: [-97, 38], zoom: 1 })
+  }, [])
 
   const handleClick = useCallback(geoItem => {
     const state = stateByFips[geoItem.id]
@@ -109,6 +133,13 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
             role="application"
             aria-label="Map of state AI education policy. Use the arrow keys to move between states, Enter to open one."
           >
+            <ZoomableGroup
+              zoom={position.zoom}
+              center={position.coordinates}
+              minZoom={1}
+              maxZoom={MAX_ZOOM}
+              onMoveEnd={setPosition}
+            >
             <Geographies geography={geo}>
               {({ geographies, projection }) => {
                 const positions = []
@@ -139,6 +170,7 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                         geography={geoItem}
                         className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
                         fill={statusVar(status)}
+                        style={geographyStyle(isSelected, position.zoom)}
                         data-state-code={state?.code}
                         tabIndex={state && state.code === tabCode ? 0 : -1}
                         role={state ? 'button' : undefined}
@@ -170,6 +202,7 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                           className="state-label"
                           textAnchor="middle"
                           dy="0.33em"
+                          style={{ fontSize: `${10 / position.zoom}px` }}
                           fill={statusInkVar(state.policy_status || 'none')}
                         >
                           {state.code}
@@ -181,6 +214,7 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                 )
               }}
             </Geographies>
+            </ZoomableGroup>
           </ComposableMap>
         )}
 
@@ -195,6 +229,22 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
             onClick={handleClick}
           />
         )}
+
+        <div className="map-zoom" role="group" aria-label="Zoom the map">
+          <button onClick={() => zoomBy(1.6)} disabled={position.zoom >= MAX_ZOOM} aria-label="Zoom in">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M8 3.5v9M3.5 8h9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </button>
+          <button onClick={() => zoomBy(1 / 1.6)} disabled={position.zoom <= 1} aria-label="Zoom out">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M3.5 8h9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </button>
+          <button onClick={resetZoom} disabled={position.zoom === 1} className="map-zoom-reset">
+            Reset
+          </button>
+        </div>
 
         <MapLegend loading={dataLoading} />
 

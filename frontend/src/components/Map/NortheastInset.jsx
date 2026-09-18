@@ -1,6 +1,13 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
 import { statusVar } from '../../utils/colors'
 
+// The inset has its own fixed scale, so its strokes need no zoom compensation.
+const INSET_STROKE = {
+  default: { strokeWidth: 0.75 },
+  hover: { strokeWidth: 1.4 },
+  pressed: { strokeWidth: 1.4 },
+}
+
 const NORTHEAST_FIPS = new Set([
   '09', // CT
   '10', // DE
@@ -56,6 +63,7 @@ function NortheastInset({
                     geography={geoItem}
                     className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
                     fill={statusVar(status)}
+                    style={INSET_STROKE}
                     tabIndex={-1}
                     onMouseEnter={evt => onMouseEnter(geoItem, evt)}
                     onMouseMove={onMouseMove}

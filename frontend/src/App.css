@@ -371,31 +371,23 @@
    muddied the pale end of the ramp. */
 .state-shape {
   stroke: var(--state-stroke);
-  stroke-width: 0.75;
+  /* stroke-width is set per-render so it can be divided by the zoom level */
   outline: none;
   cursor: pointer;
   transition: stroke 0.12s var(--ease), stroke-width 0.12s var(--ease);
 }
 
-.state-shape:hover {
-  stroke: var(--ink);
-  stroke-width: 1.4;
-}
-
-.state-shape:focus-visible {
-  stroke: var(--ink);
-  stroke-width: 2;
-  outline: none;
-}
-
+.state-shape:hover,
+.state-shape:focus-visible,
 .state-shape--selected {
   stroke: var(--ink);
-  stroke-width: 2;
 }
+
+.state-shape:focus-visible { outline: none; }
 
 .state-label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  /* font-size is set per-render so it can be divided by the zoom level */
   font-weight: 600;
   letter-spacing: 0.02em;
   pointer-events: none;
@@ -1825,8 +1817,12 @@ a.chat-source-body:hover .chat-source-title {
 
 .colophon-line {
   position: absolute;
-  left: var(--s5);
-  bottom: var(--s4);
+  left: var(--s4);
+  bottom: var(--s3);
+  padding: 4px 9px;
+  background: var(--legend-bg);
+  backdrop-filter: blur(6px);
+  border-radius: var(--radius-sm);
   font-size: var(--text-micro);
   color: var(--ink-muted);
 }
@@ -2788,4 +2784,57 @@ a.chat-source-body:hover .chat-source-title {
   align-items: center;
   gap: var(--s4);
   margin-top: var(--s4);
+}
+
+/* Zoom controls. A map that can only be zoomed by trackpad gesture is not
+   zoomable for a lot of people. */
+.map-zoom {
+  position: absolute;
+  right: var(--s4);
+  top: var(--s4);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--legend-bg);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+
+.map-zoom button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink-secondary);
+}
+
+.map-zoom button:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--ink);
+}
+
+.map-zoom button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.map-zoom-reset {
+  width: auto !important;
+  padding: 0 10px;
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+/* Panning should feel like grabbing the map, not selecting it. */
+.rsm-zoomable-group { cursor: grab; }
+.rsm-zoomable-group:active { cursor: grabbing; }
+
+@media print {
+  .map-zoom { display: none !important; }
 }
