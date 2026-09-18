@@ -49,7 +49,7 @@ function PolicyCard({ policy, highlighted }) {
   return (
     <article
       className={`policy-card${highlighted ? ' policy-card--highlighted' : ''}`}
-      style={{ borderLeftColor: badge.accent }}
+      style={{ color: badge.accent }}
       data-policy-id={policy.id}
     >
       <div className="policy-card-head">
