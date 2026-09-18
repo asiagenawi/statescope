@@ -1,5 +1,5 @@
 /**
- * Choropleth encoding for state policy status, in both themes.
+ * Choropleth encoding for state policy status.
  *
  * The five statuses are ordinal, not arbitrary categories -- they mirror the
  * precedence in backend/models/queries.py:get_all_states(), where a state is
@@ -7,74 +7,27 @@
  *
  *   enacted > pending > guidance > failed > none
  *
- * So three of them ride a single-hue sequential ramp, "failed" sits off-ramp in
- * orange because it is an outcome rather than a level, and "none" is a
- * near-surface neutral meaning "nothing to report". Deliberately no red/blue
- * opposition: on a US state map that reads as partisan, which this data is not.
+ * So three of them ride a single-hue sequential ramp (more ink = more binding
+ * policy in force), "failed" sits off-ramp in orange because it is an outcome
+ * rather than a level, and "none" is a near-surface neutral meaning "nothing to
+ * report". Deliberately no red/blue opposition: on a US state map that reads as
+ * partisan, which this data is not.
  *
- * The dark steps are *selected for the dark surface*, not inverted from the
- * light ones, and the ramp runs the other way: on paper more ink means more,
- * on a dark ground more light means more.
+ * Validated as an ordinal ramp (monotone lightness, all step gaps >= 0.06,
+ * light end 2.06:1 vs surface) and for all-pairs separation: worst CVD dE 14.0
+ * and worst normal-vision dE 15.6, both clear of the 8 / 15 floors.
  *
- * Both sets were validated against their own surface:
- *
- *   light (#fcfcfb)  ordinal ramp passes; all-pairs CVD dE 14.0, normal 15.6
- *   dark  (#1a1a19)  ordinal ramp passes; all-pairs CVD dE 15.8, normal 15.9
- *
- * Floors are 8 (CVD) and 15 (normal vision). The lightest fill in each theme
- * sits below 3:1 against its surface, so the relief rule applies -- colour never
- * carries meaning alone: every state has a legend entry, a map label, an
- * accessible name, a tooltip, and the policy drawer as the table view.
+ * The lightest two fills sit below 3:1 against the surface, so the relief rule
+ * applies -- they never carry meaning alone. Every state also has a text label
+ * in the legend, an accessible name on the shape, a tooltip, and the policy
+ * panel as the table view.
  */
-export const THEMES = {
-  light: {
-    surface: '#fcfcfb',
-    status: {
-      none: '#dcdbd5',
-      failed: '#eb6834',
-      guidance: '#86b6ef',
-      pending: '#3987e5',
-      enacted: '#184f95',
-    },
-    // Ink that clears 4.5:1 on each fill, for the postal labels drawn on top.
-    ink: {
-      none: '#0b0b0b',
-      failed: '#0b0b0b',
-      guidance: '#0b0b0b',
-      pending: '#0b0b0b',
-      enacted: '#ffffff',
-    },
-    // Single-series chart colours, drawn from the same ramp.
-    series: '#3987e5',
-    seriesStrong: '#184f95',
-    grid: '#e8e6de',
-    axis: '#cfcdc2',
-    axisText: '#85837a',
-    labelText: '#56554d',
-  },
-  dark: {
-    surface: '#1a1a19',
-    status: {
-      none: '#3a3a36',
-      failed: '#d95926',
-      guidance: '#184f95',
-      pending: '#3987e5',
-      enacted: '#9ec5f4',
-    },
-    ink: {
-      none: '#ffffff',
-      failed: '#0b0b0b',
-      guidance: '#ffffff',
-      pending: '#0b0b0b',
-      enacted: '#0b0b0b',
-    },
-    series: '#3987e5',
-    seriesStrong: '#9ec5f4',
-    grid: '#2c2c2a',
-    axis: '#383835',
-    axisText: '#898781',
-    labelText: '#c3c2b7',
-  },
+export const STATUS_COLORS = {
+  none: '#dcdbd5',
+  failed: '#eb6834',
+  guidance: '#86b6ef',
+  pending: '#3987e5',
+  enacted: '#184f95',
 }
 
 /** Legend order: escalating, least action -> most action. */
@@ -98,17 +51,19 @@ export const STATUS_DESCRIPTIONS = {
 }
 
 /**
- * Fills and label inks are referenced as CSS variables so the map, legend and
- * badges re-theme without JavaScript. Charts still need literal values, which
- * is what THEMES is for.
+ * Ink color for a label drawn on top of a status fill. The ramp spans a wide
+ * lightness range, so a single label color cannot stay legible across it.
  */
-export const statusVar = status => `var(--status-${status})`
-export const statusInkVar = status => `var(--ink-on-${status})`
+export function labelInkOn(status) {
+  // Only the darkest ramp step needs light ink. White on `pending` measures
+  // 3.64:1, short of 4.5 for label-sized text; dark ink on it clears at 5.77:1.
+  return status === 'enacted' ? '#ffffff' : '#0b0b0b'
+}
 
-/** Per-status badge colours for policy cards, keyed by the raw policy.status. */
+/** Per-status badge colors for policy cards, keyed by the raw policy.status. */
 export const POLICY_STATUS_BADGES = {
-  enacted: { bg: 'var(--badge-enacted-bg)', text: 'var(--badge-enacted-text)', accent: 'var(--status-enacted)' },
-  introduced: { bg: 'var(--badge-pending-bg)', text: 'var(--badge-pending-text)', accent: 'var(--status-pending)' },
-  active: { bg: 'var(--badge-guidance-bg)', text: 'var(--badge-guidance-text)', accent: 'var(--status-guidance)' },
-  failed: { bg: 'var(--badge-failed-bg)', text: 'var(--badge-failed-text)', accent: 'var(--status-failed)' },
+  enacted: { bg: '#e2ecfa', text: '#123a6e', accent: '#184f95' },
+  introduced: { bg: '#e6f0fd', text: '#1c5cab', accent: '#3987e5' },
+  active: { bg: '#edf3fd', text: '#25538f', accent: '#86b6ef' },
+  failed: { bg: '#fdeae2', text: '#8f3c17', accent: '#eb6834' },
 }

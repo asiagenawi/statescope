@@ -1,5 +1,15 @@
 import { useMemo } from 'react'
-import { formatMonth } from '../../utils/dates'
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December']
+
+/** "2026-02" -> "February 2026" */
+function formatUpdated(value) {
+  if (!value) return null
+  const [year, month] = value.split('-')
+  const name = MONTHS[Number(month) - 1]
+  return name ? `${name} ${year}` : year
+}
 
 /**
  * The headline numbers, derived from the snapshot rather than hardcoded, so
@@ -23,7 +33,7 @@ function StatStrip({ snapshot }) {
     return <div className="stat-strip stat-strip--loading" aria-hidden="true" />
   }
 
-  const updated = formatMonth(dataUpdated)
+  const updated = formatUpdated(dataUpdated)
 
   return (
     <div className="stat-strip">

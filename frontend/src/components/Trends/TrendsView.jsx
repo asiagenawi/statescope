@@ -1,21 +1,9 @@
-import { useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { useTrends } from '../../hooks/useTrends'
 import { POLICY_STATUS_BADGES } from '../../utils/colors'
 import PolicyTimeline from './PolicyTimeline'
 import CategoryBreakdown from './CategoryBreakdown'
 import FilterBar from './FilterBar'
-import { downloadCSV } from '../../utils/export'
-import { buildFindings, recentPolicies } from '../../utils/findings'
-import KeyFindings from './KeyFindings'
-import RecentActivity from './RecentActivity'
-
-/** Name the file after what's actually in it, so downloads stay tellable apart. */
-function exportFilename(filters) {
-  const parts = ['statescope']
-  if (filters.state) parts.push(filters.state.toLowerCase())
-  if (filters.policyType) parts.push(filters.policyType)
-  return `${parts.join('-')}-policies.csv`
-}
 
 const STATUS_LABELS = {
   enacted: 'Enacted',
@@ -24,35 +12,11 @@ const STATUS_LABELS = {
   failed: 'Failed',
 }
 
-function TrendsView({ snapshot, urlState, setUrlState, onSelectState, onSelectPolicy }) {
-  // Filters live in the URL so a narrowed view is shareable and survives reload.
-  const filters = useMemo(() => ({
-    state: urlState.fstate || null,
-    topicId: urlState.topic || null,
-    policyType: urlState.type || null,
-  }), [urlState.fstate, urlState.topic, urlState.type])
+const EMPTY_FILTERS = { state: null, topicId: null, policyType: null }
 
-  const setFilters = useCallback(next => {
-    setUrlState({ fstate: next.state, topic: next.topicId, type: next.policyType })
-  }, [setUrlState])
-
-  const resetFilters = useCallback(() => {
-    setUrlState({ fstate: null, topic: null, type: null })
-  }, [setUrlState])
-
+function TrendsView({ snapshot }) {
+  const [filters, setFilters] = useState(EMPTY_FILTERS)
   const trends = useTrends(snapshot, filters)
-
-  const filteredState = filters.state
-    ? snapshot.states.find(s => s.code === filters.state)
-    : null
-
-  // Findings describe the whole dataset, not the filtered slice -- a filtered
-  // claim would read as a claim about the field.
-  const findings = useMemo(
-    () => buildFindings(snapshot, snapshot.dataUpdated),
-    [snapshot],
-  )
-  const recent = useMemo(() => recentPolicies(snapshot.policies, 6), [snapshot.policies])
 
   const peakYear = useMemo(() => {
     if (!trends.timeline.length) return null
@@ -72,14 +36,6 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState, onSelectPo
             Every tracked bill, executive order, and department guidance document,
             across all 50 states and DC.
           </p>
-          {filteredState && (
-            <button
-              className="trends-crosslink"
-              onClick={() => onSelectState(filteredState)}
-            >
-              View {filteredState.name} on the map →
-            </button>
-          )}
         </header>
 
         <FilterBar
@@ -87,8 +43,7 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState, onSelectPo
           topics={snapshot.topics}
           filters={filters}
           onChange={setFilters}
-          onReset={resetFilters}
-          onExport={() => downloadCSV(trends.filtered, exportFilename(filters))}
+          onReset={() => setFilters(EMPTY_FILTERS)}
           resultCount={trends.total}
         />
 
@@ -112,10 +67,6 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState, onSelectPo
             <span className="tile-label">topics covered</span>
           </div>
         </div>
-
-        {!filters.state && !filters.topicId && !filters.policyType && (
-          <KeyFindings findings={findings} />
-        )}
 
         <div className="panel-grid">
           <section className="chart-panel">
@@ -152,12 +103,6 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState, onSelectPo
             <CategoryBreakdown data={trends.topicCounts} />
           </section>
         </div>
-
-        <RecentActivity
-          policies={recent}
-          onSelectPolicy={onSelectPolicy}
-          dataUpdated={snapshot.dataUpdated}
-        />
       </div>
     </div>
   )

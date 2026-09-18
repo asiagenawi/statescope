@@ -8,53 +8,30 @@
       name="description"
       content="Track AI in education policy across all 50 US states and DC. Explore enacted legislation, pending bills, executive orders, and department guidance on an interactive map."
     />
-    <meta name="theme-color" content="#f3f1ea" />
+    <meta name="theme-color" content="#f5f4f0" />
 
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
 
-    <!-- Absolute URLs: crawlers do not resolve relative paths. The image is
-         generated from the live data by `npm run og`. -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://asiagenawi.github.io/statescope/" />
-    <meta property="og:site_name" content="StateScope" />
-    <meta property="og:image" content="https://asiagenawi.github.io/statescope/og-image.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="A map of the United States shaded by how far each state has gone in regulating AI in education: 75 policies, 43 states acting, 22 with law enacted." />
     <meta property="og:title" content="StateScope — AI in Education Policy Tracker" />
     <meta
       property="og:description"
       content="Which states are regulating AI in the classroom? An interactive tracker of legislation, executive orders, and guidance across all 50 states and DC."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://asiagenawi.github.io/statescope/og-image.png" />
-    <meta name="twitter:title" content="StateScope — AI in Education Policy Tracker" />
-    <meta
-      name="twitter:description"
-      content="Which states are regulating AI in the classroom? An interactive tracker of legislation, executive orders, and guidance across all 50 states and DC."
-    />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
       rel="stylesheet"
     />
 
-    <!-- The snapshot is needed by every view, so it starts alongside the bundle.
-         The topojson is not: the landing draws no map, so it is warmed from JS
-         once that page is idle instead of blocking every first paint. -->
+    <!-- Start both data fetches alongside the JS bundle instead of after it. -->
     <link rel="preload" as="fetch" href="./data/snapshot.json" crossorigin />
+    <link rel="preload" as="fetch" href="./us-states-10m.json" crossorigin />
   </head>
   <body>
-    <!-- Stamp the saved choice before first paint, so a dark-mode reader does
-         not get a flash of the light theme while the bundle parses. -->
-    <script>
-      try {
-        var t = localStorage.getItem('statescope.theme')
-        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t)
-      } catch (e) {}
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

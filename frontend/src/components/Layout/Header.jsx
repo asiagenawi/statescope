@@ -1,19 +1,17 @@
 import StatStrip from './StatStrip'
 import StateSearch from '../Map/StateSearch'
-import ThemeToggle from './ThemeToggle'
 
 const VIEWS = [
   { id: 'map', label: 'Map' },
   { id: 'trends', label: 'Trends' },
-  { id: 'compare', label: 'Compare' },
 ]
 
-function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onSelectPolicy, onOpenAbout, onGoHome }) {
+function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState }) {
   return (
     <header className="app-header">
       <a className="skip-link" href="#main-content">Skip to content</a>
 
-      <button className="brand" onClick={onGoHome} aria-label="StateScope home">
+      <div className="brand">
         <span className="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
             <rect x="2" y="13" width="4.5" height="8" rx="1.25" fill="#86b6ef" />
@@ -25,7 +23,7 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
           <span className="brand-name">StateScope</span>
           <span className="brand-tagline">AI in education policy, tracked</span>
         </span>
-      </button>
+      </div>
 
       <nav className="view-nav" aria-label="Views">
         {VIEWS.map(v => (
@@ -43,15 +41,7 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
       <StatStrip snapshot={snapshot} />
 
       <div className="header-actions">
-        <StateSearch
-          snapshot={snapshot}
-          onSelectState={onSelectState}
-          onSelectPolicy={onSelectPolicy}
-        />
-        <button className="about-btn" onClick={onOpenAbout}>
-          Methodology
-        </button>
-        <ThemeToggle />
+        <StateSearch states={snapshot.states} onSelectState={onSelectState} />
         <button
           className={`ask-btn${chatOpen ? ' ask-btn--active' : ''}`}
           onClick={onToggleChat}

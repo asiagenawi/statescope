@@ -1,121 +1,72 @@
-/* ==========================================================================
-   StateScope design system
-
-   One principle governs everything here: COLOUR BELONGS TO THE DATA.
-
-   The interface is ink on paper -- near-black, warm off-white, hairlines. The
-   only saturated colour on screen is the choropleth, so when a reader sees
-   colour it always means something. The previous version used a ramp step as
-   its accent, which put the same blue on buttons, links and focus rings that
-   the map uses for "pending", and left the map competing with its own chrome.
-
-   The second rule is scale. A type ramp whose sizes all sit within a few points
-   of each other reads as undesigned however well spaced it is, so the display
-   sizes here are allowed to dominate.
-   ========================================================================== */
-
+/* Design tokens. Everything else in the app references these rather than raw
+   values -- that consistency is what separates "styled" from "designed". */
 :root {
+  /* This is a light-only interface; say so explicitly so the browser doesn't
+     apply its own dark treatment to form controls and scrollbars. */
   color-scheme: light;
 
-  /* ---- Type -------------------------------------------------------------
-     Newsreader is a news face: editorial weight at display sizes without the
-     mannerism of a fashion serif. Inter does the interface work and never
-     tries to have a voice. */
-  --font-display: 'Newsreader', 'Source Serif 4', Georgia, serif;
+  /* Type. Serif carries the editorial voice (wordmark, headings, policy prose);
+     sans carries every piece of UI chrome. */
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
-  /* A real ramp: 11px to ~76px. The jumps are meant to be felt. */
-  --text-micro: 0.6875rem;
-  --text-xs: 0.75rem;
-  --text-sm: 0.8125rem;
+  --text-3xl: 1.75rem;
+  --text-2xl: 1.375rem;
+  --text-xl: 1.125rem;
   --text-md: 0.9375rem;
-  --text-lg: 1.0625rem;
-  --text-xl: 1.3125rem;
-  --text-2xl: 1.75rem;
-  --text-3xl: 2.5rem;
-  --text-4xl: 3.5rem;
-  --text-5xl: clamp(2.75rem, 6.5vw, 4.75rem);
+  --text-sm: 0.8125rem;
+  --text-xs: 0.75rem;
+  --text-micro: 0.6875rem;
 
-  /* ---- Ink & paper ------------------------------------------------------ */
-  --paper: #f3f1ea;
-  --paper-raised: #fbfaf6;
-  --paper-sunken: #eceadf;
+  /* Surfaces & ink */
+  --plane: #f5f4f0;
+  --surface: #ffffff;
+  --surface-sunken: #faf9f6;
+  --surface-hover: #f0efea;
 
-  --ink: #14120d;
-  --ink-secondary: #4a463c;
-  --ink-muted: #837d6f;
-  --ink-inverse: #fbfaf6;
+  --ink: #14140f;
+  --ink-secondary: #56554d;
+  --ink-muted: #85837a;
+  --ink-inverse: #ffffff;
 
-  /* Hairlines are earned, so there are only two weights of them. */
-  --rule: rgba(20, 18, 13, 0.12);
-  --rule-strong: rgba(20, 18, 13, 0.26);
+  --border: #e3e1d8;
+  --border-strong: #cfcdc2;
 
-  /* Interactive = ink, not a hue. */
-  --accent: #14120d;
-  --accent-ink: #fbfaf6;
-  --accent-hover: #2e2a20;
-  --accent-soft: rgba(20, 18, 13, 0.06);
-  --hover: rgba(20, 18, 13, 0.055);
-  --focus-ring: rgba(20, 18, 13, 0.18);
+  /* Accent is the darkest step of the choropleth ramp, so the brand and the
+     data speak with the same voice. */
+  --accent: #184f95;
+  --accent-hover: #123a6e;
+  --accent-soft: #e6f0fd;
+  --accent-ring: rgba(24, 79, 149, 0.35);
 
-  /* ---- Choropleth: the only colour on the page -------------------------
-     Mirrors THEMES.light in utils/colors.js; a test asserts they agree. */
-  --status-none: #dcdbd5;
-  --status-failed: #eb6834;
-  --status-guidance: #86b6ef;
-  --status-pending: #3987e5;
-  --status-enacted: #184f95;
-
-  --ink-on-none: #0b0b0b;
-  --ink-on-failed: #0b0b0b;
-  --ink-on-guidance: #0b0b0b;
-  --ink-on-pending: #0b0b0b;
-  --ink-on-enacted: #ffffff;
-
-  /* Badges are tinted paper, not saturated chips. */
-  --badge-enacted-bg: rgba(24, 79, 149, 0.11);
-  --badge-enacted-text: #123a6e;
-  --badge-pending-bg: rgba(57, 135, 229, 0.13);
-  --badge-pending-text: #1c5cab;
-  --badge-guidance-bg: rgba(134, 182, 239, 0.20);
-  --badge-guidance-text: #25538f;
-  --badge-failed-bg: rgba(235, 104, 52, 0.13);
-  --badge-failed-text: #8f3c17;
-
-  --state-stroke: #f3f1ea;
-  --legend-bg: rgba(251, 250, 246, 0.86);
-  --swatch-ring: rgba(20, 18, 13, 0.18);
-  --mark-highlight: rgba(233, 168, 32, 0.34);
-
-  /* ---- Space ------------------------------------------------------------ */
+  /* Spacing scale */
   --s1: 0.25rem;
   --s2: 0.5rem;
   --s3: 0.75rem;
   --s4: 1rem;
   --s5: 1.5rem;
-  --s6: 2.25rem;
-  --s7: 3.5rem;
-  --s8: 5.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
 
-  --radius-sm: 4px;
-  --radius: 6px;
-  --radius-lg: 10px;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
   --radius-pill: 999px;
 
-  /* Elevation is for things that genuinely float above the map. */
-  --lift-sm: 0 1px 2px rgba(20, 18, 13, 0.08);
-  --lift: 0 4px 16px -4px rgba(20, 18, 13, 0.16);
-  --lift-lg: 0 18px 48px -12px rgba(20, 18, 13, 0.28);
-  --lift-panel: -20px 0 60px -30px rgba(20, 18, 13, 0.35);
+  --shadow-sm: 0 1px 2px rgba(20, 20, 15, 0.06);
+  --shadow: 0 2px 8px rgba(20, 20, 15, 0.08);
+  --shadow-lg: 0 8px 28px rgba(20, 20, 15, 0.12);
+  --shadow-drawer: -8px 0 32px rgba(20, 20, 15, 0.10);
 
-  --header-height: 58px;
+  --header-height: 60px;
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
 
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.5;
   color: var(--ink);
-  background-color: var(--paper);
+  background-color: var(--plane);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -124,26 +75,35 @@
 
 *,
 *::before,
-*::after { box-sizing: border-box; }
+*::after {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   margin: 0;
   height: 100%;
   min-width: 320px;
   overflow: hidden;
 }
 
-#root { height: 100%; }
-
-h1, h2, h3, h4 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.021em;
+#root {
+  height: 100%;
 }
 
-p { margin: 0; }
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0;
+}
 
 button {
   font-family: inherit;
@@ -152,137 +112,29 @@ button {
   cursor: pointer;
 }
 
-/* Links are underlined ink. Colour would imply data. */
 a {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.18em;
-  text-decoration-color: var(--rule-strong);
-  transition: text-decoration-color 0.15s var(--ease);
+  color: var(--accent);
+  text-decoration: none;
 }
 
-a:hover { text-decoration-color: var(--ink); }
+a:hover {
+  text-decoration: underline;
+}
 
+/* One focus treatment everywhere, so keyboard users get a consistent signal. */
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
 
-/* Tracked micro-caps: names a region without competing with its contents. */
-.eyebrow {
-  font-family: var(--font-sans);
-  font-size: var(--text-micro);
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* ==========================================================================
-   Dark theme
-   Steps selected for the dark surface and validated against it (ordinal ramp
-   passes; all-pairs CVD dE 15.8, normal-vision 15.9). The ramp runs the other
-   way: on paper more ink means more, on a dark ground more light does.
-   ========================================================================== */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --paper: #100f0d;
-    --paper-raised: #191816;
-    --paper-sunken: #1e1d1a;
-    --ink: #f6f4ee;
-    --ink-secondary: #b9b4a7;
-    --ink-muted: #837d6f;
-    --ink-inverse: #100f0d;
-    --rule: rgba(246, 244, 238, 0.14);
-    --rule-strong: rgba(246, 244, 238, 0.30);
-    --accent: #f6f4ee;
-    --accent-ink: #100f0d;
-    --accent-hover: #d9d5c9;
-    --accent-soft: rgba(246, 244, 238, 0.09);
-    --hover: rgba(246, 244, 238, 0.08);
-    --focus-ring: rgba(246, 244, 238, 0.26);
-    --status-none: #3a3a36;
-    --status-failed: #d95926;
-    --status-guidance: #184f95;
-    --status-pending: #3987e5;
-    --status-enacted: #9ec5f4;
-    --ink-on-none: #ffffff;
-    --ink-on-failed: #0b0b0b;
-    --ink-on-guidance: #ffffff;
-    --ink-on-pending: #0b0b0b;
-    --ink-on-enacted: #0b0b0b;
-    --badge-enacted-bg: rgba(158, 197, 244, 0.16);
-    --badge-enacted-text: #c2dbf8;
-    --badge-pending-bg: rgba(57, 135, 229, 0.22);
-    --badge-pending-text: #9ec5f4;
-    --badge-guidance-bg: rgba(24, 79, 149, 0.36);
-    --badge-guidance-text: #86b6ef;
-    --badge-failed-bg: rgba(217, 89, 38, 0.22);
-    --badge-failed-text: #f0a882;
-    --state-stroke: #100f0d;
-    --legend-bg: rgba(25, 24, 22, 0.88);
-    --swatch-ring: rgba(246, 244, 238, 0.22);
-    --mark-highlight: rgba(233, 168, 32, 0.30);
-    --lift-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --lift: 0 4px 16px -4px rgba(0, 0, 0, 0.6);
-    --lift-lg: 0 18px 48px -12px rgba(0, 0, 0, 0.75);
-    --lift-panel: -20px 0 60px -30px rgba(0, 0, 0, 0.7);
-  }
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --paper: #100f0d;
-  --paper-raised: #191816;
-  --paper-sunken: #1e1d1a;
-  --ink: #f6f4ee;
-  --ink-secondary: #b9b4a7;
-  --ink-muted: #837d6f;
-  --ink-inverse: #100f0d;
-  --rule: rgba(246, 244, 238, 0.14);
-  --rule-strong: rgba(246, 244, 238, 0.30);
-  --accent: #f6f4ee;
-  --accent-ink: #100f0d;
-  --accent-hover: #d9d5c9;
-  --accent-soft: rgba(246, 244, 238, 0.09);
-  --hover: rgba(246, 244, 238, 0.08);
-  --focus-ring: rgba(246, 244, 238, 0.26);
-  --status-none: #3a3a36;
-  --status-failed: #d95926;
-  --status-guidance: #184f95;
-  --status-pending: #3987e5;
-  --status-enacted: #9ec5f4;
-  --ink-on-none: #ffffff;
-  --ink-on-failed: #0b0b0b;
-  --ink-on-guidance: #ffffff;
-  --ink-on-pending: #0b0b0b;
-  --ink-on-enacted: #0b0b0b;
-  --badge-enacted-bg: rgba(158, 197, 244, 0.16);
-  --badge-enacted-text: #c2dbf8;
-  --badge-pending-bg: rgba(57, 135, 229, 0.22);
-  --badge-pending-text: #9ec5f4;
-  --badge-guidance-bg: rgba(24, 79, 149, 0.36);
-  --badge-guidance-text: #86b6ef;
-  --badge-failed-bg: rgba(217, 89, 38, 0.22);
-  --badge-failed-text: #f0a882;
-  --state-stroke: #100f0d;
-  --legend-bg: rgba(25, 24, 22, 0.88);
-  --swatch-ring: rgba(246, 244, 238, 0.22);
-  --mark-highlight: rgba(233, 168, 32, 0.30);
-  --lift-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --lift: 0 4px 16px -4px rgba(0, 0, 0, 0.6);
-  --lift-lg: 0 18px 48px -12px rgba(0, 0, 0, 0.75);
-  --lift-panel: -20px 0 60px -30px rgba(0, 0, 0, 0.7);
 }

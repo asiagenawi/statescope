@@ -22,11 +22,6 @@ function loadGeo() {
   return geoPromise
 }
 
-/** Warm the topojson ahead of the map being shown. Safe to call repeatedly. */
-export function prefetchGeo() {
-  loadGeo().catch(() => {})
-}
-
 export function useGeoData() {
   const [geo, setGeo] = useState(null)
   const [error, setError] = useState(null)

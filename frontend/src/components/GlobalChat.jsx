@@ -1,11 +1,8 @@
 import { useState, useRef, useEffect, useMemo, useCallback, Suspense, lazy } from 'react'
 import { streamAsk, warmBackend } from '../utils/api'
-import { useDrawerFocus } from '../hooks/useDrawerFocus'
-import Caret from './Layout/Caret'
 
 // react-markdown only matters once an answer exists.
 const ChatMarkdown = lazy(() => import('./ChatMarkdown'))
-const ChatSources = lazy(() => import('./ChatSources'))
 
 const STORAGE_KEY = 'statescope.conversations'
 
@@ -38,7 +35,7 @@ function loadConversations() {
   return [newConversation()]
 }
 
-function GlobalChat({ seedQuestion, onClose, style }) {
+function GlobalChat({ onClose, style }) {
   const [convos, setConvos] = useState(loadConversations)
   const [activeId, setActiveId] = useState(() => convos[0].id)
   const [input, setInput] = useState('')
@@ -46,10 +43,8 @@ function GlobalChat({ seedQuestion, onClose, style }) {
   const [waking, setWaking] = useState(false)
   const [placeholderIdx, setPlaceholderIdx] = useState(0)
   const [showList, setShowList] = useState(false)
-  const [activeCitation, setActiveCitation] = useState(null)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
-  const drawerRef = useDrawerFocus()
 
   const active = convos.find(c => c.id === activeId) || convos[0]
   // Memoised so the empty-array fallback isn't a new value on every render,
@@ -72,17 +67,6 @@ function GlobalChat({ seedQuestion, onClose, style }) {
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
-
-  // A question handed over from a drawer. Keyed by timestamp so asking the same
-  // thing twice still fires, and guarded so it never interrupts a live request.
-  const lastSeed = useRef(null)
-  useEffect(() => {
-    if (!seedQuestion || seedQuestion.at === lastSeed.current) return
-    lastSeed.current = seedQuestion.at
-    if (loading) return
-    sendQuestion(seedQuestion.text)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seedQuestion])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -117,22 +101,17 @@ function GlobalChat({ seedQuestion, onClose, style }) {
     // One placeholder message that fills in as deltas arrive.
     updateMessages(convoId, prev => [...prev, { role: 'assistant', content: '', streaming: true }])
 
-    const patchAnswer = patch => {
+    const writeAnswer = (text, done) => {
       updateMessages(convoId, prev => {
         const next = [...prev]
         const last = next.length - 1
-        if (last >= 0) next[last] = { ...next[last], role: 'assistant', ...patch }
+        if (last >= 0) next[last] = { role: 'assistant', content: text, streaming: !done }
         return next
       })
     }
 
-    const writeAnswer = (text, done) => patchAnswer({ content: text, streaming: !done })
-
     try {
-      const answer = await streamAsk(q, {
-        onDelta: text => writeAnswer(text, false),
-        onSources: sources => patchAnswer({ sources }),
-      })
+      const answer = await streamAsk(q, { onDelta: text => writeAnswer(text, false) })
       writeAnswer(answer, true)
     } catch {
       writeAnswer('Sorry, something went wrong. Please try again.', true)
@@ -174,13 +153,7 @@ function GlobalChat({ seedQuestion, onClose, style }) {
   const started = convos.filter(c => c.messages.length > 0)
 
   return (
-    <aside
-      className="drawer chat-drawer"
-      style={style}
-      aria-label="Ask about AI education policy"
-      tabIndex={-1}
-      ref={drawerRef}
-    >
+    <aside className="drawer chat-drawer" style={style} aria-label="Ask about AI education policy">
       <div className="drawer-header chat-header">
         <h2 className="drawer-title chat-title">Ask StateScope</h2>
         <div className="chat-header-actions">
@@ -191,7 +164,7 @@ function GlobalChat({ seedQuestion, onClose, style }) {
               aria-expanded={showList}
             >
               History
-              <Caret open={showList} />
+              <span className="chevron" aria-hidden="true">{showList ? '▴' : '▾'}</span>
             </button>
           )}
           <button className="text-btn" onClick={handleNew}>+ New</button>
@@ -252,18 +225,7 @@ function GlobalChat({ seedQuestion, onClose, style }) {
               msg.content
             ) : msg.content ? (
               <Suspense fallback={<span className="chat-plain">{msg.content}</span>}>
-                <ChatMarkdown
-                  content={msg.content}
-                  sourceCount={msg.sources?.length || 0}
-                  onCitationClick={n => setActiveCitation({ message: i, n })}
-                />
-                {!msg.streaming && (
-                  <ChatSources
-                    sources={msg.sources}
-                    highlighted={activeCitation?.message === i ? activeCitation.n : null}
-                    onDismissHighlight={() => setActiveCitation(null)}
-                  />
-                )}
+                <ChatMarkdown content={msg.content} />
               </Suspense>
             ) : (
               <span className="typing" aria-label="Thinking">

@@ -1,5 +1,4 @@
 import { POLICY_STATUS_BADGES } from '../../utils/colors'
-import { describeStatus } from '../../utils/policyStatus'
 
 const TYPE_LABELS = {
   bill: 'Bill',
@@ -7,17 +6,11 @@ const TYPE_LABELS = {
   executive_order: 'Executive order',
 }
 
-/**
- * Show the host a policy actually came from. "View source" tells a reader
- * nothing; "leginfo.legislature.ca.gov" tells them this is the legislature's own
- * record rather than somebody's summary of it.
- */
-function sourceHost(url) {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '')
-  } catch {
-    return null
-  }
+const STATUS_LABELS = {
+  enacted: 'Enacted',
+  introduced: 'Pending',
+  active: 'In effect',
+  failed: 'Failed',
 }
 
 function formatDate(value) {
@@ -27,46 +20,26 @@ function formatDate(value) {
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
 
-// Tone maps to the same scale the map uses, so a card and its state agree.
-const BADGE_BY_TONE = {
-  enacted: POLICY_STATUS_BADGES.enacted,
-  pending: POLICY_STATUS_BADGES.introduced,
-  guidance: POLICY_STATUS_BADGES.active,
-  failed: POLICY_STATUS_BADGES.failed,
-}
-
-function PolicyCard({ policy, highlighted }) {
-  const status = describeStatus(policy)
-  const badge = BADGE_BY_TONE[status.tone] || POLICY_STATUS_BADGES.active
+function PolicyCard({ policy }) {
+  const badge = POLICY_STATUS_BADGES[policy.status] || POLICY_STATUS_BADGES.active
   const type = TYPE_LABELS[policy.policy_type] || policy.policy_type?.replace('_', ' ')
   const date = formatDate(policy.date_introduced)
-  const host = policy.source_url ? sourceHost(policy.source_url) : null
 
   // Sans metadata under a serif title: the hierarchy does the work the old
   // all-serif card asked color and size to do alone.
   const meta = [type, policy.bill_number, date].filter(Boolean)
 
   return (
-    <article
-      className={`policy-card${highlighted ? ' policy-card--highlighted' : ''}`}
-      style={{ color: badge.accent }}
-      data-policy-id={policy.id}
-    >
+    <article className="policy-card" style={{ borderLeftColor: badge.accent }}>
       <div className="policy-card-head">
         <h4 className="policy-card-title">{policy.title}</h4>
         <span
           className="policy-badge"
           style={{ backgroundColor: badge.bg, color: badge.text }}
         >
-          {status.label}
+          {STATUS_LABELS[policy.status] || policy.status}
         </span>
       </div>
-
-      <p className="policy-card-binding">
-        {status.binding
-          ? 'Legally binding'
-          : 'Not legally binding'}
-      </p>
 
       {meta.length > 0 && (
         <p className="policy-card-meta">
@@ -90,7 +63,7 @@ function PolicyCard({ policy, highlighted }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="policy-card-source">{host || 'View source'}</span>
+          View source
           <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true">
             <path
               d="M4.5 1.5h6v6M10.5 1.5 5 7M8 9.5v1h-6.5V4h1"
