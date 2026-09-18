@@ -119,10 +119,27 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
           <div className="empty-state">
             <h3 className="empty-title">No AI education policy on record</h3>
             <p className="empty-text">
-              {state.name} has no tracked legislation, executive order, or department
-              guidance on AI in education. That absence is itself a finding — ask the
-              chat how neighbouring states are approaching it.
+              Nothing was found for {state.name} in the sources searched — which is
+              not the same as nothing existing. Guidance published as a PDF on a
+              department website is the most likely thing to be missed.
             </p>
+            {/* An empty drawer was a dead end; these are the next moves someone
+                actually wants from here. */}
+            <div className="empty-actions">
+              {onCompare && (
+                <button className="empty-action" onClick={onCompare}>
+                  Compare with a state that has acted
+                </button>
+              )}
+              <a
+                className="empty-action"
+                href="https://github.com/asiagenawi/statescope/issues/new"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Know of a policy we’ve missed? Tell us
+              </a>
+            </div>
           </div>
         ) : (
           <>

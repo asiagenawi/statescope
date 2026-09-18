@@ -139,6 +139,7 @@ function App() {
                   urlState={urlState}
                   setUrlState={setUrlState}
                   onSelectState={handleSelectState}
+                  onSelectPolicy={handleSelectPolicy}
                 />
               </Suspense>
             ) : (

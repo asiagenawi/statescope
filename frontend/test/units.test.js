@@ -135,3 +135,40 @@ test('compare: unknown codes are dropped rather than rendering blank columns', (
   }
   assert.equal(buildComparison(snapshot, ['CA', 'ZZ']).columns.length, 1)
 })
+
+test('map navigation: arrows move to the geographically nearest state, not the next in DOM order', async () => {
+  const { nextInDirection, defaultFocus, isArrowKey } = await import('../src/utils/mapNavigation.js')
+
+  // A rough west-to-east row with one state offset below.
+  const positions = [
+    { code: 'CA', x: 100, y: 200 },
+    { code: 'NV', x: 160, y: 190 },
+    { code: 'UT', x: 220, y: 190 },
+    { code: 'AZ', x: 170, y: 260 },
+  ]
+
+  assert.equal(nextInDirection(positions, 'CA', 'ArrowRight'), 'NV')
+  assert.equal(nextInDirection(positions, 'NV', 'ArrowRight'), 'UT')
+  assert.equal(nextInDirection(positions, 'NV', 'ArrowDown'), 'AZ')
+  assert.equal(nextInDirection(positions, 'NV', 'ArrowLeft'), 'CA')
+
+  // Nothing further west than California: movement stops rather than wrapping
+  // to the far side of the country.
+  assert.equal(nextInDirection(positions, 'CA', 'ArrowLeft'), null)
+
+  assert.equal(defaultFocus(positions), 'CA', 'westernmost is the entry point')
+  assert.ok(isArrowKey('ArrowUp') && !isArrowKey('Enter'))
+})
+
+test('map navigation: prefers on-axis neighbours over closer diagonal ones', () => {
+  // Straight ahead but further, vs. near but sharply off-axis.
+  const positions = [
+    { code: 'KS', x: 100, y: 100 },
+    { code: 'MO', x: 180, y: 105 },
+    { code: 'TX', x: 120, y: 200 },
+  ]
+  return import('../src/utils/mapNavigation.js').then(({ nextInDirection }) => {
+    assert.equal(nextInDirection(positions, 'KS', 'ArrowRight'), 'MO')
+    assert.equal(nextInDirection(positions, 'KS', 'ArrowDown'), 'TX')
+  })
+})

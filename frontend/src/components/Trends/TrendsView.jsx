@@ -5,6 +5,9 @@ import PolicyTimeline from './PolicyTimeline'
 import CategoryBreakdown from './CategoryBreakdown'
 import FilterBar from './FilterBar'
 import { downloadCSV } from '../../utils/export'
+import { buildFindings, recentPolicies } from '../../utils/findings'
+import KeyFindings from './KeyFindings'
+import RecentActivity from './RecentActivity'
 
 /** Name the file after what's actually in it, so downloads stay tellable apart. */
 function exportFilename(filters) {
@@ -21,7 +24,7 @@ const STATUS_LABELS = {
   failed: 'Failed',
 }
 
-function TrendsView({ snapshot, urlState, setUrlState, onSelectState }) {
+function TrendsView({ snapshot, urlState, setUrlState, onSelectState, onSelectPolicy }) {
   // Filters live in the URL so a narrowed view is shareable and survives reload.
   const filters = useMemo(() => ({
     state: urlState.fstate || null,
@@ -42,6 +45,14 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState }) {
   const filteredState = filters.state
     ? snapshot.states.find(s => s.code === filters.state)
     : null
+
+  // Findings describe the whole dataset, not the filtered slice -- a filtered
+  // claim would read as a claim about the field.
+  const findings = useMemo(
+    () => buildFindings(snapshot, snapshot.dataUpdated),
+    [snapshot],
+  )
+  const recent = useMemo(() => recentPolicies(snapshot.policies, 6), [snapshot.policies])
 
   const peakYear = useMemo(() => {
     if (!trends.timeline.length) return null
@@ -102,6 +113,10 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState }) {
           </div>
         </div>
 
+        {!filters.state && !filters.topicId && !filters.policyType && (
+          <KeyFindings findings={findings} />
+        )}
+
         <div className="panel-grid">
           <section className="chart-panel">
             <h3 className="chart-title">Policies introduced per year</h3>
@@ -137,6 +152,12 @@ function TrendsView({ snapshot, urlState, setUrlState, onSelectState }) {
             <CategoryBreakdown data={trends.topicCounts} />
           </section>
         </div>
+
+        <RecentActivity
+          policies={recent}
+          onSelectPolicy={onSelectPolicy}
+          dataUpdated={snapshot.dataUpdated}
+        />
       </div>
     </div>
   )

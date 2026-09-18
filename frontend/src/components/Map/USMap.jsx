@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
 import { geoCentroid } from 'd3-geo'
 import { useGeoData } from '../../hooks/useGeoData'
 import { formatMonth } from '../../utils/dates'
+import { isArrowKey, nextInDirection, defaultFocus } from '../../utils/mapNavigation'
 import { STATUS_DESCRIPTIONS, statusVar, statusInkVar } from '../../utils/colors'
 import MapLegend from './MapLegend'
 import NortheastInset from './NortheastInset'
@@ -31,6 +32,20 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
   const [hoveredState, setHoveredState] = useState(null)
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
 
+  // Roving tabindex: exactly one shape is tabbable, arrows move between them.
+  const [focusedCode, setFocusedCode] = useState(null)
+  const positionsRef = useRef([])
+  const svgRef = useRef(null)
+  const pendingFocus = useRef(null)
+
+  // Move real DOM focus after the render that changed which shape is tabbable.
+  useEffect(() => {
+    if (!pendingFocus.current) return
+    const code = pendingFocus.current
+    pendingFocus.current = null
+    svgRef.current?.querySelector(`[data-state-code="${code}"]`)?.focus()
+  }, [focusedCode])
+
   const handleMouseEnter = useCallback((geoItem, evt) => {
     const state = stateByFips[geoItem.id]
     if (state) {
@@ -51,10 +66,21 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
   }, [stateByFips, onSelectState])
 
   const handleKeyDown = useCallback((evt, geoItem) => {
-    if (evt.key !== 'Enter' && evt.key !== ' ') return
+    if (evt.key === 'Enter' || evt.key === ' ') {
+      evt.preventDefault()
+      handleClick(geoItem)
+      return
+    }
+    if (!isArrowKey(evt.key)) return
+
     evt.preventDefault()
-    handleClick(geoItem)
-  }, [handleClick])
+    const current = stateByFips[geoItem.id]?.code
+    const next = nextInDirection(positionsRef.current, current, evt.key)
+    if (next) {
+      pendingFocus.current = next
+      setFocusedCode(next)
+    }
+  }, [handleClick, stateByFips])
 
   const error = geoError || dataError
   if (error) {
@@ -79,11 +105,29 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
             height={640}
             viewBox="0 0 960 640"
             className="composable-map"
-            role="group"
-            aria-label="US map of state AI education policy status"
+            ref={svgRef}
+            role="application"
+            aria-label="Map of state AI education policy. Use the arrow keys to move between states, Enter to open one."
           >
             <Geographies geography={geo}>
-              {({ geographies, projection }) => (
+              {({ geographies, projection }) => {
+                const positions = []
+                for (const g of geographies) {
+                  const st = stateByFips[g.id]
+                  if (!st) continue
+                  const c = geoCentroid(g)
+                  const xy = c && projection(c)
+                  if (xy) positions.push({ code: st.code, x: xy[0], y: xy[1] })
+                }
+                positionsRef.current = positions
+
+                // Whichever state holds the tab stop: the selection, the last
+                // arrowed-to state, or a sensible default.
+                const tabCode = focusedCode
+                  || selectedState?.code
+                  || defaultFocus(positions)
+
+                return (
                 <>
                   {geographies.map(geoItem => {
                     const state = stateByFips[geoItem.id]
@@ -95,14 +139,18 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                         geography={geoItem}
                         className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
                         fill={statusVar(status)}
-                        tabIndex={state ? 0 : -1}
+                        data-state-code={state?.code}
+                        tabIndex={state && state.code === tabCode ? 0 : -1}
                         role={state ? 'button' : undefined}
                         aria-label={state ? accessibleName(state) : undefined}
                         aria-pressed={state ? isSelected : undefined}
                         onMouseEnter={evt => handleMouseEnter(geoItem, evt)}
                         onMouseMove={handleMouseMove}
                         onMouseLeave={handleMouseLeave}
-                        onFocus={evt => handleMouseEnter(geoItem, evt)}
+                        onFocus={evt => {
+                          handleMouseEnter(geoItem, evt)
+                          if (state) setFocusedCode(state.code)
+                        }}
                         onBlur={handleMouseLeave}
                         onKeyDown={evt => handleKeyDown(evt, geoItem)}
                         onClick={() => handleClick(geoItem)}
@@ -130,7 +178,8 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                     )
                   })}
                 </>
-              )}
+                )
+              }}
             </Geographies>
           </ComposableMap>
         )}
@@ -143,7 +192,6 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
             onMouseEnter={handleMouseEnter}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            onKeyDown={handleKeyDown}
             onClick={handleClick}
           />
         )}

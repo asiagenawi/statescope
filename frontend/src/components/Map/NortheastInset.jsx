@@ -1,5 +1,5 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
-import { STATUS_DESCRIPTIONS, statusVar } from '../../utils/colors'
+import { statusVar } from '../../utils/colors'
 
 const NORTHEAST_FIPS = new Set([
   '09', // CT
@@ -28,12 +28,11 @@ function NortheastInset({
   onMouseEnter,
   onMouseLeave,
   onMouseMove,
-  onKeyDown,
   onClick,
 }) {
   return (
     <div className="northeast-inset">
-      <div className="northeast-inset-label">Northeast, enlarged</div>
+      <div className="northeast-inset-label" aria-hidden="true">Northeast, enlarged</div>
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{ center: [-73.7, 42.6], scale: 780 }}
@@ -41,8 +40,7 @@ function NortheastInset({
         height={170}
         viewBox="0 0 200 170"
         className="northeast-inset-map"
-        role="group"
-        aria-label="Northeast states, enlarged"
+        aria-hidden="true"
       >
         <Geographies geography={geo}>
           {({ geographies }) =>
@@ -52,25 +50,16 @@ function NortheastInset({
                 const state = stateByFips[geoItem.id]
                 const status = state?.policy_status || 'none'
                 const isSelected = selectedState?.code === state?.code
-                const label = state
-                  ? `${state.name}. ${STATUS_DESCRIPTIONS[status]}.`
-                  : undefined
                 return (
                   <Geography
                     key={geoItem.rsmKey}
                     geography={geoItem}
                     className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
                     fill={statusVar(status)}
-                    tabIndex={state ? 0 : -1}
-                    role={state ? 'button' : undefined}
-                    aria-label={label}
-                    aria-pressed={state ? isSelected : undefined}
+                    tabIndex={-1}
                     onMouseEnter={evt => onMouseEnter(geoItem, evt)}
                     onMouseMove={onMouseMove}
                     onMouseLeave={onMouseLeave}
-                    onFocus={evt => onMouseEnter(geoItem, evt)}
-                    onBlur={onMouseLeave}
-                    onKeyDown={evt => onKeyDown(evt, geoItem)}
                     onClick={() => onClick(geoItem)}
                   />
                 )
