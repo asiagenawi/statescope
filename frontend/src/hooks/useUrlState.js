@@ -9,7 +9,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
  * rather than unwinding every click, but popstate is still honoured so a shared
  * link and the browser's own history both behave.
  */
-const KEYS = ['view', 'state', 'topic', 'type', 'fstate']
+const KEYS = ['view', 'state', 'topic', 'type', 'fstate', 'about']
 
 function read() {
   const params = new URLSearchParams(window.location.search)

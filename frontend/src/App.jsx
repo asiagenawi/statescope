@@ -6,6 +6,7 @@ import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
 import OnboardingCard from './components/Layout/OnboardingCard'
 import ErrorBoundary from './components/Layout/ErrorBoundary'
+import AboutPanel from './components/Layout/AboutPanel'
 import { useResizablePanel } from './hooks/useResizablePanel'
 import { useMediaQuery } from './hooks/useMediaQuery'
 import { useSnapshot } from './hooks/useSnapshot'
@@ -25,6 +26,7 @@ function App() {
   const [chatOpen, setChatOpen] = useState(false)
 
   const view = urlState.view === 'trends' ? 'trends' : 'map'
+  const aboutOpen = urlState.about === '1'
   // Resolved from the snapshot rather than held separately, so a shared link
   // like ?state=TX selects Texas as soon as the data lands.
   const selectedState = urlState.state
@@ -55,12 +57,13 @@ function App() {
   useEffect(() => {
     function onKeyDown(e) {
       if (e.key !== 'Escape') return
-      if (chatOpen) setChatOpen(false)
+      if (aboutOpen) setUrlState({ about: null })
+      else if (chatOpen) setChatOpen(false)
       else if (selectedState) setUrlState({ state: null })
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [chatOpen, selectedState, setUrlState])
+  }, [aboutOpen, chatOpen, selectedState, setUrlState])
 
   // Clicking the already-selected state deselects it.
   const handleSelectState = useCallback(state => {
@@ -74,7 +77,7 @@ function App() {
     setUrlState({ view: next === 'trends' ? 'trends' : null })
   }, [setUrlState])
 
-  const drawersOpen = Boolean(selectedState) || chatOpen
+  const drawersOpen = Boolean(selectedState) || chatOpen || aboutOpen
 
   return (
     <div className="app">
@@ -85,6 +88,7 @@ function App() {
         onToggleChat={() => setChatOpen(o => !o)}
         snapshot={snapshot}
         onSelectState={handleSelectState}
+        onOpenAbout={() => setUrlState({ about: '1' })}
       />
 
       <div className={`app-body${drawersOpen ? ' app-body--drawers' : ''}`}>
@@ -96,6 +100,7 @@ function App() {
                   snapshot={snapshot}
                   selectedState={selectedState}
                   onSelectState={handleSelectState}
+                  onOpenAbout={() => setUrlState({ about: '1' })}
                 />
                 {/* Hidden while a drawer is open so it can't sit on the legend. */}
                 {!drawersOpen && <OnboardingCard />}
@@ -127,6 +132,12 @@ function App() {
               />
             </ErrorBoundary>
           </>
+        )}
+
+        {aboutOpen && (
+          <ErrorBoundary label="about panel">
+            <AboutPanel snapshot={snapshot} onClose={() => setUrlState({ about: null })} />
+          </ErrorBoundary>
         )}
 
         {chatOpen && (

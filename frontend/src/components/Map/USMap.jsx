@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
 import { geoCentroid } from 'd3-geo'
 import { useGeoData } from '../../hooks/useGeoData'
+import { formatMonth } from '../../utils/dates'
 import { STATUS_COLORS, STATUS_DESCRIPTIONS, labelInkOn } from '../../utils/colors'
 import MapLegend from './MapLegend'
 import NortheastInset from './NortheastInset'
@@ -23,7 +24,7 @@ function accessibleName(state) {
   return `${state.name}. ${status}. ${policies}.`
 }
 
-function USMap({ snapshot, selectedState, onSelectState }) {
+function USMap({ snapshot, selectedState, onSelectState, onOpenAbout }) {
   const { geo, error: geoError } = useGeoData()
   const { stateByFips, error: dataError, loading: dataLoading } = snapshot
 
@@ -150,6 +151,14 @@ function USMap({ snapshot, selectedState, onSelectState }) {
         <MapLegend loading={dataLoading} />
 
         {hoveredState && <StateTooltip state={hoveredState} position={tooltipPos} />}
+
+        {snapshot.dataUpdated && (
+          <p className="colophon-line">
+            Sources: state legislatures, departments of education, Congress.gov ·
+            Curated to {formatMonth(snapshot.dataUpdated)} ·{' '}
+            <button onClick={onOpenAbout}>Methodology &amp; limitations</button>
+          </p>
+        )}
       </div>
     </div>
   )

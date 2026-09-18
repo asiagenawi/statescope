@@ -48,6 +48,13 @@ React app runs at http://localhost:5173
 
 The map works with the backend stopped. Only the chat needs it.
 
+## Methodology
+
+The in-app **Methodology** panel (`?about=1`) documents what counts as a policy, how
+each state's colour is derived, where the data comes from, and — importantly — where
+the dataset falls short. Every figure in it is computed from the snapshot at render
+time rather than written by hand, so the prose cannot drift away from the data.
+
 ## Shareable URLs
 
 App state lives in the query string, so views are linkable and survive a reload:
@@ -57,8 +64,9 @@ App state lives in the query string, so views are linkable and survive a reload:
 | `?state=TX` | the map with Texas selected |
 | `?view=trends` | the Trends view |
 | `?view=trends&fstate=CA&type=bill` | Trends filtered to California bills |
+| `?about=1` | the methodology panel |
 
-Keys: `view`, `state`, and the Trends filters `fstate`, `topic`, `type`.
+Keys: `view`, `state`, `about`, and the Trends filters `fstate`, `topic`, `type`.
 
 ## Regenerating the data snapshot
 

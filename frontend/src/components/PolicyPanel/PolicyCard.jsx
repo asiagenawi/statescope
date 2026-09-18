@@ -13,6 +13,19 @@ const STATUS_LABELS = {
   failed: 'Failed',
 }
 
+/**
+ * Show the host a policy actually came from. "View source" tells a reader
+ * nothing; "leginfo.legislature.ca.gov" tells them this is the legislature's own
+ * record rather than somebody's summary of it.
+ */
+function sourceHost(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '')
+  } catch {
+    return null
+  }
+}
+
 function formatDate(value) {
   if (!value) return null
   const d = new Date(value)
@@ -24,6 +37,7 @@ function PolicyCard({ policy }) {
   const badge = POLICY_STATUS_BADGES[policy.status] || POLICY_STATUS_BADGES.active
   const type = TYPE_LABELS[policy.policy_type] || policy.policy_type?.replace('_', ' ')
   const date = formatDate(policy.date_introduced)
+  const host = policy.source_url ? sourceHost(policy.source_url) : null
 
   // Sans metadata under a serif title: the hierarchy does the work the old
   // all-serif card asked color and size to do alone.
@@ -63,7 +77,7 @@ function PolicyCard({ policy }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          View source
+          <span className="policy-card-source">{host || 'View source'}</span>
           <svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true">
             <path
               d="M4.5 1.5h6v6M10.5 1.5 5 7M8 9.5v1h-6.5V4h1"
