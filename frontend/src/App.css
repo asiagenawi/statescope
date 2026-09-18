@@ -2838,3 +2838,22 @@ a.chat-source-body:hover .chat-source-title {
 @media print {
   .map-zoom { display: none !important; }
 }
+
+/* Binding vs non-binding is the distinction the methodology turns on, so a card
+   states it rather than leaving it to be inferred from the badge. */
+.policy-card-binding {
+  margin-top: 5px;
+  font-size: var(--text-micro);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.policy-group-hint {
+  font-size: var(--text-micro);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-muted);
+}

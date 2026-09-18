@@ -2,14 +2,7 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import { useDrawerFocus } from '../../hooks/useDrawerFocus'
 import { STATUS_DESCRIPTIONS, statusVar } from '../../utils/colors'
 import PolicyCard from './PolicyCard'
-
-// Most consequential first, so the drawer opens on what matters.
-const GROUP_ORDER = [
-  { key: 'enacted', label: 'Enacted' },
-  { key: 'active', label: 'In effect' },
-  { key: 'introduced', label: 'Pending' },
-  { key: 'failed', label: 'Failed' },
-]
+import { groupPolicies } from '../../utils/policyStatus'
 
 function StateDropdown({ states, selectedCode, onSelect }) {
   const sorted = useMemo(
@@ -61,17 +54,7 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
     }
   }
 
-  const groups = useMemo(() => {
-    return GROUP_ORDER
-      .map(g => ({ ...g, items: policies.filter(p => p.status === g.key) }))
-      .filter(g => g.items.length > 0)
-  }, [policies])
-
-  // Anything with an unexpected status still has to appear somewhere.
-  const ungrouped = useMemo(() => {
-    const known = new Set(GROUP_ORDER.map(g => g.key))
-    return policies.filter(p => !known.has(p.status))
-  }, [policies])
+  const groups = useMemo(() => groupPolicies(policies), [policies])
 
   return (
     <aside
@@ -163,23 +146,13 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
                 <h3 className="policy-group-title">
                   {group.label}
                   <span className="policy-group-count">{group.items.length}</span>
+                  {group.hint && <span className="policy-group-hint">{group.hint}</span>}
                 </h3>
                 {group.items.map(p => (
                   <PolicyCard key={p.id} policy={p} highlighted={String(p.id) === highlightPolicyId} />
                 ))}
               </section>
             ))}
-            {ungrouped.length > 0 && (
-              <section className="policy-group">
-                <h3 className="policy-group-title">
-                  Other
-                  <span className="policy-group-count">{ungrouped.length}</span>
-                </h3>
-                {ungrouped.map(p => (
-                  <PolicyCard key={p.id} policy={p} highlighted={String(p.id) === highlightPolicyId} />
-                ))}
-              </section>
-            )}
           </>
         )}
       </div>

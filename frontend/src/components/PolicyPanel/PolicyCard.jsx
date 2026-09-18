@@ -1,16 +1,10 @@
 import { POLICY_STATUS_BADGES } from '../../utils/colors'
+import { describeStatus } from '../../utils/policyStatus'
 
 const TYPE_LABELS = {
   bill: 'Bill',
   guidance: 'Guidance',
   executive_order: 'Executive order',
-}
-
-const STATUS_LABELS = {
-  enacted: 'Enacted',
-  introduced: 'Pending',
-  active: 'In effect',
-  failed: 'Failed',
 }
 
 /**
@@ -33,8 +27,17 @@ function formatDate(value) {
   return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
 }
 
+// Tone maps to the same scale the map uses, so a card and its state agree.
+const BADGE_BY_TONE = {
+  enacted: POLICY_STATUS_BADGES.enacted,
+  pending: POLICY_STATUS_BADGES.introduced,
+  guidance: POLICY_STATUS_BADGES.active,
+  failed: POLICY_STATUS_BADGES.failed,
+}
+
 function PolicyCard({ policy, highlighted }) {
-  const badge = POLICY_STATUS_BADGES[policy.status] || POLICY_STATUS_BADGES.active
+  const status = describeStatus(policy)
+  const badge = BADGE_BY_TONE[status.tone] || POLICY_STATUS_BADGES.active
   const type = TYPE_LABELS[policy.policy_type] || policy.policy_type?.replace('_', ' ')
   const date = formatDate(policy.date_introduced)
   const host = policy.source_url ? sourceHost(policy.source_url) : null
@@ -55,9 +58,15 @@ function PolicyCard({ policy, highlighted }) {
           className="policy-badge"
           style={{ backgroundColor: badge.bg, color: badge.text }}
         >
-          {STATUS_LABELS[policy.status] || policy.status}
+          {status.label}
         </span>
       </div>
+
+      <p className="policy-card-binding">
+        {status.binding
+          ? 'Legally binding'
+          : 'Not legally binding'}
+      </p>
 
       {meta.length > 0 && (
         <p className="policy-card-meta">

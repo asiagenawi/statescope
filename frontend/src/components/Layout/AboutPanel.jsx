@@ -109,6 +109,15 @@ function AboutPanel({ snapshot, onClose }) {
           without passing a single bill, and the map keeps that distinction rather
           than collapsing everything into "has a policy".
         </p>
+        <p>
+          Every policy is marked <strong>legally binding</strong> or not, and the
+          test is the same one used in every count on this site: an enacted bill
+          binds, an executive order in force binds, and nothing else does. A
+          pending bill and a published framework are both real activity, but
+          neither obliges anyone. A revoked executive order is labelled
+          <em> revoked</em> rather than failed — it was in force, and then it
+          wasn’t, which is a different fact from never passing.
+        </p>
 
         <h3>How a state gets its colour</h3>
         <p>
