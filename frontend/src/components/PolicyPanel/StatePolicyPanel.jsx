@@ -36,7 +36,7 @@ function StateDropdown({ states, selectedCode, onSelect }) {
   )
 }
 
-function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, onCompare, highlightPolicyId, style }) {
+function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, onCompare, onAsk, highlightPolicyId, style }) {
   const status = state?.policy_status || 'none'
   const drawerRef = useDrawerFocus()
   const bodyRef = useRef(null)
@@ -112,6 +112,16 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
         {states.length > 0 && (
           <StateDropdown states={states} selectedCode={state.code} onSelect={onSelectState} />
         )}
+
+        {onAsk && (
+          <button className="drawer-ask" onClick={onAsk}>
+            <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+              <path d="M8 1.5c3.6 0 6.5 2.4 6.5 5.4S11.6 12.3 8 12.3c-.5 0-1-.05-1.5-.14L3 14l.7-2.6C2.35 10.4 1.5 9 1.5 6.9 1.5 3.9 4.4 1.5 8 1.5Z"
+                fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+            </svg>
+            Ask about {state.name}
+          </button>
+        )}
       </div>
 
       <div className="drawer-body" ref={bodyRef}>
@@ -129,6 +139,11 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
               {onCompare && (
                 <button className="empty-action" onClick={onCompare}>
                   Compare with a state that has acted
+                </button>
+              )}
+              {onAsk && (
+                <button className="empty-action" onClick={onAsk}>
+                  Ask what neighbouring states are doing
                 </button>
               )}
               <a

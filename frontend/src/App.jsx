@@ -27,6 +27,8 @@ function App() {
   const [urlState, setUrlState] = useUrlState()
 
   const [chatOpen, setChatOpen] = useState(false)
+  // A question handed to the chat from elsewhere in the app.
+  const [seedQuestion, setSeedQuestion] = useState(null)
 
   // The front door shows once; a deep link never gets intercepted.
   const [hasVisited] = useState(readVisited)
@@ -94,6 +96,11 @@ function App() {
       policy: String(policy.id),
     })
   }, [setUrlState])
+
+  const askAbout = useCallback(question => {
+    setSeedQuestion({ text: question, at: Date.now() })
+    setChatOpen(true)
+  }, [])
 
   const handleViewChange = useCallback(next => {
     if (next !== 'home') markVisited()
@@ -189,6 +196,9 @@ function App() {
                 onClose={() => setUrlState({ state: null })}
                 onSelectState={s => setUrlState({ state: s.code })}
                 onCompare={() => handleCompare(selectedState.code)}
+                onAsk={() => askAbout(
+                  `What is ${selectedState.name}'s approach to AI in education, and how does it compare with neighbouring states?`,
+                )}
                 style={policyResize.width != null ? { width: policyResize.width } : undefined}
               />
             </ErrorBoundary>
@@ -206,6 +216,7 @@ function App() {
             {!isMobile && <ResizeHandle onMouseDown={chatResize.handleProps.onMouseDown} />}
             <ErrorBoundary label="chat">
               <GlobalChat
+                seedQuestion={seedQuestion}
                 onClose={() => setChatOpen(false)}
                 style={chatResize.width != null ? { width: chatResize.width } : undefined}
               />

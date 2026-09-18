@@ -65,6 +65,9 @@ function StateSearch({ snapshot, onSelectState, onSelectPolicy }) {
   }
 
   const showList = open && query.trim().length >= 2
+  // Before anything is typed, say what this searches -- the policy text is the
+  // part nobody guesses is in here.
+  const showHints = open && query.trim().length < 2
   const hasResults = flat.length > 0
 
   return (
@@ -88,6 +91,17 @@ function StateSearch({ snapshot, onSelectState, onSelectPolicy }) {
         aria-autocomplete="list"
         aria-label="Search states and policies"
       />
+
+      {showHints && (
+        <div className="search-results search-results--hints">
+          <p className="search-group">Search covers</p>
+          <ul className="search-hints">
+            <li>State names and postal codes — <em>California</em>, <em>TX</em></li>
+            <li>Bill numbers — <em>HB 531</em>, <em>AB 2885</em></li>
+            <li>Policy titles and summary text — <em>teacher training</em>, <em>privacy</em></li>
+          </ul>
+        </div>
+      )}
 
       {showList && (
         <div className="search-results" id="search-results">

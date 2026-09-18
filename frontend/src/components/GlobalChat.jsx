@@ -38,7 +38,7 @@ function loadConversations() {
   return [newConversation()]
 }
 
-function GlobalChat({ onClose, style }) {
+function GlobalChat({ seedQuestion, onClose, style }) {
   const [convos, setConvos] = useState(loadConversations)
   const [activeId, setActiveId] = useState(() => convos[0].id)
   const [input, setInput] = useState('')
@@ -72,6 +72,17 @@ function GlobalChat({ onClose, style }) {
   useEffect(() => {
     inputRef.current?.focus()
   }, [])
+
+  // A question handed over from a drawer. Keyed by timestamp so asking the same
+  // thing twice still fires, and guarded so it never interrupts a live request.
+  const lastSeed = useRef(null)
+  useEffect(() => {
+    if (!seedQuestion || seedQuestion.at === lastSeed.current) return
+    lastSeed.current = seedQuestion.at
+    if (loading) return
+    sendQuestion(seedQuestion.text)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seedQuestion])
 
   useEffect(() => {
     const timer = setInterval(() => {

@@ -65,6 +65,13 @@ Floors are 8 and 15. Colours live in two places — `utils/colors.js` for charts
 CSS custom properties for everything else — and a test asserts the two match, so
 they cannot drift.
 
+## Printing
+
+A print stylesheet turns any view into a document: interface chrome drops out,
+drawers flow inline instead of floating, cards avoid breaking across pages, and
+source links print their full URL — a citation you cannot click has to be one you
+can read. Verified by rendering the real PDF, not by reading the CSS.
+
 ## Tests
 
 ```bash
