@@ -4,7 +4,6 @@ import USMap from './components/Map/USMap'
 import GlobalChat from './components/GlobalChat'
 import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
-import OnboardingCard from './components/Layout/OnboardingCard'
 import ErrorBoundary from './components/Layout/ErrorBoundary'
 import AboutPanel from './components/Layout/AboutPanel'
 import { useResizablePanel } from './hooks/useResizablePanel'
@@ -12,6 +11,7 @@ import { useMediaQuery } from './hooks/useMediaQuery'
 import { useSnapshot } from './hooks/useSnapshot'
 import { useUrlState } from './hooks/useUrlState'
 import { FEDERAL_CODE, buildFederalJurisdiction } from './utils/federal'
+import { resolveView, readVisited, markVisited } from './utils/routing'
 import { warmBackend } from './utils/api'
 import './App.css'
 
@@ -19,6 +19,7 @@ import './App.css'
 // paints the map.
 const TrendsView = lazy(() => import('./components/Trends/TrendsView'))
 const CompareView = lazy(() => import('./components/Compare/CompareView'))
+const LandingView = lazy(() => import('./components/Landing/LandingView'))
 
 function App() {
   const isMobile = useMediaQuery('(max-width: 900px)')
@@ -27,8 +28,9 @@ function App() {
 
   const [chatOpen, setChatOpen] = useState(false)
 
-  const VIEWS = ['trends', 'compare']
-  const view = VIEWS.includes(urlState.view) ? urlState.view : 'map'
+  // The front door shows once; a deep link never gets intercepted.
+  const [hasVisited] = useState(readVisited)
+  const view = resolveView(urlState, hasVisited)
   const aboutOpen = urlState.about === '1'
   // Resolved from the snapshot rather than held separately, so a shared link
   // like ?state=TX selects Texas as soon as the data lands.
@@ -76,6 +78,7 @@ function App() {
 
   // Clicking the already-selected state deselects it.
   const handleSelectState = useCallback(state => {
+    markVisited()
     setUrlState({
       view: null,
       state: state && state.code !== urlState.state ? state.code : null,
@@ -84,6 +87,7 @@ function App() {
 
   // A policy result opens the state that owns it, with that policy called out.
   const handleSelectPolicy = useCallback(policy => {
+    markVisited()
     setUrlState({
       view: null,
       state: policy.state_code || FEDERAL_CODE,
@@ -92,6 +96,7 @@ function App() {
   }, [setUrlState])
 
   const handleViewChange = useCallback(next => {
+    if (next !== 'home') markVisited()
     setUrlState({ view: next === 'map' ? null : next })
   }, [setUrlState])
 
@@ -101,6 +106,24 @@ function App() {
   }, [setUrlState])
 
   const drawersOpen = Boolean(selectedState) || chatOpen || aboutOpen
+
+  if (view === 'home') {
+    return (
+      <div className="app app--landing">
+        <ErrorBoundary label="home page">
+          <Suspense fallback={<div className="view-loading">Loading…</div>}>
+            <LandingView
+              snapshot={snapshot}
+              onNavigate={handleViewChange}
+              onOpenChat={() => { markVisited(); handleViewChange('map'); setChatOpen(true) }}
+              onOpenAbout={() => { markVisited(); setUrlState({ view: null, about: '1' }) }}
+              onSelectPolicy={handleSelectPolicy}
+            />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+    )
+  }
 
   return (
     <div className="app">
@@ -113,25 +136,22 @@ function App() {
         onSelectState={handleSelectState}
         onSelectPolicy={handleSelectPolicy}
         onOpenAbout={() => setUrlState({ about: '1' })}
+        onGoHome={() => setUrlState({ view: 'home', state: null, about: null })}
       />
 
       <div className={`app-body${drawersOpen ? ' app-body--drawers' : ''}`}>
         <main className="stage" id="main-content">
           <ErrorBoundary label="map">
             {view === 'map' ? (
-              <>
-                <USMap
-                  snapshot={snapshot}
-                  selectedState={selectedState}
-                  onSelectState={handleSelectState}
-                  onOpenAbout={() => setUrlState({ about: '1' })}
-                  onOpenFederal={() => setUrlState({
-                    state: urlState.state === FEDERAL_CODE ? null : FEDERAL_CODE,
-                  })}
-                />
-                {/* Hidden while a drawer is open so it can't sit on the legend. */}
-                {!drawersOpen && <OnboardingCard />}
-              </>
+              <USMap
+                snapshot={snapshot}
+                selectedState={selectedState}
+                onSelectState={handleSelectState}
+                onOpenAbout={() => setUrlState({ about: '1' })}
+                onOpenFederal={() => setUrlState({
+                  state: urlState.state === FEDERAL_CODE ? null : FEDERAL_CODE,
+                })}
+              />
             ) : view === 'trends' ? (
               <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
                 <TrendsView

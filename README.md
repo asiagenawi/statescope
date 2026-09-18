@@ -104,6 +104,7 @@ App state lives in the query string, so views are linkable and survive a reload:
 | `?state=US` | federal policy |
 | `?view=trends` | the Trends view |
 | `?view=trends&fstate=CA&type=bill` | Trends filtered to California bills |
+| `?view=home` | the landing menu |
 | `?about=1` | the methodology panel |
 | `?view=compare&states=CA,TX` | two states side by side |
 

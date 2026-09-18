@@ -8,12 +8,12 @@ const VIEWS = [
   { id: 'compare', label: 'Compare' },
 ]
 
-function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onSelectPolicy, onOpenAbout }) {
+function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onSelectPolicy, onOpenAbout, onGoHome }) {
   return (
     <header className="app-header">
       <a className="skip-link" href="#main-content">Skip to content</a>
 
-      <div className="brand">
+      <button className="brand" onClick={onGoHome} aria-label="StateScope home">
         <span className="brand-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
             <rect x="2" y="13" width="4.5" height="8" rx="1.25" fill="#86b6ef" />
@@ -25,7 +25,7 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
           <span className="brand-name">StateScope</span>
           <span className="brand-tagline">AI in education policy, tracked</span>
         </span>
-      </div>
+      </button>
 
       <nav className="view-nav" aria-label="Views">
         {VIEWS.map(v => (
