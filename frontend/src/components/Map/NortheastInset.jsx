@@ -1,5 +1,5 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
-import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
+import { STATUS_DESCRIPTIONS, statusVar } from '../../utils/colors'
 
 const NORTHEAST_FIPS = new Set([
   '09', // CT
@@ -60,7 +60,7 @@ function NortheastInset({
                     key={geoItem.rsmKey}
                     geography={geoItem}
                     className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
-                    fill={STATUS_COLORS[status]}
+                    fill={statusVar(status)}
                     tabIndex={state ? 0 : -1}
                     role={state ? 'button' : undefined}
                     aria-label={label}

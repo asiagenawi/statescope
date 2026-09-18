@@ -1,4 +1,4 @@
-import { STATUS_COLORS, STATUS_ORDER, STATUS_LABELS } from '../../utils/colors'
+import { STATUS_ORDER, STATUS_LABELS, statusVar } from '../../utils/colors'
 
 // "Failed" and "No policy" sit off the ramp -- one is an outcome, the other an
 // absence -- so they read as separate keys rather than steps on the scale.
@@ -24,7 +24,7 @@ function MapLegend({ loading }) {
             <span
               key={status}
               className="legend-ramp-step"
-              style={{ backgroundColor: STATUS_COLORS[status] }}
+              style={{ backgroundColor: statusVar(status) }}
             />
           ))}
         </div>
@@ -43,7 +43,7 @@ function MapLegend({ loading }) {
           <span key={status} className="legend-key">
             <span
               className="legend-swatch"
-              style={{ backgroundColor: STATUS_COLORS[status] }}
+              style={{ backgroundColor: statusVar(status) }}
             />
             <span className="legend-label">{STATUS_LABELS[status]}</span>
           </span>

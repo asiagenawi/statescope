@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom'
-import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
+import { STATUS_DESCRIPTIONS, statusVar } from '../../utils/colors'
 
 const WIDTH = 220
 const OFFSET = 14
@@ -19,7 +19,7 @@ function StateTooltip({ state, position }) {
     <div className="state-tooltip" style={{ left, top, width: WIDTH }} role="status" aria-live="polite">
       <span className="tooltip-name">{state.name}</span>
       <span className="tooltip-status">
-        <span className="tooltip-status-dot" style={{ backgroundColor: STATUS_COLORS[status] }} />
+        <span className="tooltip-status-dot" style={{ backgroundColor: statusVar(status) }} />
         {STATUS_DESCRIPTIONS[status]}
       </span>
       <span className="tooltip-count">

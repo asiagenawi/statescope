@@ -5,7 +5,7 @@ import { linkifyCitations } from '../src/utils/citations.js'
 import { policiesToCSV } from '../src/utils/export.js'
 import { formatMonth } from '../src/utils/dates.js'
 import { buildComparison, isBinding, parseCompareCodes, MAX_COMPARE } from '../src/utils/compare.js'
-import { STATUS_COLORS, STATUS_ORDER, STATUS_LABELS, labelInkOn } from '../src/utils/colors.js'
+import { THEMES, STATUS_ORDER, STATUS_LABELS } from '../src/utils/colors.js'
 
 test('citations: numbered markers become jump links', () => {
   assert.equal(
@@ -56,16 +56,16 @@ test('dates: month keys render the same everywhere', () => {
 test('colors: every status has a colour and a label, in escalating order', () => {
   assert.deepEqual(STATUS_ORDER, ['none', 'failed', 'guidance', 'pending', 'enacted'])
   for (const status of STATUS_ORDER) {
-    assert.ok(STATUS_COLORS[status], `${status} has a colour`)
+    assert.ok(THEMES.light.status[status], `${status} has a colour`)
     assert.ok(STATUS_LABELS[status], `${status} has a label`)
   }
 })
 
-test('colors: only the darkest ramp step takes light ink', () => {
+test('colors: in light mode only the darkest ramp step takes light ink', () => {
   // White on `pending` measures 3.64:1, below the 4.5 needed for label text.
-  assert.equal(labelInkOn('enacted'), '#ffffff')
+  assert.equal(THEMES.light.ink.enacted, '#ffffff')
   for (const status of ['none', 'failed', 'guidance', 'pending']) {
-    assert.equal(labelInkOn(status), '#0b0b0b', `${status} takes dark ink`)
+    assert.equal(THEMES.light.ink[status], '#0b0b0b', `${status} takes dark ink`)
   }
 })
 

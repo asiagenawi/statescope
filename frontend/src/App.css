@@ -254,7 +254,7 @@
 }
 
 .state-search-input {
-  width: 168px;
+  width: 200px;
   padding: 7px 10px 7px 30px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
@@ -270,7 +270,7 @@
 }
 
 .state-search-input:focus {
-  width: 210px;
+  width: 240px;
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-ring);
@@ -312,7 +312,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  border: 1px solid rgba(20, 20, 15, 0.12);
+  border: 1px solid var(--swatch-ring);
   flex-shrink: 0;
 }
 
@@ -370,7 +370,7 @@
 /* Stroke and elevation carry hover instead of a brightness filter, which
    muddied the pale end of the ramp. */
 .state-shape {
-  stroke: #ffffff;
+  stroke: var(--state-stroke);
   stroke-width: 0.75;
   outline: none;
   cursor: pointer;
@@ -440,7 +440,7 @@
   flex-direction: column;
   gap: var(--s3);
   padding: var(--s3) var(--s4) var(--s3);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--legend-bg);
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -470,7 +470,7 @@
   height: 10px;
   border-radius: 3px;
   overflow: hidden;
-  border: 1px solid rgba(20, 20, 15, 0.12);
+  border: 1px solid var(--swatch-ring);
 }
 
 .legend-ramp-step {
@@ -506,7 +506,7 @@
   width: 11px;
   height: 11px;
   border-radius: 3px;
-  border: 1px solid rgba(20, 20, 15, 0.12);
+  border: 1px solid var(--swatch-ring);
   flex-shrink: 0;
 }
 
@@ -542,7 +542,8 @@
   align-items: center;
   gap: 6px;
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--plane);
+  opacity: 0.82;
 }
 
 .tooltip-status-dot {
@@ -553,7 +554,8 @@
 
 .tooltip-count {
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--plane);
+  opacity: 0.6;
 }
 
 /* ==========================================================================
@@ -614,7 +616,7 @@
 }
 
 .onboarding-cta:hover {
-  background: #2b2b22;
+  background: var(--ink-secondary);
 }
 
 /* ==========================================================================
@@ -680,7 +682,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  border: 1px solid rgba(20, 20, 15, 0.12);
+  border: 1px solid var(--swatch-ring);
 }
 
 .drawer-count {
@@ -1075,12 +1077,12 @@
 
 .chat-notice {
   padding: var(--s2) var(--s3);
-  background: #fdf4ee;
-  border: 1px solid #f5d9c6;
+  background: var(--badge-failed-bg);
+  border: 1px solid var(--status-failed);
   border-radius: var(--radius-sm);
   font-size: var(--text-xs);
   line-height: 1.5;
-  color: #8f3c17;
+  color: var(--badge-failed-text);
 }
 
 .typing {
@@ -1313,7 +1315,8 @@
 
 .chart-tooltip-label {
   font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--plane);
+  opacity: 0.7;
 }
 
 .chart-tooltip-value {
@@ -2121,7 +2124,7 @@ a.chat-source-body:hover .chat-source-title {
 
 .search-excerpt mark {
   padding: 0 1px;
-  background: #fdf0cd;
+  background: var(--mark-highlight);
   color: var(--ink);
   border-radius: 2px;
 }
@@ -2143,7 +2146,7 @@ a.chat-source-body:hover .chat-source-title {
   padding: 7px 12px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--legend-bg);
   backdrop-filter: blur(6px);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -2166,4 +2169,32 @@ a.chat-source-body:hover .chat-source-title {
 
 @media (max-width: 900px) {
   .federal-chip { bottom: var(--s7); }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-secondary);
+  transition: color 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--ink-muted);
+}
+
+/* Theme changes should not animate every surface on the page at once. */
+.app,
+.drawer,
+.map-wrapper,
+.chart-panel,
+.tile {
+  transition: background-color 0.18s var(--ease), border-color 0.18s var(--ease);
 }

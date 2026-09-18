@@ -1,5 +1,6 @@
 import StatStrip from './StatStrip'
 import StateSearch from '../Map/StateSearch'
+import ThemeToggle from './ThemeToggle'
 
 const VIEWS = [
   { id: 'map', label: 'Map' },
@@ -50,6 +51,7 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
         <button className="about-btn" onClick={onOpenAbout}>
           Methodology
         </button>
+        <ThemeToggle />
         <button
           className={`ask-btn${chatOpen ? ' ask-btn--active' : ''}`}
           onClick={onToggleChat}

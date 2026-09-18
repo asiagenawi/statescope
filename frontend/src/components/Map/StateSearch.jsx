@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
-import { STATUS_COLORS, STATUS_LABELS } from '../../utils/colors'
+import { STATUS_LABELS, statusVar } from '../../utils/colors'
 import { searchAll, matchExcerpt } from '../../utils/search'
 
 /**
@@ -77,7 +77,7 @@ function StateSearch({ snapshot, onSelectState, onSelectPolicy }) {
         ref={inputRef}
         type="text"
         className="state-search-input"
-        placeholder="Search states and policies"
+        placeholder="Search states &amp; policies"
         value={query}
         onChange={e => { setQuery(e.target.value); setHighlight(0); setOpen(true) }}
         onFocus={() => setOpen(true)}
@@ -111,7 +111,7 @@ function StateSearch({ snapshot, onSelectState, onSelectPolicy }) {
                     >
                       <span
                         className="state-search-dot"
-                        style={{ backgroundColor: STATUS_COLORS[s.policy_status || 'none'] }}
+                        style={{ backgroundColor: statusVar(s.policy_status || 'none') }}
                       />
                       <span className="state-search-name">{s.name}</span>
                       <span className="state-search-meta">

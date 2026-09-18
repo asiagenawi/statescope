@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { buildComparison, parseCompareCodes, serializeCompareCodes, MAX_COMPARE } from '../../utils/compare'
-import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
+import { STATUS_DESCRIPTIONS, statusVar } from '../../utils/colors'
 import PolicyCard from '../PolicyPanel/PolicyCard'
 
 const TYPE_ROWS = [
@@ -100,7 +100,7 @@ function CompareView({ snapshot, urlState, setUrlState, onSelectState }) {
                     <span className="status-pill">
                       <span
                         className="status-pill-dot"
-                        style={{ backgroundColor: STATUS_COLORS[c.state.policy_status || 'none'] }}
+                        style={{ backgroundColor: statusVar(c.state.policy_status || 'none') }}
                       />
                       {STATUS_DESCRIPTIONS[c.state.policy_status || 'none']}
                     </span>

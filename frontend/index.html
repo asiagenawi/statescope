@@ -46,6 +46,14 @@
     <link rel="preload" as="fetch" href="./us-states-10m.json" crossorigin />
   </head>
   <body>
+    <!-- Stamp the saved choice before first paint, so a dark-mode reader does
+         not get a flash of the light theme while the bundle parses. -->
+    <script>
+      try {
+        var t = localStorage.getItem('statescope.theme')
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t)
+      } catch (e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

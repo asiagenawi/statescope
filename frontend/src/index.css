@@ -1,8 +1,6 @@
 /* Design tokens. Everything else in the app references these rather than raw
    values -- that consistency is what separates "styled" from "designed". */
 :root {
-  /* This is a light-only interface; say so explicitly so the browser doesn't
-     apply its own dark treatment to form controls and scrollbars. */
   color-scheme: light;
 
   /* Type. Serif carries the editorial voice (wordmark, headings, policy prose);
@@ -60,6 +58,34 @@
 
   --header-height: 60px;
   --ease: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Choropleth encoding. Mirrors THEMES.light in utils/colors.js -- a test
+     asserts the two stay in step. */
+  --status-none: #dcdbd5;
+  --status-failed: #eb6834;
+  --status-guidance: #86b6ef;
+  --status-pending: #3987e5;
+  --status-enacted: #184f95;
+
+  --ink-on-none: #0b0b0b;
+  --ink-on-failed: #0b0b0b;
+  --ink-on-guidance: #0b0b0b;
+  --ink-on-pending: #0b0b0b;
+  --ink-on-enacted: #ffffff;
+
+  --badge-enacted-bg: #e2ecfa;
+  --badge-enacted-text: #123a6e;
+  --badge-pending-bg: #e6f0fd;
+  --badge-pending-text: #1c5cab;
+  --badge-guidance-bg: #edf3fd;
+  --badge-guidance-text: #25538f;
+  --badge-failed-bg: #fdeae2;
+  --badge-failed-text: #8f3c17;
+
+  --state-stroke: #ffffff;
+  --legend-bg: rgba(255, 255, 255, 0.92);
+  --swatch-ring: rgba(20, 20, 15, 0.12);
+  --mark-highlight: #fdf0cd;
 
   font-family: var(--font-sans);
   font-size: 16px;
@@ -137,4 +163,131 @@ a:hover {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* ==========================================================================
+   Dark theme
+
+   Not an inversion: the status steps were selected for the dark surface and
+   validated against it -- the ordinal ramp passes every gate, worst all-pairs
+   CVD dE 15.8 and normal-vision 15.9 (floors 8 and 15). The ramp also runs the
+   other way: on paper more ink means more, on a dark ground more light does.
+
+   Declared under both scopes so an explicit choice wins either way -- the
+   :not() guard lets a light stamp beat OS dark, and the toggle scope beats the
+   media query.
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  color-scheme: dark;
+
+  --plane: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-sunken: #141413;
+  --surface-hover: #262624;
+
+  --ink: #ffffff;
+  --ink-secondary: #c3c2b7;
+  --ink-muted: #898781;
+  --ink-inverse: #0b0b0b;
+
+  --border: #2c2c2a;
+  --border-strong: #3d3d39;
+
+  /* Accent moves to the light end of the ramp so it still reads as the brand
+     colour against a dark ground, and still clears contrast on it. */
+  --accent: #9ec5f4;
+  --accent-hover: #c2dbf8;
+  --accent-soft: #1d2b3d;
+  --accent-ring: rgba(158, 197, 244, 0.32);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.55);
+  --shadow-drawer: -8px 0 32px rgba(0, 0, 0, 0.5);
+
+  /* Selected for this surface, not inverted. See utils/colors.js. */
+  --status-none: #3a3a36;
+  --status-failed: #d95926;
+  --status-guidance: #184f95;
+  --status-pending: #3987e5;
+  --status-enacted: #9ec5f4;
+
+  --ink-on-none: #ffffff;
+  --ink-on-failed: #0b0b0b;
+  --ink-on-guidance: #ffffff;
+  --ink-on-pending: #0b0b0b;
+  --ink-on-enacted: #0b0b0b;
+
+  --badge-enacted-bg: #1d2b3d;
+  --badge-enacted-text: #c2dbf8;
+  --badge-pending-bg: #16263a;
+  --badge-pending-text: #9ec5f4;
+  --badge-guidance-bg: #15202f;
+  --badge-guidance-text: #86b6ef;
+  --badge-failed-bg: #37200f;
+  --badge-failed-text: #f0a882;
+
+  --state-stroke: #1a1a19;
+  --legend-bg: rgba(26, 26, 25, 0.92);
+  --swatch-ring: rgba(255, 255, 255, 0.16);
+  --mark-highlight: #4a3a12;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --plane: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-sunken: #141413;
+  --surface-hover: #262624;
+
+  --ink: #ffffff;
+  --ink-secondary: #c3c2b7;
+  --ink-muted: #898781;
+  --ink-inverse: #0b0b0b;
+
+  --border: #2c2c2a;
+  --border-strong: #3d3d39;
+
+  /* Accent moves to the light end of the ramp so it still reads as the brand
+     colour against a dark ground, and still clears contrast on it. */
+  --accent: #9ec5f4;
+  --accent-hover: #c2dbf8;
+  --accent-soft: #1d2b3d;
+  --accent-ring: rgba(158, 197, 244, 0.32);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.55);
+  --shadow-drawer: -8px 0 32px rgba(0, 0, 0, 0.5);
+
+  /* Selected for this surface, not inverted. See utils/colors.js. */
+  --status-none: #3a3a36;
+  --status-failed: #d95926;
+  --status-guidance: #184f95;
+  --status-pending: #3987e5;
+  --status-enacted: #9ec5f4;
+
+  --ink-on-none: #ffffff;
+  --ink-on-failed: #0b0b0b;
+  --ink-on-guidance: #ffffff;
+  --ink-on-pending: #0b0b0b;
+  --ink-on-enacted: #0b0b0b;
+
+  --badge-enacted-bg: #1d2b3d;
+  --badge-enacted-text: #c2dbf8;
+  --badge-pending-bg: #16263a;
+  --badge-pending-text: #9ec5f4;
+  --badge-guidance-bg: #15202f;
+  --badge-guidance-text: #86b6ef;
+  --badge-failed-bg: #37200f;
+  --badge-failed-text: #f0a882;
+
+  --state-stroke: #1a1a19;
+  --legend-bg: rgba(26, 26, 25, 0.92);
+  --swatch-ring: rgba(255, 255, 255, 0.16);
+  --mark-highlight: #4a3a12;
 }

@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { useDrawerFocus } from '../../hooks/useDrawerFocus'
-import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
+import { STATUS_DESCRIPTIONS, statusVar } from '../../utils/colors'
 import PolicyCard from './PolicyCard'
 
 // Most consequential first, so the drawer opens on what matters.
@@ -101,7 +101,7 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
 
         <div className="drawer-meta">
           <span className="status-pill">
-            <span className="status-pill-dot" style={{ backgroundColor: STATUS_COLORS[status] }} />
+            <span className="status-pill-dot" style={{ backgroundColor: statusVar(status) }} />
             {STATUS_DESCRIPTIONS[status]}
           </span>
           <span className="drawer-count">

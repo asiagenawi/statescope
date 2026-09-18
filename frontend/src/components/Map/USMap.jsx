@@ -3,7 +3,7 @@ import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps
 import { geoCentroid } from 'd3-geo'
 import { useGeoData } from '../../hooks/useGeoData'
 import { formatMonth } from '../../utils/dates'
-import { STATUS_COLORS, STATUS_DESCRIPTIONS, labelInkOn } from '../../utils/colors'
+import { STATUS_DESCRIPTIONS, statusVar, statusInkVar } from '../../utils/colors'
 import MapLegend from './MapLegend'
 import NortheastInset from './NortheastInset'
 import StateTooltip from './StateTooltip'
@@ -94,7 +94,7 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                         key={geoItem.rsmKey}
                         geography={geoItem}
                         className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
-                        fill={STATUS_COLORS[status]}
+                        fill={statusVar(status)}
                         tabIndex={state ? 0 : -1}
                         role={state ? 'button' : undefined}
                         aria-label={state ? accessibleName(state) : undefined}
@@ -122,7 +122,7 @@ function USMap({ snapshot, selectedState, onSelectState, onOpenAbout, onOpenFede
                           className="state-label"
                           textAnchor="middle"
                           dy="0.33em"
-                          fill={labelInkOn(state.policy_status || 'none')}
+                          fill={statusInkVar(state.policy_status || 'none')}
                         >
                           {state.code}
                         </text>

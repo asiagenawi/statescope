@@ -48,6 +48,23 @@ React app runs at http://localhost:5173
 
 The map works with the backend stopped. Only the chat needs it.
 
+## Theming
+
+Light and dark, following the OS by default with an explicit override that
+persists. The dark choropleth steps are **selected for the dark surface and
+validated against it**, not inverted — and the ramp runs the other way, since on
+paper more ink means more while on a dark ground more light does.
+
+| | light (`#fcfcfb`) | dark (`#1a1a19`) |
+|---|---|---|
+| ordinal ramp | passes | passes |
+| worst all-pairs CVD ΔE | 14.0 | 15.8 |
+| worst normal-vision ΔE | 15.6 | 15.9 |
+
+Floors are 8 and 15. Colours live in two places — `utils/colors.js` for charts,
+CSS custom properties for everything else — and a test asserts the two match, so
+they cannot drift.
+
 ## Tests
 
 ```bash
