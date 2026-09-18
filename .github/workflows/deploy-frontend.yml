@@ -48,6 +48,12 @@ jobs:
         run: npm ci --legacy-peer-deps
         working-directory: frontend
 
+      # Runs against the snapshot the step above just generated, so a data or
+      # logic regression fails the deploy rather than shipping.
+      - name: Test
+        run: npm test
+        working-directory: frontend
+
       - name: Build
         run: npm run build
         working-directory: frontend

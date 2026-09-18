@@ -34,7 +34,7 @@ function StateDropdown({ states, selectedCode, onSelect }) {
   )
 }
 
-function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, style }) {
+function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelectState, onCompare, style }) {
   const status = state?.policy_status || 'none'
   const drawerRef = useDrawerFocus()
   const [copied, setCopied] = useState(false)
@@ -74,6 +74,9 @@ function StatePolicyPanel({ state, states = [], policies = [], onClose, onSelect
         <div className="drawer-title-row">
           <h2 className="drawer-title">{state.name}</h2>
           <div className="drawer-title-actions">
+            {onCompare && (
+              <button className="text-btn" onClick={onCompare}>Compare</button>
+            )}
             <button className="text-btn" onClick={copyLink}>
               {copied ? 'Link copied' : 'Copy link'}
             </button>

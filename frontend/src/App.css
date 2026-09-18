@@ -1370,13 +1370,24 @@
    Responsive
    ========================================================================== */
 
-@media (max-width: 1240px) {
-  .stat-strip .stat:nth-child(3) { display: none; }
+/* The header carries brand + 3 nav tabs + stats + search + two buttons. These
+   thresholds are measured against that content, not guessed: at 1280 the row
+   overflowed and at 1440 the stat strip silently clipped mid-word. Detail is
+   dropped in order of redundancy -- the curation date also appears in the map
+   colophon and the methodology panel, so it goes first. */
+@media (max-width: 1500px) {
   .stat-updated { display: none; }
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1380px) {
+  .stat-strip .stat:nth-child(3) { display: none; }
+}
+
+@media (max-width: 1240px) {
   .stat-strip { display: none; }
+}
+
+@media (max-width: 1080px) {
   .brand-tagline { display: none; }
 }
 
@@ -1829,4 +1840,187 @@ a.chat-source-body:hover .chat-source-title {
 
 @media (max-width: 900px) {
   .colophon-line { display: none; }
+}
+
+/* ==========================================================================
+   Compare
+   ========================================================================== */
+
+.compare-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.compare-pickers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  margin-bottom: var(--s5);
+  padding: var(--s3) var(--s4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.compare-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+}
+
+.compare-picker .filter-select {
+  width: auto;
+  min-width: 170px;
+  margin-top: 0;
+}
+
+/* One shared column template so the stat rows and the topic rows line up. */
+.compare-grid {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.compare-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.1fr) repeat(var(--cols), minmax(90px, 1fr));
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s2) var(--s4);
+  border-top: 1px solid var(--border);
+}
+
+.compare-row:first-child {
+  border-top: none;
+}
+
+.compare-row--head {
+  align-items: flex-end;
+  padding-top: var(--s4);
+  padding-bottom: var(--s3);
+  background: var(--surface-sunken);
+}
+
+.compare-row--emphasis {
+  background: var(--surface-sunken);
+}
+
+.compare-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.compare-state-name {
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+}
+
+.compare-state-name:hover {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.compare-label {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.compare-hint {
+  font-size: var(--text-micro);
+  color: var(--ink-muted);
+}
+
+.compare-cell {
+  font-size: var(--text-sm);
+  color: var(--ink-secondary);
+}
+
+.compare-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.compare-row--emphasis .compare-value {
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.topic-yes {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.topic-no {
+  color: var(--border-strong);
+}
+
+.compare-section {
+  margin-top: var(--s6);
+}
+
+.compare-summary {
+  margin-top: var(--s3);
+  padding: var(--s3) var(--s4);
+  background: var(--surface-sunken);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: var(--ink-secondary);
+}
+
+.compare-summary strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.compare-columns {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--s4);
+  align-items: start;
+}
+
+.compare-column-title {
+  margin-bottom: var(--s3);
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--text-md);
+}
+
+@media (max-width: 860px) {
+  /* Below this the side-by-side grid stops being readable; stack instead. */
+  .compare-columns { grid-template-columns: 1fr; }
+
+  .compare-row {
+    grid-template-columns: minmax(110px, 1fr) repeat(var(--cols), minmax(64px, auto));
+    gap: var(--s2);
+    padding: var(--s2) var(--s3);
+  }
+
+  .compare-state-name { font-size: var(--text-md); }
+  .compare-row--emphasis .compare-value { font-size: var(--text-md); }
 }

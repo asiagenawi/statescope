@@ -48,6 +48,21 @@ React app runs at http://localhost:5173
 
 The map works with the backend stopped. Only the chat needs it.
 
+## Tests
+
+```bash
+cd frontend && npm test
+```
+
+Node's built-in runner, no extra dependency. Covers the pure logic (citation
+linkifying, CSV escaping, comparison aggregation, the status palette) and the
+invariants of the generated snapshot — including that the derived `policy_status`
+still agrees with the underlying policies, and that every policy carries a
+parseable source URL, which is a claim the methodology panel makes publicly.
+
+CI runs these against the freshly generated snapshot before building, so a data
+or logic regression fails the deploy instead of shipping.
+
 ## Methodology
 
 The in-app **Methodology** panel (`?about=1`) documents what counts as a policy, how
@@ -65,8 +80,9 @@ App state lives in the query string, so views are linkable and survive a reload:
 | `?view=trends` | the Trends view |
 | `?view=trends&fstate=CA&type=bill` | Trends filtered to California bills |
 | `?about=1` | the methodology panel |
+| `?view=compare&states=CA,TX` | two states side by side |
 
-Keys: `view`, `state`, `about`, and the Trends filters `fstate`, `topic`, `type`.
+Keys: `view`, `state`, `about`, `states` (compare), and the Trends filters `fstate`, `topic`, `type`.
 
 ## Regenerating the data snapshot
 

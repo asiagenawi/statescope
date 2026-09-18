@@ -4,6 +4,7 @@ import StateSearch from '../Map/StateSearch'
 const VIEWS = [
   { id: 'map', label: 'Map' },
   { id: 'trends', label: 'Trends' },
+  { id: 'compare', label: 'Compare' },
 ]
 
 function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onOpenAbout }) {

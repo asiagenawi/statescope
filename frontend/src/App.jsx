@@ -17,6 +17,7 @@ import './App.css'
 // Trends pulls in recharts, which has no business being in the bundle that
 // paints the map.
 const TrendsView = lazy(() => import('./components/Trends/TrendsView'))
+const CompareView = lazy(() => import('./components/Compare/CompareView'))
 
 function App() {
   const isMobile = useMediaQuery('(max-width: 900px)')
@@ -25,7 +26,8 @@ function App() {
 
   const [chatOpen, setChatOpen] = useState(false)
 
-  const view = urlState.view === 'trends' ? 'trends' : 'map'
+  const VIEWS = ['trends', 'compare']
+  const view = VIEWS.includes(urlState.view) ? urlState.view : 'map'
   const aboutOpen = urlState.about === '1'
   // Resolved from the snapshot rather than held separately, so a shared link
   // like ?state=TX selects Texas as soon as the data lands.
@@ -74,7 +76,12 @@ function App() {
   }, [setUrlState, urlState.state])
 
   const handleViewChange = useCallback(next => {
-    setUrlState({ view: next === 'trends' ? 'trends' : null })
+    setUrlState({ view: next === 'map' ? null : next })
+  }, [setUrlState])
+
+  // Jumping to Compare from a state keeps that state as the first column.
+  const handleCompare = useCallback(code => {
+    setUrlState({ view: 'compare', states: code, state: null })
   }, [setUrlState])
 
   const drawersOpen = Boolean(selectedState) || chatOpen || aboutOpen
@@ -105,9 +112,18 @@ function App() {
                 {/* Hidden while a drawer is open so it can't sit on the legend. */}
                 {!drawersOpen && <OnboardingCard />}
               </>
-            ) : (
+            ) : view === 'trends' ? (
               <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
                 <TrendsView
+                  snapshot={snapshot}
+                  urlState={urlState}
+                  setUrlState={setUrlState}
+                  onSelectState={handleSelectState}
+                />
+              </Suspense>
+            ) : (
+              <Suspense fallback={<div className="view-loading">Loading comparison…</div>}>
+                <CompareView
                   snapshot={snapshot}
                   urlState={urlState}
                   setUrlState={setUrlState}
@@ -128,6 +144,7 @@ function App() {
                 policies={snapshot.policiesByState[selectedState.code] || []}
                 onClose={() => setUrlState({ state: null })}
                 onSelectState={s => setUrlState({ state: s.code })}
+                onCompare={() => handleCompare(selectedState.code)}
                 style={policyResize.width != null ? { width: policyResize.width } : undefined}
               />
             </ErrorBoundary>
