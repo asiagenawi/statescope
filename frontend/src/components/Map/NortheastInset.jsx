@@ -1,7 +1,5 @@
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
-import { STATUS_COLORS } from '../../utils/colors'
-
-const GEO_URL = `${import.meta.env.BASE_URL}us-states-10m.json`
+import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
 
 const NORTHEAST_FIPS = new Set([
   '09', // CT
@@ -18,41 +16,62 @@ const NORTHEAST_FIPS = new Set([
   '50', // VT
 ])
 
-function NortheastInset({ stateByFips, selectedState, onMouseEnter, onMouseLeave, onMouseMove, onClick }) {
+/**
+ * Magnified Northeast. Receives the already-parsed topojson from USMap -- when
+ * this passed a URL instead, react-simple-maps fetched and parsed the same
+ * 114KB file a second time.
+ */
+function NortheastInset({
+  geo,
+  stateByFips,
+  selectedState,
+  onMouseEnter,
+  onMouseLeave,
+  onMouseMove,
+  onKeyDown,
+  onClick,
+}) {
   return (
     <div className="northeast-inset">
-      <div className="northeast-inset-label">Northeast</div>
+      <div className="northeast-inset-label">Northeast, enlarged</div>
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ center: [-73.5, 42], scale: 2200 }}
-        width={220}
-        height={200}
-        style={{ width: '100%', height: '100%' }}
+        projectionConfig={{ center: [-73.7, 42.6], scale: 780 }}
+        width={200}
+        height={170}
+        viewBox="0 0 200 170"
+        className="northeast-inset-map"
+        role="group"
+        aria-label="Northeast states, enlarged"
       >
-        <Geographies geography={GEO_URL}>
+        <Geographies geography={geo}>
           {({ geographies }) =>
             geographies
-              .filter(geo => NORTHEAST_FIPS.has(geo.id))
-              .map(geo => {
-                const state = stateByFips[geo.id]
+              .filter(geoItem => NORTHEAST_FIPS.has(geoItem.id))
+              .map(geoItem => {
+                const state = stateByFips[geoItem.id]
                 const status = state?.policy_status || 'none'
                 const isSelected = selectedState?.code === state?.code
+                const label = state
+                  ? `${state.name}. ${STATUS_DESCRIPTIONS[status]}.`
+                  : undefined
                 return (
                   <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
+                    key={geoItem.rsmKey}
+                    geography={geoItem}
+                    className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
                     fill={STATUS_COLORS[status]}
-                    stroke={isSelected ? '#1a1a2e' : '#b0b0b8'}
-                    strokeWidth={isSelected ? 2 : 0.75}
-                    style={{
-                      default: { outline: 'none', transition: 'filter 0.15s' },
-                      hover: { fill: STATUS_COLORS[status], filter: 'brightness(0.88)', cursor: 'pointer', outline: 'none' },
-                      pressed: { fill: STATUS_COLORS[status], filter: 'brightness(0.8)', outline: 'none' },
-                    }}
-                    onMouseEnter={(evt) => onMouseEnter(geo, evt)}
-                    onMouseMove={(evt) => onMouseMove(evt)}
+                    tabIndex={state ? 0 : -1}
+                    role={state ? 'button' : undefined}
+                    aria-label={label}
+                    aria-pressed={state ? isSelected : undefined}
+                    onMouseEnter={evt => onMouseEnter(geoItem, evt)}
+                    onMouseMove={onMouseMove}
                     onMouseLeave={onMouseLeave}
-                    onClick={() => onClick(geo)}
+                    onFocus={evt => onMouseEnter(geoItem, evt)}
+                    onBlur={onMouseLeave}
+                    onKeyDown={evt => onKeyDown(evt, geoItem)}
+                    onClick={() => onClick(geoItem)}
                   />
                 )
               })

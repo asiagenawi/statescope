@@ -1,27 +1,81 @@
-import { useState, useEffect } from 'react'
-import { fetchJSON } from '../utils/api'
+import { useMemo } from 'react'
 
-export function useTrends(type = 'timeline', filters = {}) {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+/**
+ * Trend aggregates, computed from the snapshot in the browser.
+ *
+ * These used to be four /api/trends/* round trips. The dataset is 75 rows, so
+ * grouping it locally is faster than asking the server to do it and removes the
+ * last reason for the Trends view to touch the network.
+ */
+export function useTrends({ policies, policyTopics, topics }, filters = {}) {
+  const { state, topicId, policyType } = filters
 
-  const filterKey = JSON.stringify(filters)
+  const filtered = useMemo(() => {
+    return policies.filter(p => {
+      if (state && p.state_code !== state) return false
+      if (policyType && p.policy_type !== policyType) return false
+      if (topicId) {
+        const ids = policyTopics[String(p.id)] || []
+        if (!ids.includes(Number(topicId))) return false
+      }
+      return true
+    })
+  }, [policies, policyTopics, state, topicId, policyType])
 
-  useEffect(() => {
-    setLoading(true)
-    const params = new URLSearchParams()
-    if (filters.state) params.set('state', filters.state)
-    if (filters.topic_id) params.set('topic_id', filters.topic_id)
-    if (filters.policy_type) params.set('policy_type', filters.policy_type)
-    const qs = params.toString()
-    const url = `/trends/${type}${qs ? '?' + qs : ''}`
+  const timeline = useMemo(() => {
+    const byYear = new Map()
+    for (const p of filtered) {
+      if (!p.date_introduced) continue
+      const year = String(p.date_introduced).slice(0, 4)
+      byYear.set(year, (byYear.get(year) || 0) + 1)
+    }
+    return [...byYear.entries()]
+      .map(([year, count]) => ({ year, count }))
+      .sort((a, b) => a.year.localeCompare(b.year))
+  }, [filtered])
 
-    fetchJSON(url)
-      .then(setData)
-      .catch(setError)
-      .finally(() => setLoading(false))
-  }, [type, filterKey])
+  const topicCounts = useMemo(() => {
+    const nameById = new Map(topics.map(t => [t.id, t.name]))
+    const counts = new Map()
+    for (const p of filtered) {
+      for (const id of policyTopics[String(p.id)] || []) {
+        counts.set(id, (counts.get(id) || 0) + 1)
+      }
+    }
+    return [...counts.entries()]
+      .map(([id, count]) => ({ id, name: nameById.get(id) || 'Unknown', count }))
+      .sort((a, b) => b.count - a.count)
+  }, [filtered, topics, policyTopics])
 
-  return { data, loading, error }
+  const statusBreakdown = useMemo(() => countBy(filtered, p => p.status), [filtered])
+  const typeBreakdown = useMemo(() => countBy(filtered, p => p.policy_type), [filtered])
+  const levelBreakdown = useMemo(() => countBy(filtered, p => p.level), [filtered])
+
+  const statesActing = useMemo(
+    () => new Set(filtered.filter(p => p.state_code).map(p => p.state_code)).size,
+    [filtered],
+  )
+
+  return {
+    filtered,
+    timeline,
+    topicCounts,
+    statusBreakdown,
+    typeBreakdown,
+    levelBreakdown,
+    statesActing,
+    total: filtered.length,
+  }
+}
+
+function countBy(rows, keyOf) {
+  const counts = new Map()
+  for (const row of rows) {
+    const key = keyOf(row)
+    if (!key) continue
+    counts.set(key, (counts.get(key) || 0) + 1)
+  }
+  return [...counts.entries()]
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
 }

@@ -1,123 +1,156 @@
-import { useState, useMemo } from 'react'
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
-import { useStates } from '../../hooks/useStates'
-import { STATUS_COLORS } from '../../utils/colors'
+import { useState, useCallback } from 'react'
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
+import { geoCentroid } from 'd3-geo'
+import { useGeoData } from '../../hooks/useGeoData'
+import { STATUS_COLORS, STATUS_DESCRIPTIONS, labelInkOn } from '../../utils/colors'
 import MapLegend from './MapLegend'
 import NortheastInset from './NortheastInset'
 import StateTooltip from './StateTooltip'
-import StatePolicyPanel from '../PolicyPanel/StatePolicyPanel'
-import ResizeHandle from '../Layout/ResizeHandle'
-import { useResizablePanel } from '../../hooks/useResizablePanel'
 
-const GEO_URL = `${import.meta.env.BASE_URL}us-states-10m.json`
+/**
+ * States too small to hold a label at this projection scale. They are covered
+ * by the Northeast inset instead, which has the room.
+ */
+const NO_LABEL_FIPS = new Set([
+  '09', '10', '11', '24', '25', '33', '34', '44', '50',
+])
 
-function USMap({ isMobile }) {
-  const { states, loading, error } = useStates()
+function accessibleName(state) {
+  if (!state) return 'Unknown area'
+  const status = STATUS_DESCRIPTIONS[state.policy_status || 'none']
+  const count = state.policy_count || 0
+  const policies = count === 1 ? '1 policy' : `${count} policies`
+  return `${state.name}. ${status}. ${policies}.`
+}
+
+function USMap({ snapshot, selectedState, onSelectState }) {
+  const { geo, error: geoError } = useGeoData()
+  const { stateByFips, error: dataError, loading: dataLoading } = snapshot
+
   const [hoveredState, setHoveredState] = useState(null)
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
-  const [selectedState, setSelectedState] = useState(null)
 
-  const policyResize = useResizablePanel({
-    defaultWidth: 380,
-    minWidth: 240,
-    maxWidth: 600,
-    side: 'right',
-    disabled: isMobile,
-  })
-
-  const stateByFips = useMemo(() => {
-    const map = {}
-    for (const s of states) {
-      map[s.fips] = s
-    }
-    return map
-  }, [states])
-
-  if (loading) return <p>Loading map data...</p>
-  if (error) return <p>Error loading states: {error.message}</p>
-
-  function handleMouseEnter(geo, evt) {
-    const state = stateByFips[geo.id]
+  const handleMouseEnter = useCallback((geoItem, evt) => {
+    const state = stateByFips[geoItem.id]
     if (state) {
       setHoveredState(state)
       setTooltipPos({ x: evt.clientX, y: evt.clientY })
     }
-  }
+  }, [stateByFips])
 
-  function handleMouseLeave() {
-    setHoveredState(null)
-  }
+  const handleMouseMove = useCallback(evt => {
+    setTooltipPos({ x: evt.clientX, y: evt.clientY })
+  }, [])
 
-  function handleClick(geo) {
-    const state = stateByFips[geo.id]
-    if (state) {
-      setSelectedState(prev => prev?.code === state.code ? null : state)
-    }
+  const handleMouseLeave = useCallback(() => setHoveredState(null), [])
+
+  const handleClick = useCallback(geoItem => {
+    const state = stateByFips[geoItem.id]
+    if (state) onSelectState(state)
+  }, [stateByFips, onSelectState])
+
+  const handleKeyDown = useCallback((evt, geoItem) => {
+    if (evt.key !== 'Enter' && evt.key !== ' ') return
+    evt.preventDefault()
+    handleClick(geoItem)
+  }, [handleClick])
+
+  const error = geoError || dataError
+  if (error) {
+    return (
+      <div className="stage-message">
+        <h2>Couldn’t load the map</h2>
+        <p>{error.message}</p>
+      </div>
+    )
   }
 
   return (
-    <div className={`map-container${policyResize.isResizing ? ' map-container--resizing' : ''}`}>
+    <div className="map-stage">
       <div className="map-wrapper">
-        <ComposableMap
-          projection="geoAlbersUsa"
-          projectionConfig={{ scale: 1000 }}
-          width={960}
-          height={600}
-          viewBox="0 0 960 600"
-          className="composable-map"
-        >
-            <Geographies geography={GEO_URL}>
-              {({ geographies }) =>
-                geographies.map(geo => {
-                  const state = stateByFips[geo.id]
-                  const status = state?.policy_status || 'none'
-                  const isSelected = selectedState?.code === state?.code
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill={STATUS_COLORS[status]}
-                      stroke={isSelected ? '#1a1a2e' : '#b0b0b8'}
-                      strokeWidth={isSelected ? 2 : 0.75}
-                      style={{
-                        default: { outline: 'none', transition: 'filter 0.15s' },
-                        hover: { fill: STATUS_COLORS[status], filter: 'brightness(0.88)', cursor: 'pointer', outline: 'none' },
-                        pressed: { fill: STATUS_COLORS[status], filter: 'brightness(0.8)', outline: 'none' },
-                      }}
-                      onMouseEnter={(evt) => handleMouseEnter(geo, evt)}
-                      onMouseMove={(evt) => setTooltipPos({ x: evt.clientX, y: evt.clientY })}
-                      onMouseLeave={handleMouseLeave}
-                      onClick={() => handleClick(geo)}
-                    />
-                  )
-                })
-              }
+        {!geo && <div className="map-skeleton" aria-hidden="true" />}
+
+        {geo && (
+          <ComposableMap
+            projection="geoAlbersUsa"
+            projectionConfig={{ scale: 980 }}
+            width={960}
+            height={640}
+            viewBox="0 0 960 640"
+            className="composable-map"
+            role="group"
+            aria-label="US map of state AI education policy status"
+          >
+            <Geographies geography={geo}>
+              {({ geographies, projection }) => (
+                <>
+                  {geographies.map(geoItem => {
+                    const state = stateByFips[geoItem.id]
+                    const status = state?.policy_status || 'none'
+                    const isSelected = selectedState?.code === state?.code
+                    return (
+                      <Geography
+                        key={geoItem.rsmKey}
+                        geography={geoItem}
+                        className={`state-shape${isSelected ? ' state-shape--selected' : ''}`}
+                        fill={STATUS_COLORS[status]}
+                        tabIndex={state ? 0 : -1}
+                        role={state ? 'button' : undefined}
+                        aria-label={state ? accessibleName(state) : undefined}
+                        aria-pressed={state ? isSelected : undefined}
+                        onMouseEnter={evt => handleMouseEnter(geoItem, evt)}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}
+                        onFocus={evt => handleMouseEnter(geoItem, evt)}
+                        onBlur={handleMouseLeave}
+                        onKeyDown={evt => handleKeyDown(evt, geoItem)}
+                        onClick={() => handleClick(geoItem)}
+                      />
+                    )
+                  })}
+
+                  {/* Postal codes so the map is readable without hovering. */}
+                  {geographies.map(geoItem => {
+                    const state = stateByFips[geoItem.id]
+                    if (!state || NO_LABEL_FIPS.has(geoItem.id)) return null
+                    const centroid = geoCentroid(geoItem)
+                    if (!centroid || !projection(centroid)) return null
+                    return (
+                      <Marker key={`label-${geoItem.rsmKey}`} coordinates={centroid}>
+                        <text
+                          className="state-label"
+                          textAnchor="middle"
+                          dy="0.33em"
+                          fill={labelInkOn(state.policy_status || 'none')}
+                        >
+                          {state.code}
+                        </text>
+                      </Marker>
+                    )
+                  })}
+                </>
+              )}
             </Geographies>
-        </ComposableMap>
-        <NortheastInset
-          stateByFips={stateByFips}
-          selectedState={selectedState}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onMouseMove={(evt) => setTooltipPos({ x: evt.clientX, y: evt.clientY })}
-          onClick={handleClick}
-        />
-        <div className="map-overlay-stack">
-          <MapLegend />
-          <div className="map-description">
-            As states race to regulate artificial intelligence in classrooms, keeping track of who's doing what has become a challenge in itself. StateScope makes it simple — explore legislation, trends, and guidance on one interactive dashboard. Click on any state to view its policies, or use the chat to ask questions about AI education policy across the country.
-          </div>
-        </div>
+          </ComposableMap>
+        )}
+
+        {geo && (
+          <NortheastInset
+            geo={geo}
+            stateByFips={stateByFips}
+            selectedState={selectedState}
+            onMouseEnter={handleMouseEnter}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            onKeyDown={handleKeyDown}
+            onClick={handleClick}
+          />
+        )}
+
+        <MapLegend loading={dataLoading} />
+
         {hoveredState && <StateTooltip state={hoveredState} position={tooltipPos} />}
       </div>
-      <ResizeHandle onMouseDown={policyResize.handleProps.onMouseDown} />
-      <StatePolicyPanel
-        state={selectedState}
-        states={states}
-        onClose={() => setSelectedState(null)}
-        onSelectState={(s) => setSelectedState(s)}
-        style={policyResize.width != null ? { width: policyResize.width } : undefined}
-      />
     </div>
   )
 }

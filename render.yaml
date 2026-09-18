@@ -4,7 +4,9 @@ services:
     runtime: python
     region: oregon
     buildCommand: pip install -r backend/requirements.txt && python backend/scripts/init_db.py && python backend/scripts/seed_data.py
-    startCommand: python -m gunicorn --chdir backend --bind 0.0.0.0:$PORT app:app
+    # Threaded workers so a streaming /api/ask/stream response doesn't block
+    # every other request for the length of a Claude generation.
+    startCommand: python -m gunicorn --chdir backend --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 app:app
     envVars:
       - key: ANTHROPIC_API_KEY
         sync: false

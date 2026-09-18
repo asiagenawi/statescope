@@ -1,25 +1,24 @@
-import { STATUS_COLORS } from '../../utils/colors'
+import { STATUS_COLORS, STATUS_ORDER, STATUS_LABELS } from '../../utils/colors'
 
-const LEGEND_ITEMS = [
-  { status: 'none', label: 'No policy' },
-  { status: 'failed', label: 'Failed' },
-  { status: 'guidance', label: 'Guidance only' },
-  { status: 'pending', label: 'Pending' },
-  { status: 'enacted', label: 'Enacted' },
-]
-
-function MapLegend() {
+/**
+ * The legend carries the relief for the two lightest fills, which sit below 3:1
+ * against the surface -- color never has to work alone here.
+ */
+function MapLegend({ loading }) {
   return (
-    <div className="map-legend">
-      {LEGEND_ITEMS.map(item => (
-        <div key={item.status} className="legend-item">
-          <span
-            className="legend-swatch"
-            style={{ backgroundColor: STATUS_COLORS[item.status] }}
-          />
-          <span className="legend-label">{item.label}</span>
-        </div>
-      ))}
+    <div className={`map-legend${loading ? ' map-legend--loading' : ''}`}>
+      <span className="legend-title">Most significant action</span>
+      <div className="legend-scale">
+        {STATUS_ORDER.map(status => (
+          <div key={status} className="legend-item">
+            <span
+              className="legend-swatch"
+              style={{ backgroundColor: STATUS_COLORS[status] }}
+            />
+            <span className="legend-label">{STATUS_LABELS[status]}</span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

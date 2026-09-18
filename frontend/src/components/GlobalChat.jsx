@@ -1,6 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
-import { postJSON } from '../utils/api'
-import ChatMarkdown from './ChatMarkdown'
+import { useState, useRef, useEffect, useMemo, useCallback, Suspense, lazy } from 'react'
+import { streamAsk, warmBackend } from '../utils/api'
+
+// react-markdown only matters once an answer exists.
+const ChatMarkdown = lazy(() => import('./ChatMarkdown'))
+
+const STORAGE_KEY = 'statescope.conversations'
 
 const PLACEHOLDERS = [
   'Which states have AI literacy laws?',
@@ -16,28 +20,53 @@ const SUGGESTIONS = [
   'Which states have pending legislation?',
 ]
 
-let nextId = 2
-
-function createConvo(name) {
-  return { id: nextId++, name, messages: [] }
+function newConversation() {
+  return { id: `c${Date.now()}${Math.random().toString(36).slice(2, 7)}`, name: 'New chat', messages: [] }
 }
 
-function GlobalChat({ style }) {
-  const [convos, setConvos] = useState([{ id: 1, name: 'New chat', messages: [] }])
-  const [activeId, setActiveId] = useState(1)
+function loadConversations() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    const parsed = raw ? JSON.parse(raw) : null
+    if (Array.isArray(parsed) && parsed.length) return parsed
+  } catch {
+    // Corrupt or unavailable storage just means starting fresh.
+  }
+  return [newConversation()]
+}
+
+function GlobalChat({ onClose, style }) {
+  const [convos, setConvos] = useState(loadConversations)
+  const [activeId, setActiveId] = useState(() => convos[0].id)
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [waking, setWaking] = useState(false)
   const [placeholderIdx, setPlaceholderIdx] = useState(0)
   const [showList, setShowList] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
   const messagesEndRef = useRef(null)
+  const inputRef = useRef(null)
 
-  const active = convos.find(c => c.id === activeId)
-  const messages = active?.messages || []
+  const active = convos.find(c => c.id === activeId) || convos[0]
+  // Memoised so the empty-array fallback isn't a new value on every render,
+  // which would re-fire the scroll effect below continuously.
+  const messages = useMemo(() => active?.messages || [], [active])
+
+  // Conversations used to vanish on reload; now they survive it.
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(convos))
+    } catch {
+      // Over quota or blocked -- the in-memory conversation still works.
+    }
+  }, [convos])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -47,34 +76,53 @@ function GlobalChat({ style }) {
   }, [])
 
   const updateMessages = useCallback((id, updater) => {
-    setConvos(prev => prev.map(c =>
-      c.id === id ? { ...c, messages: updater(c.messages) } : c
-    ))
+    setConvos(prev => prev.map(c => (c.id === id ? { ...c, messages: updater(c.messages) } : c)))
   }, [])
 
   async function sendQuestion(q) {
     if (!q || loading) return
+    const convoId = activeId
 
     if (messages.length === 0) {
       setConvos(prev => prev.map(c =>
-        c.id === activeId ? { ...c, name: q.length > 30 ? q.slice(0, 30) + '...' : q } : c
+        c.id === convoId ? { ...c, name: q.length > 34 ? `${q.slice(0, 34)}…` : q } : c,
       ))
     }
 
-    updateMessages(activeId, prev => [...prev, { role: 'user', content: q }])
+    updateMessages(convoId, prev => [...prev, { role: 'user', content: q }])
     setLoading(true)
 
+    // If the dyno is still asleep, say so rather than showing a silent spinner
+    // for 40 seconds.
+    let settled = false
+    warmBackend().then(() => { settled = true; setWaking(false) })
+    const wakeTimer = setTimeout(() => { if (!settled) setWaking(true) }, 1500)
+
+    // One placeholder message that fills in as deltas arrive.
+    updateMessages(convoId, prev => [...prev, { role: 'assistant', content: '', streaming: true }])
+
+    const writeAnswer = (text, done) => {
+      updateMessages(convoId, prev => {
+        const next = [...prev]
+        const last = next.length - 1
+        if (last >= 0) next[last] = { role: 'assistant', content: text, streaming: !done }
+        return next
+      })
+    }
+
     try {
-      const data = await postJSON('/ask', { question: q })
-      updateMessages(activeId, prev => [...prev, { role: 'assistant', content: data.answer }])
+      const answer = await streamAsk(q, { onDelta: text => writeAnswer(text, false) })
+      writeAnswer(answer, true)
     } catch {
-      updateMessages(activeId, prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong.' }])
+      writeAnswer('Sorry, something went wrong. Please try again.', true)
     } finally {
+      clearTimeout(wakeTimer)
+      setWaking(false)
       setLoading(false)
     }
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault()
     const q = input.trim()
     if (!q) return
@@ -83,16 +131,17 @@ function GlobalChat({ style }) {
   }
 
   function handleNew() {
-    const c = createConvo('New chat')
+    const c = newConversation()
     setConvos(prev => [...prev, c])
     setActiveId(c.id)
     setShowList(false)
+    inputRef.current?.focus()
   }
 
   function handleDelete(id) {
     const remaining = convos.filter(c => c.id !== id)
     if (remaining.length === 0) {
-      const c = createConvo('New chat')
+      const c = newConversation()
       setConvos([c])
       setActiveId(c.id)
     } else {
@@ -101,60 +150,65 @@ function GlobalChat({ style }) {
     }
   }
 
-  function handleSwitch(id) {
-    setActiveId(id)
-    setShowList(false)
-  }
+  const started = convos.filter(c => c.messages.length > 0)
 
   return (
-    <div className={`global-chat ${mobileOpen ? 'global-chat--mobile-open' : ''}`} style={style}>
-      <button className="global-chat-mobile-toggle" onClick={() => setMobileOpen(o => !o)}>
-        {mobileOpen ? '✕ Close' : (
-          <>
-            <span className="mobile-toggle-handle"></span>
-            <span className="mobile-toggle-label">Let's chat — AI</span>
-          </>
-        )}
-      </button>
-      <div className="global-chat-header">
-        <button className="global-chat-tab-toggle" onClick={() => setShowList(s => !s)}>
-          Continue Previous Conversations
-          <span className="global-chat-chevron">{showList ? '▴' : '▾'}</span>
-        </button>
-        <button className="global-chat-new" onClick={handleNew} title="New conversation">+ New</button>
+    <aside className="drawer chat-drawer" style={style} aria-label="Ask about AI education policy">
+      <div className="drawer-header chat-header">
+        <h2 className="drawer-title chat-title">Ask StateScope</h2>
+        <div className="chat-header-actions">
+          {started.length > 0 && (
+            <button
+              className="text-btn"
+              onClick={() => setShowList(s => !s)}
+              aria-expanded={showList}
+            >
+              History
+              <span className="chevron" aria-hidden="true">{showList ? '▴' : '▾'}</span>
+            </button>
+          )}
+          <button className="text-btn" onClick={handleNew}>+ New</button>
+          <button className="icon-btn" onClick={onClose} aria-label="Close chat">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {showList && (
-        <div className="global-chat-list">
-          {convos.map(c => (
-            <div
-              key={c.id}
-              className={`global-chat-list-item ${c.id === activeId ? 'active' : ''}`}
-              onClick={() => handleSwitch(c.id)}
-            >
-              <span className="global-chat-list-name">{c.name}</span>
-              {convos.length > 1 && (
-                <button
-                  className="global-chat-list-delete"
-                  onClick={e => { e.stopPropagation(); handleDelete(c.id) }}
-                >
-                  &times;
-                </button>
-              )}
-            </div>
+      {showList && started.length > 0 && (
+        <ul className="chat-history">
+          {started.map(c => (
+            <li key={c.id} className={`chat-history-item${c.id === activeId ? ' is-active' : ''}`}>
+              <button
+                className="chat-history-name"
+                onClick={() => { setActiveId(c.id); setShowList(false) }}
+              >
+                {c.name}
+              </button>
+              <button
+                className="chat-history-delete"
+                onClick={() => handleDelete(c.id)}
+                aria-label={`Delete conversation: ${c.name}`}
+              >
+                &times;
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
-      <div className="global-chat-messages">
+      <div className="chat-messages">
         {messages.length === 0 && (
-          <div className="global-chat-empty">
-            <p className="global-chat-empty-text">Ask about AI education policy across all 50 states</p>
-            <div className="global-chat-suggestions">
+          <div className="chat-empty">
+            <p className="chat-empty-text">
+              Ask about AI education policy across all 50 states and DC.
+            </p>
+            <div className="chat-suggestions">
               {SUGGESTIONS.map(s => (
                 <button
                   key={s}
-                  className="global-chat-suggestion"
+                  className="chat-suggestion"
                   onClick={() => sendQuestion(s)}
                   disabled={loading}
                 >
@@ -164,37 +218,69 @@ function GlobalChat({ style }) {
             </div>
           </div>
         )}
+
         {messages.map((msg, i) => (
-          <div key={i} className={`panel-chat-msg panel-chat-msg--${msg.role}`}>
-            {msg.role === 'user' ? msg.content : <ChatMarkdown content={msg.content} />}
+          <div key={i} className={`chat-msg chat-msg--${msg.role}`}>
+            {msg.role === 'user' ? (
+              msg.content
+            ) : msg.content ? (
+              <Suspense fallback={<span className="chat-plain">{msg.content}</span>}>
+                <ChatMarkdown content={msg.content} />
+              </Suspense>
+            ) : (
+              <span className="typing" aria-label="Thinking">
+                <span className="typing-dot" />
+                <span className="typing-dot" />
+                <span className="typing-dot" />
+              </span>
+            )}
           </div>
         ))}
-        {loading && (
-          <div className="panel-chat-msg panel-chat-msg--assistant panel-chat-typing">
-            <span className="typing-dot" />
-            <span className="typing-dot" />
-            <span className="typing-dot" />
-          </div>
+
+        {waking && (
+          <p className="chat-notice">
+            Waking the answer service — free hosting sleeps when idle, so this
+            first question can take up to 30 seconds.
+          </p>
         )}
+
         <div ref={messagesEndRef} />
       </div>
-      <form className="global-chat-form" onSubmit={handleSubmit}>
-        <div className="global-chat-input-wrap">
+
+      <form className="chat-form" onSubmit={handleSubmit}>
+        <div className="chat-input-wrap">
           <textarea
-            className="global-chat-input"
+            ref={inputRef}
+            className="chat-input"
             value={input}
             onChange={e => setInput(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSubmit(e) } }}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                handleSubmit(e)
+              }
+            }}
             placeholder={PLACEHOLDERS[placeholderIdx]}
             disabled={loading}
             rows={1}
+            aria-label="Ask a question"
           />
-          <button type="submit" className="global-chat-send" disabled={loading || !input.trim()}>
-            &rarr;
+          <button
+            type="submit"
+            className="chat-send"
+            disabled={loading || !input.trim()}
+            aria-label="Send question"
+          >
+            <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+              <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </button>
         </div>
+        <p className="chat-disclaimer">
+          Answers are AI-generated and may be incomplete. Check linked sources.
+        </p>
       </form>
-    </div>
+    </aside>
   )
 }
 

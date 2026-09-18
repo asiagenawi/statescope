@@ -1,34 +1,34 @@
-import { STATUS_COLORS } from '../../utils/colors'
+import { createPortal } from 'react-dom'
+import { STATUS_COLORS, STATUS_DESCRIPTIONS } from '../../utils/colors'
 
-const STATUS_LABELS = {
-  enacted: 'Enacted legislation',
-  pending: 'Pending bills',
-  guidance: 'Guidance only',
-  failed: 'Failed legislation',
-  none: 'No policy yet',
-}
+const WIDTH = 220
+const OFFSET = 14
 
+/**
+ * Rendered through a portal so it escapes the map's stacking and overflow, and
+ * flipped near the viewport edge so it no longer clips against the right side.
+ */
 function StateTooltip({ state, position }) {
   const status = state.policy_status || 'none'
-  return (
-    <div
-      className="state-tooltip"
-      style={{ left: position.x + 12, top: position.y - 10 }}
-    >
-      <strong>{state.name}</strong>
+
+  const flipX = position.x + OFFSET + WIDTH > window.innerWidth
+  const left = flipX ? position.x - OFFSET - WIDTH : position.x + OFFSET
+  const top = Math.min(position.y - 10, window.innerHeight - 110)
+
+  return createPortal(
+    <div className="state-tooltip" style={{ left, top, width: WIDTH }} role="status" aria-live="polite">
+      <span className="tooltip-name">{state.name}</span>
       <span className="tooltip-status">
-        <span
-          className="tooltip-status-dot"
-          style={{ backgroundColor: STATUS_COLORS[status] }}
-        />
-        {STATUS_LABELS[status]}
+        <span className="tooltip-status-dot" style={{ backgroundColor: STATUS_COLORS[status] }} />
+        {STATUS_DESCRIPTIONS[status]}
       </span>
-      {state.policy_count > 0 && (
-        <span className="tooltip-count">
-          {state.policy_count} {state.policy_count === 1 ? 'policy' : 'policies'} — click to view
-        </span>
-      )}
-    </div>
+      <span className="tooltip-count">
+        {state.policy_count > 0
+          ? `${state.policy_count} ${state.policy_count === 1 ? 'policy' : 'policies'} — click to view`
+          : 'Nothing on record yet'}
+      </span>
+    </div>,
+    document.body,
   )
 }
 

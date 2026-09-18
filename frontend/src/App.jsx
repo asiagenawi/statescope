@@ -1,30 +1,119 @@
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react'
 import Header from './components/Layout/Header'
 import USMap from './components/Map/USMap'
 import GlobalChat from './components/GlobalChat'
+import StatePolicyPanel from './components/PolicyPanel/StatePolicyPanel'
 import ResizeHandle from './components/Layout/ResizeHandle'
+import OnboardingCard from './components/Layout/OnboardingCard'
 import { useResizablePanel } from './hooks/useResizablePanel'
 import { useMediaQuery } from './hooks/useMediaQuery'
+import { useSnapshot } from './hooks/useSnapshot'
+import { warmBackend } from './utils/api'
 import './App.css'
 
+// Trends pulls in recharts, which has no business being in the bundle that
+// paints the map.
+const TrendsView = lazy(() => import('./components/Trends/TrendsView'))
+
 function App() {
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isMobile = useMediaQuery('(max-width: 900px)')
+  const snapshot = useSnapshot()
+
+  const [view, setView] = useState('map')
+  const [selectedState, setSelectedState] = useState(null)
+  const [chatOpen, setChatOpen] = useState(false)
+
+  const policyResize = useResizablePanel({
+    defaultWidth: 400,
+    minWidth: 300,
+    maxWidth: 620,
+    side: 'right',
+    disabled: isMobile,
+  })
+
   const chatResize = useResizablePanel({
     defaultWidth: 420,
-    minWidth: 280,
+    minWidth: 320,
     maxWidth: 650,
     side: 'right',
     disabled: isMobile,
   })
 
+  // The map needs no backend, but /ask does and the free tier sleeps. Wake it
+  // now so the dyno is up by the time anyone opens the chat.
+  useEffect(() => { warmBackend() }, [])
+
+  // Escape closes whatever is open, innermost first.
+  useEffect(() => {
+    function onKeyDown(e) {
+      if (e.key !== 'Escape') return
+      if (chatOpen) setChatOpen(false)
+      else if (selectedState) setSelectedState(null)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [chatOpen, selectedState])
+
+  const handleSelectState = useCallback(state => {
+    setView('map')
+    setSelectedState(prev => (prev?.code === state?.code ? null : state))
+  }, [])
+
+  const drawersOpen = Boolean(selectedState) || chatOpen
+
   return (
     <div className="app">
-      <Header />
-      <div className={`app-body${chatResize.isResizing ? ' app-body--resizing' : ''}`}>
-        <main className="main-content main-content--noscroll">
-          <USMap isMobile={isMobile} />
+      <Header
+        view={view}
+        onViewChange={setView}
+        chatOpen={chatOpen}
+        onToggleChat={() => setChatOpen(o => !o)}
+        snapshot={snapshot}
+        onSelectState={handleSelectState}
+      />
+
+      <div className={`app-body${drawersOpen ? ' app-body--drawers' : ''}`}>
+        <main className="stage" id="main-content">
+          {view === 'map' ? (
+            <>
+              <USMap
+                snapshot={snapshot}
+                selectedState={selectedState}
+                onSelectState={handleSelectState}
+              />
+              {/* Hidden while a drawer is open so it can't sit on the legend. */}
+              {!drawersOpen && <OnboardingCard />}
+            </>
+          ) : (
+            <Suspense fallback={<div className="view-loading">Loading trends…</div>}>
+              <TrendsView snapshot={snapshot} onSelectState={handleSelectState} />
+            </Suspense>
+          )}
         </main>
-        <ResizeHandle onMouseDown={chatResize.handleProps.onMouseDown} />
-        <GlobalChat style={chatResize.width != null ? { width: chatResize.width } : undefined} />
+
+        {selectedState && (
+          <>
+            {!isMobile && <ResizeHandle onMouseDown={policyResize.handleProps.onMouseDown} />}
+            <StatePolicyPanel
+              state={selectedState}
+              states={snapshot.states}
+              policies={snapshot.policiesByState[selectedState.code] || []}
+              onClose={() => setSelectedState(null)}
+              onSelectState={setSelectedState}
+              style={policyResize.width != null ? { width: policyResize.width } : undefined}
+            />
+          </>
+        )}
+
+        {chatOpen && (
+          <>
+            {!isMobile && <ResizeHandle onMouseDown={chatResize.handleProps.onMouseDown} />}
+            <GlobalChat
+              onClose={() => setChatOpen(false)}
+              style={chatResize.width != null ? { width: chatResize.width } : undefined}
+            />
+          </>
+        )}
       </div>
     </div>
   )

@@ -22,6 +22,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The frontend ships the policy data as a static file so the map never
+      # waits on the API. Rebuild that snapshot from the checked-in seed JSON on
+      # every deploy, using the same scripts the backend runs.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Build data snapshot
+        run: |
+          python backend/scripts/init_db.py
+          python backend/scripts/seed_data.py
+          python backend/scripts/export_static_data.py
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20

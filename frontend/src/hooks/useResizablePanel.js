@@ -2,12 +2,16 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 
 export function useResizablePanel({ defaultWidth, minWidth, maxWidth, side = 'right', disabled = false }) {
   const [width, setWidth] = useState(defaultWidth)
+  // Mirrored in state as well as the ref: the ref drives the mousemove handler,
+  // the state is what render is allowed to read.
+  const [isResizing, setIsResizing] = useState(false)
   const dragRef = useRef(null)
 
-  const onMouseDown = useCallback((e) => {
+  const onMouseDown = useCallback(e => {
     if (disabled) return
     e.preventDefault()
     dragRef.current = { startX: e.clientX, startWidth: width }
+    setIsResizing(true)
     document.body.style.cursor = 'col-resize'
     document.body.style.userSelect = 'none'
   }, [disabled, width])
@@ -25,6 +29,7 @@ export function useResizablePanel({ defaultWidth, minWidth, maxWidth, side = 'ri
     function onMouseUp() {
       if (!dragRef.current) return
       dragRef.current = null
+      setIsResizing(false)
       document.body.style.cursor = ''
       document.body.style.userSelect = ''
     }
@@ -39,7 +44,7 @@ export function useResizablePanel({ defaultWidth, minWidth, maxWidth, side = 'ri
 
   return {
     width: disabled ? undefined : width,
-    isResizing: !disabled && dragRef.current !== null,
+    isResizing: !disabled && isResizing,
     handleProps: { onMouseDown },
   }
 }
