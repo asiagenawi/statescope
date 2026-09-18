@@ -8,21 +8,28 @@ const VIEWS = [
 ]
 
 function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelectState, onOpenGuide }) {
-  return (
-    <header className="app-header">
-      <a className="skip-link" href="#main-content">Skip to content</a>
+  const updated = snapshot.dataUpdated
 
+  return (
+    <>
+      <div className="utility-bar">
+        <a className="skip-link" href="#main-content">Skip to content</a>
+        <span>An independent tracker of AI in education policy</span>
+        {updated && <span className="utility-sep">Data current to {formatUpdated(updated)}</span>}
+      </div>
+
+      <header className="app-header">
       <div className="brand">
         <span className="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-            <rect x="2" y="13" width="4.5" height="8" rx="1.25" fill="#86b6ef" />
-            <rect x="9.75" y="8" width="4.5" height="13" rx="1.25" fill="#3987e5" />
-            <rect x="17.5" y="3" width="4.5" height="18" rx="1.25" fill="#184f95" />
+          <svg viewBox="0 0 26 26" width="24" height="24" fill="none">
+            <rect x="1" y="14" width="6" height="11" fill="var(--status-guidance)" />
+            <rect x="9.5" y="8" width="6" height="17" fill="var(--status-pending)" />
+            <rect x="18" y="1" width="6" height="24" fill="var(--status-enacted)" />
           </svg>
         </span>
         <span className="brand-text">
           <span className="brand-name">StateScope</span>
-          <span className="brand-tagline">AI in education policy, tracked</span>
+          <span className="brand-tagline">AI in education policy</span>
         </span>
       </div>
 
@@ -73,8 +80,18 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
           {chatOpen ? 'Close' : 'Ask'}
         </button>
       </div>
-    </header>
+      </header>
+    </>
   )
+}
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December']
+
+function formatUpdated(value) {
+  const [year, month] = String(value).split('-')
+  const name = MONTHS[Number(month) - 1]
+  return name ? `${name} ${year}` : year
 }
 
 export default Header

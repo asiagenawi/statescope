@@ -23,11 +23,11 @@
  * panel as the table view.
  */
 export const STATUS_COLORS = {
-  none: '#dcdbd5',
-  failed: '#eb6834',
-  guidance: '#86b6ef',
-  pending: '#3987e5',
-  enacted: '#184f95',
+  none: '#e4e6e4',
+  failed: '#c2410c',
+  guidance: '#86b39d',
+  pending: '#357d59',
+  enacted: '#063d29',
 }
 
 /** Legend order: escalating, least action -> most action. */
@@ -55,15 +55,15 @@ export const STATUS_DESCRIPTIONS = {
  * lightness range, so a single label color cannot stay legible across it.
  */
 export function labelInkOn(status) {
-  // Only the darkest ramp step needs light ink. White on `pending` measures
-  // 3.64:1, short of 4.5 for label-sized text; dark ink on it clears at 5.77:1.
-  return status === 'enacted' ? '#ffffff' : '#0b0b0b'
+  // Measured per fill: white clears 4.5:1 on failed (5.18), pending (4.97) and
+  // enacted (12.30); the two pale fills take dark ink.
+  return ['failed', 'pending', 'enacted'].includes(status) ? '#ffffff' : '#0d1b12'
 }
 
 /** Per-status badge colors for policy cards, keyed by the raw policy.status. */
 export const POLICY_STATUS_BADGES = {
-  enacted: { bg: '#e2ecfa', text: '#123a6e', accent: '#184f95' },
-  introduced: { bg: '#e6f0fd', text: '#1c5cab', accent: '#3987e5' },
-  active: { bg: '#edf3fd', text: '#25538f', accent: '#86b6ef' },
-  failed: { bg: '#fdeae2', text: '#8f3c17', accent: '#eb6834' },
+  enacted: { bg: 'transparent', text: '#063d29', accent: '#063d29' },
+  introduced: { bg: 'transparent', text: '#357d59', accent: '#357d59' },
+  active: { bg: 'transparent', text: '#2c6b4c', accent: '#86b39d' },
+  failed: { bg: 'transparent', text: '#9a340a', accent: '#c2410c' },
 }

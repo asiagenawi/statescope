@@ -43,7 +43,6 @@ function StatStrip({ snapshot }) {
           <span className="stat-label">{s.label}</span>
         </span>
       ))}
-      {updated && <span className="stat-updated">Data current to {updated}</span>}
     </div>
   )
 }
