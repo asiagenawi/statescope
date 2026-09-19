@@ -81,6 +81,13 @@ function TrendsView({ snapshot }) {
           <section className="chart-panel">
             <h3 className="chart-title">Policies introduced per year</h3>
             <PolicyTimeline data={trends.timeline} />
+            {trends.undated > 0 && (
+              <p className="chart-note">
+                {trends.undated} further {trends.undated === 1 ? 'policy is' : 'policies are'} tracked
+                without a confirmed introduction date and {trends.undated === 1 ? 'is' : 'are'} not
+                plotted here. They still appear in the table and in every count.
+              </p>
+            )}
           </section>
 
           <section className="chart-panel">

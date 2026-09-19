@@ -1940,3 +1940,11 @@
   .policy-table { font-size: var(--text-xs); }
   .policy-table td, .th-button { padding-left: var(--s3); padding-right: var(--s3); }
 }
+
+/* Says what a chart cannot show, rather than letting the omission read as zero. */
+.chart-note {
+  padding: var(--s2) var(--s5) 0;
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--ink-muted);
+}

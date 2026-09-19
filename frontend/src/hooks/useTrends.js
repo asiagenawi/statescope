@@ -47,6 +47,11 @@ export function useTrends({ policies, policyTopics, topics }, filters = {}) {
       .sort((a, b) => b.count - a.count)
   }, [filtered, topics, policyTopics])
 
+  const undated = useMemo(
+    () => filtered.filter(p => !p.date_introduced).length,
+    [filtered],
+  )
+
   const statusBreakdown = useMemo(() => countBy(filtered, p => p.status), [filtered])
   const typeBreakdown = useMemo(() => countBy(filtered, p => p.policy_type), [filtered])
   const levelBreakdown = useMemo(() => countBy(filtered, p => p.level), [filtered])
@@ -64,6 +69,7 @@ export function useTrends({ policies, policyTopics, topics }, filters = {}) {
     typeBreakdown,
     levelBreakdown,
     statesActing,
+    undated,
     total: filtered.length,
   }
 }

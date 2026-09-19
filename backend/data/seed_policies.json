@@ -1,17 +1,53 @@
 {
   "topics": [
-    {"name": "AI Literacy", "description": "Teaching students and educators about AI concepts and capabilities"},
-    {"name": "Student Privacy", "description": "Protecting student data from AI systems"},
-    {"name": "Teacher Training", "description": "Professional development for educators on AI tools"},
-    {"name": "Curriculum", "description": "Integrating AI topics into K-12 curriculum standards"},
-    {"name": "Assessment", "description": "Policies on AI use in student testing and evaluation"},
-    {"name": "Procurement", "description": "Guidelines for purchasing AI-powered education technology"},
-    {"name": "Task Forces", "description": "State commissions or task forces studying AI in education"},
-    {"name": "Academic Integrity", "description": "Policies on AI use by students in coursework"},
-    {"name": "Equity & Access", "description": "Ensuring equitable access to AI education resources"},
-    {"name": "Data Governance", "description": "Frameworks for managing education data used by AI"},
-    {"name": "Workforce Development", "description": "Preparing students for AI-impacted careers"},
-    {"name": "Research", "description": "Funding and conducting research on AI in education"}
+    {
+      "name": "AI Literacy",
+      "description": "Teaching students and educators about AI concepts and capabilities"
+    },
+    {
+      "name": "Student Privacy",
+      "description": "Protecting student data from AI systems"
+    },
+    {
+      "name": "Teacher Training",
+      "description": "Professional development for educators on AI tools"
+    },
+    {
+      "name": "Curriculum",
+      "description": "Integrating AI topics into K-12 curriculum standards"
+    },
+    {
+      "name": "Assessment",
+      "description": "Policies on AI use in student testing and evaluation"
+    },
+    {
+      "name": "Procurement",
+      "description": "Guidelines for purchasing AI-powered education technology"
+    },
+    {
+      "name": "Task Forces",
+      "description": "State commissions or task forces studying AI in education"
+    },
+    {
+      "name": "Academic Integrity",
+      "description": "Policies on AI use by students in coursework"
+    },
+    {
+      "name": "Equity & Access",
+      "description": "Ensuring equitable access to AI education resources"
+    },
+    {
+      "name": "Data Governance",
+      "description": "Frameworks for managing education data used by AI"
+    },
+    {
+      "name": "Workforce Development",
+      "description": "Preparing students for AI-impacted careers"
+    },
+    {
+      "name": "Research",
+      "description": "Funding and conducting research on AI in education"
+    }
   ],
   "policies": [
     {
@@ -27,7 +63,10 @@
       "sponsor": "Assemblymember Marc Berman",
       "summary_text": "Directs CDE to develop model AI literacy guidelines and resources for incorporation into math, science, and computer science curriculum frameworks. Requires consideration of AI ethics, bias, and societal impact.",
       "source_url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB2885",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "CA",
@@ -42,7 +81,10 @@
       "sponsor": "Governor Gavin Newsom",
       "summary_text": "Directs state agencies to study AI risks and benefits. Includes provisions for workforce development and education system preparedness for AI integration.",
       "source_url": "https://www.gov.ca.gov/2023/09/06/governor-newsom-signs-executive-order-to-prepare-california-for-the-progress-of-artificial-intelligence/",
-      "topics": ["Workforce Development", "Task Forces"]
+      "topics": [
+        "Workforce Development",
+        "Task Forces"
+      ]
     },
     {
       "state": "CA",
@@ -57,7 +99,11 @@
       "sponsor": "Senator Josh Becker",
       "summary_text": "Directs the Superintendent of Public Instruction to convene a working group, with at least half being current classroom teachers, to develop guidance on safe AI use in schools by January 2026 and a model policy by July 2026.",
       "source_url": "https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240SB1288",
-      "topics": ["Teacher Training", "Data Governance", "Academic Integrity"]
+      "topics": [
+        "Teacher Training",
+        "Data Governance",
+        "Academic Integrity"
+      ]
     },
     {
       "state": "OR",
@@ -72,7 +118,10 @@
       "sponsor": "Representative Courtney Neron",
       "summary_text": "Requires ODE to convene a work group to study AI use in education, examine impacts on students and teachers, and deliver recommendations to the legislature.",
       "source_url": "https://olis.oregonlegislature.gov/liz/2023R1/Measures/Overview/HB2985",
-      "topics": ["Task Forces", "Research"]
+      "topics": [
+        "Task Forces",
+        "Research"
+      ]
     },
     {
       "state": "VA",
@@ -87,7 +136,10 @@
       "sponsor": "Delegate Shelly Simonds",
       "summary_text": "Mandates the Board of Education to incorporate AI literacy into computer science standards, including understanding AI capabilities, limitations, ethical considerations, and societal impact.",
       "source_url": "https://lis.virginia.gov/bill-details?ses=241&bill=HB2094",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "WA",
@@ -102,7 +154,10 @@
       "sponsor": "Senator Joe Nguyen",
       "summary_text": "Creates an AI task force to examine AI use across state agencies including education. Requires recommendations on responsible AI adoption, workforce impacts, and student data protection.",
       "source_url": "https://app.leg.wa.gov/billsummary?BillNumber=5693&Year=2023",
-      "topics": ["Task Forces", "Student Privacy"]
+      "topics": [
+        "Task Forces",
+        "Student Privacy"
+      ]
     },
     {
       "state": "NC",
@@ -117,7 +172,10 @@
       "sponsor": "Senator Michael Lee",
       "summary_text": "Establishes the Joint Legislative Study Commission on AI in Public Schools to study current and potential use of AI, examine impacts on teaching and learning, and recommend legislation.",
       "source_url": "https://www.ncleg.gov/BillLookUp/2023/S812",
-      "topics": ["Task Forces", "Research"]
+      "topics": [
+        "Task Forces",
+        "Research"
+      ]
     },
     {
       "state": "CT",
@@ -132,7 +190,10 @@
       "sponsor": "Representative Holly Cheeseman",
       "summary_text": "Creates an AI in Education Working Group under the State Department of Education to study AI impacts on K-12 education and develop recommendations for responsible AI integration.",
       "source_url": "https://www.cga.ct.gov/asp/cgabillstatus/cgabillstatus.asp?selBillType=Bill&bill_num=HB05523",
-      "topics": ["Task Forces", "Teacher Training"]
+      "topics": [
+        "Task Forces",
+        "Teacher Training"
+      ]
     },
     {
       "state": "NY",
@@ -147,7 +208,10 @@
       "sponsor": "Assemblymember Nily Rozic",
       "summary_text": "Directs the commissioner of education to conduct a study on the use of AI in elementary and secondary education, examining both opportunities and risks.",
       "source_url": "https://www.nysenate.gov/legislation/bills/2023/A8195",
-      "topics": ["Research", "Task Forces"]
+      "topics": [
+        "Research",
+        "Task Forces"
+      ]
     },
     {
       "state": "TX",
@@ -162,7 +226,10 @@
       "sponsor": "Representative Giovanni Capriglione",
       "summary_text": "Establishes the AI Advisory Council to study and monitor AI systems used by state agencies. Includes education representatives and examines AI impacts on the education workforce.",
       "source_url": "https://capitol.texas.gov/BillLookup/History.aspx?LegSess=88R&Bill=HB3261",
-      "topics": ["Task Forces", "Workforce Development"]
+      "topics": [
+        "Task Forces",
+        "Workforce Development"
+      ]
     },
     {
       "state": "IL",
@@ -177,7 +244,11 @@
       "sponsor": "Representative Jennifer Gong-Gershowitz",
       "summary_text": "Enacted as Public Act 103-0451. Creates the Generative AI and Natural Language Processing Task Force to study impacts of generative AI technologies on various sectors including education, workforce, and the economy. The task force provides recommendations to the General Assembly.",
       "source_url": "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3563&GAID=17&DocTypeID=HB",
-      "topics": ["Task Forces", "Research", "Workforce Development"]
+      "topics": [
+        "Task Forces",
+        "Research",
+        "Workforce Development"
+      ]
     },
     {
       "state": "IL",
@@ -192,7 +263,10 @@
       "sponsor": null,
       "summary_text": "Amends the School Code to expand the definition of cyberbullying to include posting or sharing a person's AI-generated digital replica online without permission if it causes harm. Takes effect for the 2026-2027 school year.",
       "source_url": "https://www.ilga.gov/legislation/BillStatus.asp?DocNum=3851&GAID=18&DocTypeID=HB",
-      "topics": ["Academic Integrity", "Student Privacy"]
+      "topics": [
+        "Academic Integrity",
+        "Student Privacy"
+      ]
     },
     {
       "state": "CO",
@@ -207,7 +281,10 @@
       "sponsor": "Representative Brianna Titone",
       "summary_text": "Requires educational institutions to disclose when AI systems are used in consequential decisions affecting students. Establishes transparency and notification requirements.",
       "source_url": "https://leg.colorado.gov/bills/hb24-1468",
-      "topics": ["Student Privacy", "Data Governance"]
+      "topics": [
+        "Student Privacy",
+        "Data Governance"
+      ]
     },
     {
       "state": null,
@@ -222,7 +299,11 @@
       "sponsor": "Representative Lisa Blunt Rochester",
       "summary_text": "Establishes a grant program through the Department of Education to support AI literacy education in K-12 schools. Funds curriculum development, teacher training, and research.",
       "source_url": "https://www.congress.gov/bill/118th-congress/house-bill/6834",
-      "topics": ["AI Literacy", "Teacher Training", "Research"]
+      "topics": [
+        "AI Literacy",
+        "Teacher Training",
+        "Research"
+      ]
     },
     {
       "state": null,
@@ -237,7 +318,10 @@
       "sponsor": "Senator Michael Bennet",
       "summary_text": "Directs the Department of Education to conduct a comprehensive study on AI in education, develop recommendations for responsible AI use, and create resources for educators.",
       "source_url": "https://www.congress.gov/bill/118th-congress/senate-bill/2451",
-      "topics": ["Research", "Teacher Training"]
+      "topics": [
+        "Research",
+        "Teacher Training"
+      ]
     },
     {
       "state": null,
@@ -252,7 +336,11 @@
       "sponsor": "Representative Suzanne Bonamici",
       "summary_text": "Creates competitive grant programs for AI education, including K-12 AI literacy, teacher training, and higher education AI programs. Focuses on equitable access.",
       "source_url": "https://www.congress.gov/bill/118th-congress/house-bill/3686",
-      "topics": ["AI Literacy", "Equity & Access", "Teacher Training"]
+      "topics": [
+        "AI Literacy",
+        "Equity & Access",
+        "Teacher Training"
+      ]
     },
     {
       "state": null,
@@ -267,7 +355,11 @@
       "sponsor": "President Joe Biden",
       "summary_text": "Comprehensive executive order on AI safety and security. Included directives for the Department of Education to develop resources for AI-enabled education, create guidelines for AI use in schools, and address equity concerns. Revoked by Executive Order 14148 on January 20, 2025.",
       "source_url": "https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/",
-      "topics": ["Equity & Access", "Data Governance", "Procurement"]
+      "topics": [
+        "Equity & Access",
+        "Data Governance",
+        "Procurement"
+      ]
     },
     {
       "state": null,
@@ -282,7 +374,11 @@
       "sponsor": "President Donald Trump",
       "summary_text": "Promotes AI literacy by integrating AI into K-12 education, providing comprehensive AI training for educators, and fostering early exposure to AI concepts. Establishes White House Task Force on AI Education and Presidential AI Challenge for youth.",
       "source_url": "https://www.whitehouse.gov/presidential-actions/2025/04/advancing-artificial-intelligence-education-for-american-youth/",
-      "topics": ["AI Literacy", "Teacher Training", "Workforce Development"]
+      "topics": [
+        "AI Literacy",
+        "Teacher Training",
+        "Workforce Development"
+      ]
     },
     {
       "state": "NJ",
@@ -297,7 +393,10 @@
       "sponsor": "Senator Angela V. McKnight",
       "summary_text": "Required school districts to incorporate AI instruction in grades K-12 as part of the NJ Student Learning Standards in Computer Science and Design Thinking. Also required each public institution of higher education to offer certificate and degree programs in AI. Did not advance before the 2024-2025 session ended.",
       "source_url": "https://www.njleg.state.nj.us/bill-search/2024/S3876",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "MA",
@@ -312,7 +411,10 @@
       "sponsor": null,
       "summary_text": "DESE launched a pilot program in partnership with select districts to develop and test AI literacy curriculum frameworks for grades 6-12.",
       "source_url": "https://www.doe.mass.edu/",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "GA",
@@ -327,7 +429,10 @@
       "sponsor": "Senator Brian Strickland",
       "summary_text": "Establishes a Senate study committee to examine the use of AI in Georgia's education system, focusing on opportunities, risks, and needed policy frameworks.",
       "source_url": "https://www.legis.ga.gov/legislation/64560",
-      "topics": ["Task Forces", "Research"]
+      "topics": [
+        "Task Forces",
+        "Research"
+      ]
     },
     {
       "state": "GA",
@@ -342,7 +447,11 @@
       "sponsor": null,
       "summary_text": "Requires a computer science course as a high school graduation requirement beginning in 2031. Course standards include AI concepts, preparing students for technology-driven careers.",
       "source_url": "https://legiscan.com/GA/bill/HB487/2025",
-      "topics": ["AI Literacy", "Curriculum", "Workforce Development"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum",
+        "Workforce Development"
+      ]
     },
     {
       "state": "PA",
@@ -357,7 +466,10 @@
       "sponsor": "Senator Lindsey Williams",
       "summary_text": "Directs the Department of Education to develop and implement AI education standards for K-12 schools, including AI literacy, computational thinking, and ethical AI use.",
       "source_url": "https://www.legis.state.pa.us/cfdocs/billinfo/billinfo.cfm?syear=2023&sind=0&body=S&type=B&bn=1227",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "WI",
@@ -372,7 +484,11 @@
       "sponsor": null,
       "summary_text": "Wisconsin Department of Public Instruction published comprehensive guidance for schools on responsible AI use, covering academic integrity, teacher tools, and student data privacy.",
       "source_url": "https://dpi.wi.gov/",
-      "topics": ["Academic Integrity", "Teacher Training", "Student Privacy"]
+      "topics": [
+        "Academic Integrity",
+        "Teacher Training",
+        "Student Privacy"
+      ]
     },
     {
       "state": "OH",
@@ -387,7 +503,10 @@
       "sponsor": null,
       "summary_text": "Ohio's Department of Education and Workforce released a framework providing guidance to districts on integrating AI tools, addressing academic integrity, and protecting student data.",
       "source_url": "https://education.ohio.gov/",
-      "topics": ["Academic Integrity", "Data Governance"]
+      "topics": [
+        "Academic Integrity",
+        "Data Governance"
+      ]
     },
     {
       "state": "UT",
@@ -402,7 +521,10 @@
       "sponsor": "Representative Stephanie Gricius",
       "summary_text": "Amends education code to include AI literacy as part of the digital literacy standards for K-12 students. Requires integration into existing technology and computer science courses.",
       "source_url": "https://le.utah.gov/~2024/bills/static/HB0513.html",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "IN",
@@ -417,7 +539,10 @@
       "sponsor": "Representative Matt Lehman",
       "summary_text": "Establishes an AI task force to study the impact of AI across Indiana, with specific attention to education, workforce development, and state agency use of AI tools.",
       "source_url": "https://iga.in.gov/legislative/2024/bills/house/1591",
-      "topics": ["Task Forces", "Workforce Development"]
+      "topics": [
+        "Task Forces",
+        "Workforce Development"
+      ]
     },
     {
       "state": "IN",
@@ -432,7 +557,11 @@
       "sponsor": "Representative Sue Errington",
       "summary_text": "Required schools to establish a process for teachers and administrators to submit AI platforms for inventory and conduct annual surveys about AI usage. Required schools to adopt and publicly post AI policies. Prohibited schools from penalizing students solely based on AI detection tool evidence. Died in the House Education Committee without advancing.",
       "source_url": "https://iga.in.gov/legislative/2025/bills/house/1296",
-      "topics": ["Academic Integrity", "Data Governance", "Teacher Training"]
+      "topics": [
+        "Academic Integrity",
+        "Data Governance",
+        "Teacher Training"
+      ]
     },
     {
       "state": "MN",
@@ -447,7 +576,10 @@
       "sponsor": "Representative Heather Edelson",
       "summary_text": "Requires the commissioner of education to incorporate AI literacy into Minnesota's academic standards, including understanding AI systems, ethical implications, and practical applications.",
       "source_url": "https://www.revisor.mn.gov/bills/bill.php?b=House&f=HF3775&ssn=0&y=2024",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "FL",
@@ -462,7 +594,10 @@
       "sponsor": "Representative Fiona McFarland",
       "summary_text": "Amends Florida education statutes to include artificial intelligence within computer science education standards. Requires AI concepts to be taught as part of the K-12 computer science curriculum.",
       "source_url": "https://www.flsenate.gov/Session/Bill/2024/1361",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "TN",
@@ -477,7 +612,10 @@
       "sponsor": "Senator Jon Lundberg",
       "summary_text": "Requires each local board of education, charter school governing body, and public higher education institution to adopt policies regarding AI technology use by students, teachers, faculty, and staff for instructional and assignment purposes. Tennessee is the only state mandating district-level AI rules.",
       "source_url": "https://publications.tnsosfiles.com/acts/113/pub/pc0550.pdf",
-      "topics": ["Academic Integrity", "Teacher Training"]
+      "topics": [
+        "Academic Integrity",
+        "Teacher Training"
+      ]
     },
     {
       "state": "TN",
@@ -492,7 +630,11 @@
       "sponsor": null,
       "summary_text": "Requires local education agencies and public charter schools to provide age-appropriate instruction on accessing, utilizing, and critically evaluating AI tools. Requires the Department of Education to issue implementation guidance and provide AI professional development programs.",
       "source_url": "https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=HB0531",
-      "topics": ["AI Literacy", "Curriculum", "Teacher Training"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum",
+        "Teacher Training"
+      ]
     },
     {
       "state": "NV",
@@ -507,7 +649,10 @@
       "sponsor": "Assemblymember Shondra Summers-Armstrong",
       "summary_text": "Prohibits the use of AI in public schools for counselors, psychologists, or social workers, except for administrative efficiencies. Requires the Department of Education to develop guidance for mental health professionals on responsible AI use in student services.",
       "source_url": "https://www.leg.state.nv.us/Session/83rd2025/Bills/AB/AB406_EN.pdf",
-      "topics": ["Student Privacy", "Equity & Access"]
+      "topics": [
+        "Student Privacy",
+        "Equity & Access"
+      ]
     },
     {
       "state": "MS",
@@ -522,7 +667,10 @@
       "sponsor": null,
       "summary_text": "Establishes the Artificial Intelligence Regulation (AIR) Task Force with seven voting members including legislative and agency representatives, plus expert ex-officio members from education, healthcare, and technology. Must report findings annually; dissolves December 31, 2027.",
       "source_url": "https://billstatus.ls.state.ms.us/documents/2025/html/SB/2400-2499/SB2426SG.htm",
-      "topics": ["Task Forces", "Research"]
+      "topics": [
+        "Task Forces",
+        "Research"
+      ]
     },
     {
       "state": "AL",
@@ -537,7 +685,10 @@
       "sponsor": "Representative David Faulkner",
       "summary_text": "Beginning with the graduating class of 2031, requires all public school students to earn at least one computer science course credit including AI, coding, and quantum computing for graduation. Passed the Alabama House.",
       "source_url": "https://legiscan.com/AL/bill/HB332/2025",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "MD",
@@ -552,7 +703,11 @@
       "sponsor": null,
       "summary_text": "Requires MSDE to develop and update guidance on AI use in education, create a list of approved AI tools for classroom use, and establish a task force to study AI's implications in K-12 education.",
       "source_url": "https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/HB1391?ys=2025rs",
-      "topics": ["Procurement", "Teacher Training", "Task Forces"]
+      "topics": [
+        "Procurement",
+        "Teacher Training",
+        "Task Forces"
+      ]
     },
     {
       "state": "MD",
@@ -567,7 +722,10 @@
       "sponsor": "Governor Wes Moore",
       "summary_text": "Establishes framework for responsible AI use across Maryland state agencies including education. Directs agencies to develop AI use policies and identify beneficial AI applications while managing risks.",
       "source_url": "https://governor.maryland.gov/Lists/ExecutiveOrders/Attachments/31/EO%2001.01.2024.02",
-      "topics": ["Data Governance", "Workforce Development"]
+      "topics": [
+        "Data Governance",
+        "Workforce Development"
+      ]
     },
     {
       "state": "NM",
@@ -582,7 +740,11 @@
       "sponsor": null,
       "summary_text": "Directs the legislative education study committee to create an education data governance and AI working group to study and recommend structures for improved statewide education data governance and policies addressing AI in education.",
       "source_url": "https://www.nmlegis.gov/Sessions/25%20Regular/bills/house/HB0002.html",
-      "topics": ["Data Governance", "Task Forces", "Research"]
+      "topics": [
+        "Data Governance",
+        "Task Forces",
+        "Research"
+      ]
     },
     {
       "state": "WA",
@@ -597,7 +759,10 @@
       "sponsor": "Governor Jay Inslee",
       "summary_text": "Directs assessment of generative AI's impact on the state workforce and identifies research opportunities and partnerships with institutions to power innovation and expansion of AI technology and education.",
       "source_url": "https://governor.wa.gov/sites/default/files/exe_order/24-01%20-%20Artificial%20Intelligence%20(tmp).pdf",
-      "topics": ["Workforce Development", "Research"]
+      "topics": [
+        "Workforce Development",
+        "Research"
+      ]
     },
     {
       "state": "ME",
@@ -612,7 +777,10 @@
       "sponsor": "Governor Janet Mills",
       "summary_text": "Creates an AI task force to study AI impacts and develop recommendations for responsible use across state agencies. Led to the Department of Education releasing an AI guidance toolkit in February 2025.",
       "source_url": "https://www.maine.gov/governor/mills/",
-      "topics": ["Task Forces", "Research"]
+      "topics": [
+        "Task Forces",
+        "Research"
+      ]
     },
     {
       "state": "AR",
@@ -627,7 +795,11 @@
       "sponsor": "Governor Sarah Huckabee Sanders",
       "summary_text": "Established a task force to comprehensively study AI across state functions. Released initial report with recommendations on risk management, phased policy development, AI literacy curriculum frameworks, and educator professional development.",
       "source_url": "https://governor.arkansas.gov/",
-      "topics": ["Task Forces", "AI Literacy", "Teacher Training"]
+      "topics": [
+        "Task Forces",
+        "AI Literacy",
+        "Teacher Training"
+      ]
     },
     {
       "state": "AK",
@@ -642,7 +814,10 @@
       "sponsor": null,
       "summary_text": "Comprehensive guidance on responsible AI integration in K-12 education, focusing on augmenting human capabilities while maintaining ethical and responsible use practices.",
       "source_url": "https://education.alaska.gov/",
-      "topics": ["AI Literacy", "Teacher Training"]
+      "topics": [
+        "AI Literacy",
+        "Teacher Training"
+      ]
     },
     {
       "state": "DE",
@@ -657,7 +832,10 @@
       "sponsor": null,
       "summary_text": "Provides guidance on understanding AI, classroom implementation, and professional learning. Published by the Delaware Council on Educational Technology to support educators in integrating generative AI responsibly.",
       "source_url": "https://www.doe.k12.de.us/",
-      "topics": ["Teacher Training", "AI Literacy"]
+      "topics": [
+        "Teacher Training",
+        "AI Literacy"
+      ]
     },
     {
       "state": "HI",
@@ -672,7 +850,10 @@
       "sponsor": null,
       "summary_text": "Establishes a balanced approach to AI in education with emphasis on ethical considerations and a framework for responsible use by students and educators across Hawaii's public schools.",
       "source_url": "https://www.hawaiipublicschools.org/",
-      "topics": ["Academic Integrity", "Teacher Training"]
+      "topics": [
+        "Academic Integrity",
+        "Teacher Training"
+      ]
     },
     {
       "state": "KY",
@@ -687,7 +868,10 @@
       "sponsor": null,
       "summary_text": "Provides guidance on consistent technology integration with a balanced approach to AI in education. Promotes normalization of responsible AI use across Kentucky schools.",
       "source_url": "https://education.ky.gov/",
-      "topics": ["Teacher Training", "AI Literacy"]
+      "topics": [
+        "Teacher Training",
+        "AI Literacy"
+      ]
     },
     {
       "state": "LA",
@@ -702,7 +886,11 @@
       "sponsor": null,
       "summary_text": "Comprehensive guide covering AI overview, challenges, plagiarism and cheating mitigation strategies, classroom integration approaches, and safeguards for student data. Published following the state AI Task Force recommendations.",
       "source_url": "https://doe.louisiana.gov/docs/default-source/technology-footprint/ldoe-ai-guidance.pdf",
-      "topics": ["Academic Integrity", "Student Privacy", "Teacher Training"]
+      "topics": [
+        "Academic Integrity",
+        "Student Privacy",
+        "Teacher Training"
+      ]
     },
     {
       "state": "MO",
@@ -717,7 +905,11 @@
       "sponsor": null,
       "summary_text": "Covers AI capabilities and limitations, professional development recommendations, instructional practices, and data privacy considerations for Missouri schools.",
       "source_url": "https://dese.mo.gov/",
-      "topics": ["Teacher Training", "Student Privacy", "Data Governance"]
+      "topics": [
+        "Teacher Training",
+        "Student Privacy",
+        "Data Governance"
+      ]
     },
     {
       "state": "MT",
@@ -732,7 +924,10 @@
       "sponsor": null,
       "summary_text": "Establishes a human-centered approach to AI in education with core principles addressing benefits, risks, professional learning needs, and accessibility considerations.",
       "source_url": "https://opi.mt.gov/",
-      "topics": ["Teacher Training", "Equity & Access"]
+      "topics": [
+        "Teacher Training",
+        "Equity & Access"
+      ]
     },
     {
       "state": "ND",
@@ -747,7 +942,10 @@
       "sponsor": null,
       "summary_text": "Provides a framework to guide K-12 schools in developing AI policies and implementation strategies for responsible AI integration in North Dakota.",
       "source_url": "https://www.nd.gov/dpi/",
-      "topics": ["Data Governance", "Teacher Training"]
+      "topics": [
+        "Data Governance",
+        "Teacher Training"
+      ]
     },
     {
       "state": "OK",
@@ -762,7 +960,11 @@
       "sponsor": null,
       "summary_text": "Addresses understanding AI, benefits and risks, roles and responsibilities, academic integrity considerations, and implementation guidance for Oklahoma schools.",
       "source_url": "https://sde.ok.gov/",
-      "topics": ["Academic Integrity", "Teacher Training", "AI Literacy"]
+      "topics": [
+        "Academic Integrity",
+        "Teacher Training",
+        "AI Literacy"
+      ]
     },
     {
       "state": "RI",
@@ -777,7 +979,11 @@
       "sponsor": null,
       "summary_text": "Provides instructional guidance addressing equity and bias, support for diverse learners, security considerations, and preparation for college and career readiness in an AI-driven world.",
       "source_url": "https://www.ride.ri.gov/",
-      "topics": ["Equity & Access", "Teacher Training", "Workforce Development"]
+      "topics": [
+        "Equity & Access",
+        "Teacher Training",
+        "Workforce Development"
+      ]
     },
     {
       "state": "SC",
@@ -792,7 +998,11 @@
       "sponsor": null,
       "summary_text": "Establishes curriculum standards and course framework for teaching AI concepts in K-12 career and technical education. One of the first states to develop dedicated AI curriculum standards.",
       "source_url": "https://ed.sc.gov/instruction/career-and-technical-education/",
-      "topics": ["Curriculum", "AI Literacy", "Workforce Development"]
+      "topics": [
+        "Curriculum",
+        "AI Literacy",
+        "Workforce Development"
+      ]
     },
     {
       "state": "WV",
@@ -807,7 +1017,10 @@
       "sponsor": null,
       "summary_text": "Addresses AI use for users in various school roles including classroom instruction, school administration, and risk management considerations for West Virginia schools.",
       "source_url": "https://wvde.us/",
-      "topics": ["Teacher Training", "Data Governance"]
+      "topics": [
+        "Teacher Training",
+        "Data Governance"
+      ]
     },
     {
       "state": "WY",
@@ -822,7 +1035,10 @@
       "sponsor": null,
       "summary_text": "Provides guidelines for Wyoming school districts on developing AI use policies, focusing on appropriate and responsible AI use and academic integrity.",
       "source_url": "https://edu.wyoming.gov/",
-      "topics": ["Academic Integrity", "Data Governance"]
+      "topics": [
+        "Academic Integrity",
+        "Data Governance"
+      ]
     },
     {
       "state": "MI",
@@ -837,7 +1053,11 @@
       "sponsor": null,
       "summary_text": "Comprehensive AI integration framework developed by Michigan Virtual in partnership with the Michigan Department of Education. Covers eight key areas including data compliance, ethical use, plagiarism, data privacy, informed consent, and algorithmic transparency for K-12 educators.",
       "source_url": "https://www.michigan.gov/mde/services/academic-standards/educational-technology/artificial-intelligence",
-      "topics": ["Teacher Training", "Student Privacy", "Data Governance"]
+      "topics": [
+        "Teacher Training",
+        "Student Privacy",
+        "Data Governance"
+      ]
     },
     {
       "state": "AZ",
@@ -852,7 +1072,11 @@
       "sponsor": null,
       "summary_text": "Developed by the Arizona Institute for Education and the Economy at Northern Arizona University. Provides guidance on teaching and learning with generative AI, administrator and school system use, and ethical considerations for educators.",
       "source_url": "https://legacy.nau.edu/college-education/community-resources/arizona-institute-education-economy/generative-artificial-intelligence-education-guidance-arizona-educators/",
-      "topics": ["Teacher Training", "AI Literacy", "Academic Integrity"]
+      "topics": [
+        "Teacher Training",
+        "AI Literacy",
+        "Academic Integrity"
+      ]
     },
     {
       "state": "AL",
@@ -867,7 +1091,10 @@
       "sponsor": null,
       "summary_text": "Provides a customizable AI policy template for LEAs to develop and implement AI policies. Addresses responsible AI use, data privacy, facial recognition restrictions, and compliance with federal and state laws.",
       "source_url": "https://www.alsde.edu/",
-      "topics": ["Data Governance", "Student Privacy"]
+      "topics": [
+        "Data Governance",
+        "Student Privacy"
+      ]
     },
     {
       "state": "CA",
@@ -882,7 +1109,10 @@
       "sponsor": null,
       "summary_text": "CDE guidance document providing a framework for understanding, using, and teaching about AI in California schools. Accompanied by an AI Resource Kit released in April 2024 with practical tools for educators.",
       "source_url": "https://www.cde.ca.gov/ci/pl/aiincalifornia.asp",
-      "topics": ["AI Literacy", "Teacher Training"]
+      "topics": [
+        "AI Literacy",
+        "Teacher Training"
+      ]
     },
     {
       "state": "CO",
@@ -897,7 +1127,11 @@
       "sponsor": null,
       "summary_text": "Developed by the Colorado Education Initiative with over 100 stakeholders. Covers reshaping teaching and learning, advancing equitable access for all learners, and developing policy for transparent and ethical AI use. Includes a pilot program in eight school districts.",
       "source_url": "https://www.coloradoedinitiative.org/projects/ai-in-colorado-education/",
-      "topics": ["Teacher Training", "Equity & Access", "Data Governance"]
+      "topics": [
+        "Teacher Training",
+        "Equity & Access",
+        "Data Governance"
+      ]
     },
     {
       "state": "CT",
@@ -912,7 +1146,10 @@
       "sponsor": null,
       "summary_text": "22-page guidance document detailing AI's role in the classroom, defining AI terminology for teachers, and providing a framework for responsible AI use. One of the first state-level AI education guidance documents in the nation.",
       "source_url": "https://portal.ct.gov/das/ctedtech/commission-for-educational-technology/initiatives/artificial-intelligence",
-      "topics": ["Teacher Training", "AI Literacy"]
+      "topics": [
+        "Teacher Training",
+        "AI Literacy"
+      ]
     },
     {
       "state": "GA",
@@ -927,7 +1164,11 @@
       "sponsor": null,
       "summary_text": "Comprehensive framework for AI in K-12 education with strategies for students, teachers, and administrators. Features a Traffic Light system for evaluating AI tool appropriateness and an AI tool rubric assessing privacy, usability, and cost. Emphasizes data privacy, academic integrity, and AI literacy.",
       "source_url": "https://gadoe.org/learning/artificial-intelligence/",
-      "topics": ["Teacher Training", "Academic Integrity", "Student Privacy"]
+      "topics": [
+        "Teacher Training",
+        "Academic Integrity",
+        "Student Privacy"
+      ]
     },
     {
       "state": "IN",
@@ -942,7 +1183,10 @@
       "sponsor": null,
       "summary_text": "Provides guidance to Indiana educators on responsible AI use in K-12 schools, covering classroom applications, data privacy considerations, and implementation strategies.",
       "source_url": "https://www.in.gov/doe/educators/digital-learning/",
-      "topics": ["Teacher Training", "Data Governance"]
+      "topics": [
+        "Teacher Training",
+        "Data Governance"
+      ]
     },
     {
       "state": "MN",
@@ -957,7 +1201,10 @@
       "sponsor": null,
       "summary_text": "Outlines guiding principles for responsible AI use in education, based on the U.S. Department of Education's Office of Educational Technology report and the National Center on Education and the Economy's framework.",
       "source_url": "https://education.mn.gov/MDE/dse/tech/AI/AIEd/",
-      "topics": ["Teacher Training", "AI Literacy"]
+      "topics": [
+        "Teacher Training",
+        "AI Literacy"
+      ]
     },
     {
       "state": "MS",
@@ -972,7 +1219,10 @@
       "sponsor": null,
       "summary_text": "Provides procedural guidance and instructional strategies to district leaders, school leaders, and classroom teachers on how to appropriately use artificial intelligence in Mississippi schools.",
       "source_url": "https://mdek12.org/DLResources",
-      "topics": ["Teacher Training", "Academic Integrity"]
+      "topics": [
+        "Teacher Training",
+        "Academic Integrity"
+      ]
     },
     {
       "state": "NC",
@@ -987,7 +1237,11 @@
       "sponsor": null,
       "summary_text": "Living document covering leadership and vision, human capacity, curriculum and instruction, data privacy and security, and technology infrastructure. Features the EVERY framework for responsible AI use. Fourth state education department in the nation to issue AI guidance.",
       "source_url": "https://www.dpi.nc.gov/districts-schools/districts-schools-support/digital-teaching-and-learning/ai-resources",
-      "topics": ["Teacher Training", "Student Privacy", "Curriculum"]
+      "topics": [
+        "Teacher Training",
+        "Student Privacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "NV",
@@ -1002,7 +1256,11 @@
       "sponsor": null,
       "summary_text": "Developed through the Nevada A.I. Alliance task force with stakeholder engagement. Provides ethical AI integration guidance for K-12 classrooms using the STELLAR framework for responsible AI adoption.",
       "source_url": "https://doe.nv.gov/offices/office-of-teaching-and-learning/nevada-digital-learning",
-      "topics": ["AI Literacy", "Teacher Training", "Equity & Access"]
+      "topics": [
+        "AI Literacy",
+        "Teacher Training",
+        "Equity & Access"
+      ]
     },
     {
       "state": "NM",
@@ -1017,7 +1275,11 @@
       "sponsor": null,
       "summary_text": "Developed with the Friday Institute at NC State University. Covers AI literacy with age-appropriate strategies for K-5, 6-8, and 9-12. Features the M.A.Z.E. framework: Monitor data privacy, Assess for accuracy, Zero-in on bias, Evaluate value.",
       "source_url": "https://web.ped.nm.gov/bureaus/curriculum-instruction/",
-      "topics": ["AI Literacy", "Student Privacy", "Teacher Training"]
+      "topics": [
+        "AI Literacy",
+        "Student Privacy",
+        "Teacher Training"
+      ]
     },
     {
       "state": "OR",
@@ -1032,7 +1294,10 @@
       "sponsor": null,
       "summary_text": "Suite of guidance documents covering generative AI in K-12 classrooms, developing policy and protocols for AI use, and resources for educational AI use. Among the earliest state-level AI education guidance.",
       "source_url": "https://www.oregon.gov/ode/educator-resources/teachingcontent/pages/generative-artificial-intelligence-(ai)-for-k-12-schools.aspx",
-      "topics": ["Teacher Training", "Academic Integrity"]
+      "topics": [
+        "Teacher Training",
+        "Academic Integrity"
+      ]
     },
     {
       "state": "UT",
@@ -1047,7 +1312,11 @@
       "sponsor": null,
       "summary_text": "Statewide AI framework to help school districts develop AI policies and practices. Living document covering responsible AI use, data privacy, and instructional integration. Positions Utah as a national leader in K-12 AI education.",
       "source_url": "https://schools.utah.gov/informationtechnology/artificialintelligence/index",
-      "topics": ["Data Governance", "Teacher Training", "AI Literacy"]
+      "topics": [
+        "Data Governance",
+        "Teacher Training",
+        "AI Literacy"
+      ]
     },
     {
       "state": "VA",
@@ -1062,7 +1331,11 @@
       "sponsor": null,
       "summary_text": "Developed in response to Governor Youngkin's Executive Order 30 (January 2024). Provides tools, instructional resources, and support for implementing and using AI at all levels of education in Virginia.",
       "source_url": "https://www.education.virginia.gov/media/governorvirginiagov/secretary-of-education/pdf/AI-Education-Guidelines.pdf",
-      "topics": ["Teacher Training", "AI Literacy", "Curriculum"]
+      "topics": [
+        "Teacher Training",
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "WA",
@@ -1077,7 +1350,11 @@
       "sponsor": null,
       "summary_text": "Published by OSPI, making Washington the fifth state to issue state-level AI guidance. Developed by a diverse advisory group of educators, technology experts, and researchers. Now on version 3.0 with ongoing updates. Covers ethical considerations and responsible classroom use.",
       "source_url": "https://ospi.k12.wa.us/student-success/resources-subject-area/human-centered-artificial-intelligence-schools",
-      "topics": ["Teacher Training", "Equity & Access", "Data Governance"]
+      "topics": [
+        "Teacher Training",
+        "Equity & Access",
+        "Data Governance"
+      ]
     },
     {
       "state": "NY",
@@ -1092,7 +1369,11 @@
       "sponsor": "Assemblymember Ritchie Torres",
       "summary_text": "Establishes a competitive AI literacy grant program under the Digital Equity framework. Provides grants to public schools, community colleges, higher education institutions, and nonprofits to expand AI education, improve digital literacy, and reduce technology access disparities. Companion bill S7691 in the Senate.",
       "source_url": "https://www.nysenate.gov/legislation/bills/2025/A6874",
-      "topics": ["AI Literacy", "Equity & Access", "Workforce Development"]
+      "topics": [
+        "AI Literacy",
+        "Equity & Access",
+        "Workforce Development"
+      ]
     },
     {
       "state": "NJ",
@@ -1107,7 +1388,10 @@
       "sponsor": null,
       "summary_text": "Reintroduction of S3876 from the 2024-2025 session. Requires school districts to incorporate AI instruction in grades K-12 as part of the NJ Student Learning Standards in Computer Science and Design Thinking. Requires public higher education institutions to offer AI certificate and degree programs.",
       "source_url": "https://www.njleg.state.nj.us/bill-search/2026/S2862",
-      "topics": ["AI Literacy", "Curriculum"]
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
     },
     {
       "state": "LA",
@@ -1122,7 +1406,10 @@
       "sponsor": "Representative Phelps",
       "summary_text": "Requires local public school boards to promote artificial intelligence education for students and to encourage professional development relative to artificial intelligence for faculty and staff.",
       "source_url": "https://www.legis.la.gov/Legis/ViewDocument.aspx?d=1398300",
-      "topics": ["AI Literacy", "Teacher Training"]
+      "topics": [
+        "AI Literacy",
+        "Teacher Training"
+      ]
     },
     {
       "state": null,
@@ -1137,7 +1424,266 @@
       "sponsor": "Representative Vince Fong",
       "summary_text": "Calls on the National Science Foundation to create fellowships for students and instructors, expand AI education through scholarships, and establish regional Centers of Excellence at community colleges. Bipartisan bill co-sponsored by Representatives Salinas and Pettersen.",
       "source_url": "https://www.congress.gov/bill/119th-congress/house-bill/5351",
-      "topics": ["AI Literacy", "Workforce Development", "Research"]
+      "topics": [
+        "AI Literacy",
+        "Workforce Development",
+        "Research"
+      ]
+    },
+    {
+      "state": "ID",
+      "title": "SB 1227 - Generative AI in Public Education Act",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": "2026-01-22",
+      "date_enacted": "2026-03-19",
+      "bill_number": "SB 1227",
+      "description": "Establishes a statewide framework for generative AI in Idaho public schools.",
+      "summary_text": "Directs the State Department of Education to develop a generative AI framework covering privacy, procurement safeguards, transparency, academic integrity, AI literacy standards and professional development. Districts and charter schools must adopt aligned policies. Prohibits AI from replacing human teachers. Session Law Chapter 71, effective 1 July 2026.",
+      "source_url": "https://legislature.idaho.gov/sessioninfo/2026/legislation/S1227/",
+      "topics": [
+        "AI Literacy",
+        "Student Privacy",
+        "Teacher Training",
+        "Procurement",
+        "Academic Integrity"
+      ]
+    },
+    {
+      "state": "MD",
+      "title": "SB 720 - Artificial Intelligence Ready Schools Act",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": "2026-02-06",
+      "date_enacted": "2026-05-26",
+      "bill_number": "SB 720",
+      "description": "Requires statewide AI guidance, district policies and an AI Education Collaborative.",
+      "summary_text": "Requires the Maryland State Department of Education to publish and maintain AI guidance and best practices, requires districts to adopt aligned policies and designate AI coordinators, establishes the Maryland AI Education Collaborative, and supports evaluation and certification of AI tools before adoption. Passed 41-0 in the Senate and 129-8 in the House. Chapter 634, effective 1 June 2026.",
+      "source_url": "https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0720?ys=2026RS",
+      "topics": [
+        "Teacher Training",
+        "Procurement",
+        "Task Forces",
+        "Data Governance"
+      ]
+    },
+    {
+      "state": "OK",
+      "title": "SB 1734 - Oklahoma Responsible Technology in Schools Act",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": null,
+      "date_enacted": "2026-05-12",
+      "bill_number": "SB 1734",
+      "description": "Sets guardrails for student-facing AI and requires district policies by 2027-28.",
+      "summary_text": "Requires every district and charter school to adopt an AI policy before the 2027-28 school year covering approved and prohibited uses, data protection, family transparency and periodic review. Requires human review of AI output before it is used for instruction, feedback, assessment or any decision affecting a student, prohibits AI as the primary basis for grading, discipline or placement, and gives parents an opt-out without academic penalty. Effective 1 July 2026.",
+      "source_url": "https://oksenate.gov/press-releases/senator-seifried-advances-bill-setting-guardrails-ai-schools",
+      "topics": [
+        "Student Privacy",
+        "Data Governance",
+        "Academic Integrity",
+        "Equity & Access"
+      ]
+    },
+    {
+      "state": "UT",
+      "title": "HB 218 - Digital Skills Amendments",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HB 218",
+      "description": "Creates a required grade 7 or 8 digital skills course including AI literacy.",
+      "summary_text": "Establishes a required digital skills course in grade 7 or 8 covering AI literacy, cybersecurity and digital privacy.",
+      "source_url": "https://le.utah.gov/~2026/bills/static/HB0218.html",
+      "topics": [
+        "AI Literacy",
+        "Curriculum",
+        "Student Privacy"
+      ]
+    },
+    {
+      "state": "VA",
+      "title": "HB 1186 - AI Innovation in Education Pilot Program",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HB 1186",
+      "description": "Funds an AI pilot program and requires statewide guidance and district policies.",
+      "summary_text": "Establishes the AI Innovation in Education Pilot Program to fund and scale innovative classroom uses of AI, requires state guidance for safe, ethical and equitable use, and requires school boards to adopt policies consistent with that guidance.",
+      "source_url": "https://lis.virginia.gov/bill-details/20261/HB1186",
+      "topics": [
+        "Curriculum",
+        "Equity & Access",
+        "Teacher Training"
+      ]
+    },
+    {
+      "state": "AL",
+      "title": "HB 329 - Computer Science and AI Graduation Requirement",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "enacted",
+      "date_introduced": null,
+      "date_enacted": "2026-04-09",
+      "bill_number": "HB 329",
+      "description": "Adds AI to the computer science definition and codifies the graduation requirement.",
+      "summary_text": "Requires all public high school students, beginning with the class graduating in 2031-32, to earn at least one credit in an approved computer science course, and adds artificial intelligence to the statutory definition of computer science. The credit may satisfy mathematics, science, career and technical education or elective requirements. Sponsored by Rep. David Faulkner.",
+      "source_url": "https://legiscan.com/AL/bill/HB329/2026",
+      "topics": [
+        "AI Literacy",
+        "Curriculum",
+        "Workforce Development"
+      ]
+    },
+    {
+      "state": "IA",
+      "title": "HF 2540 - Computer Science and AI Coursework Requirement",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HF 2540",
+      "description": "Would require a semester of computer science and AI coursework to graduate.",
+      "summary_text": "Would require a semester of computer science and artificial intelligence coursework beginning with the class of 2030-31, covering foundational concepts, ethics and societal impacts, and would strengthen teacher preparation in the subject.",
+      "source_url": "https://legiscan.com/IA/bill/HF2540/2026",
+      "topics": [
+        "AI Literacy",
+        "Curriculum",
+        "Teacher Training"
+      ]
+    },
+    {
+      "state": "VT",
+      "title": "HB 650 - Educational Technology Privacy Registration",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HB 650",
+      "description": "Would require edtech providers to register and certify privacy compliance annually.",
+      "summary_text": "Would require educational technology providers operating in Vermont schools to register with the state and certify compliance with student privacy requirements each year. Passed the first chamber.",
+      "source_url": "https://legiscan.com/VT/bill/H0650/2026",
+      "topics": [
+        "Student Privacy",
+        "Data Governance",
+        "Procurement"
+      ]
+    },
+    {
+      "state": "HI",
+      "title": "SB 2212 - AI Literacy Course and Grant Program",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "SB 2212",
+      "description": "Would require a six-week AI literacy course and fund a $5 million grant pilot.",
+      "summary_text": "Would require a six-week AI literacy course for juniors and seniors beginning in 2027-28 covering machine learning, generative AI, ethics and culturally responsive content, and would establish a $5 million AI Education Grant Pilot Program.",
+      "source_url": "https://legiscan.com/HI/bill/SB2212/2026",
+      "topics": [
+        "AI Literacy",
+        "Curriculum",
+        "Equity & Access"
+      ]
+    },
+    {
+      "state": "SC",
+      "title": "H 5253 - Student AI Safeguards Act",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "H 5253",
+      "description": "Would require parental opt-in consent and bar AI from high-stakes decisions.",
+      "summary_text": "Would require written parental opt-in consent for student-facing AI, annual public disclosure of AI tools and data practices, and would prohibit AI replacing teachers in core instruction or grading and bar automated high-stakes decisions without human oversight. Restricts student profiling, requires data minimisation and deletion, prohibits commercial use of student data, and grants parents enforcement rights.",
+      "source_url": "https://legiscan.com/SC/bill/H5253/2025",
+      "topics": [
+        "Student Privacy",
+        "Data Governance",
+        "Equity & Access",
+        "Academic Integrity"
+      ]
+    },
+    {
+      "state": "WV",
+      "title": "HB 5205 - Model AI Policies for School Districts",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HB 5205",
+      "description": "Would require the State Board to develop model AI policies applying by July 2027.",
+      "summary_text": "Would require the State Board of Education to develop model AI policies that automatically apply to districts that have not adopted their own by July 2027, prohibit AI making high-stakes decisions independently, establish safeguards against harmful content, and tie compliance to funding.",
+      "source_url": "https://legiscan.com/WV/bill/HB5205/2026",
+      "topics": [
+        "Data Governance",
+        "Equity & Access",
+        "Task Forces"
+      ]
+    },
+    {
+      "state": "NY",
+      "title": "A 9190 - Limits on Classroom AI Below Ninth Grade",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "A 9190",
+      "description": "Would prohibit most classroom AI use below ninth grade.",
+      "summary_text": "Would prohibit most classroom use of artificial intelligence below ninth grade, with limited exceptions.",
+      "source_url": "https://legiscan.com/NY/bill/A09190/2025",
+      "topics": [
+        "Student Privacy",
+        "Curriculum"
+      ]
+    },
+    {
+      "state": "IL",
+      "title": "HB 4411 - Computer Science and AI Graduation Requirement",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HB 4411",
+      "description": "Would require a full year of computer science and AI from 2028-29.",
+      "summary_text": "Would require a full year of computer science and artificial intelligence for students entering ninth grade in 2028-29.",
+      "source_url": "https://legiscan.com/IL/bill/HB4411/2026",
+      "topics": [
+        "AI Literacy",
+        "Curriculum"
+      ]
+    },
+    {
+      "state": "AZ",
+      "title": "HB 4005 - Ethical AI Instruction",
+      "policy_type": "bill",
+      "level": "state",
+      "status": "introduced",
+      "date_introduced": null,
+      "date_enacted": null,
+      "bill_number": "HB 4005",
+      "description": "Would require instruction on ethical and educational uses of AI.",
+      "summary_text": "Would require instruction on the ethical, moral and educational uses of artificial intelligence, delivered either as a standalone course or embedded in existing coursework, covering foundational concepts, prompt development and responsible use.",
+      "source_url": "https://legiscan.com/AZ/bill/HB4005/2026",
+      "topics": [
+        "AI Literacy",
+        "Academic Integrity",
+        "Curriculum"
+      ]
     }
   ]
 }
