@@ -1,4 +1,3 @@
-import StatStrip from './StatStrip'
 import StateSearch from '../Map/StateSearch'
 
 const VIEWS = [
@@ -46,7 +45,6 @@ function Header({ view, onViewChange, chatOpen, onToggleChat, snapshot, onSelect
         ))}
       </nav>
 
-      <StatStrip snapshot={snapshot} />
 
       <div className="header-actions">
         <StateSearch states={snapshot.states} onSelectState={onSelectState} />

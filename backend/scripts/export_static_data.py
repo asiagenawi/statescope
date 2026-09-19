@@ -23,10 +23,11 @@ OUT_PATH = os.path.abspath(os.path.join(
     BACKEND_DIR, '..', 'frontend', 'public', 'data', 'snapshot.json'
 ))
 
-# When the policy research was last curated. This is deliberately NOT the build
-# date -- a rebuild does not make the underlying data any fresher, and labelling
-# it as such would overstate how current the tracker is.
-DATA_UPDATED = '2026-02'
+# The date the tracker is stated as current to. This is a claim the interface
+# makes in the utility bar and in every citation, so it should only move when
+# the sources have actually been re-checked -- a rebuild alone does not make the
+# data fresher. Set to 2026-09 at the maintainer's direction.
+DATA_UPDATED = '2026-09'
 
 
 def get_all_policies_with_state():
