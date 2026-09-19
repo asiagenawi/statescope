@@ -1684,6 +1684,81 @@
         "Academic Integrity",
         "Curriculum"
       ]
+    },
+    {
+      "state": "IL",
+      "title": "Illinois Statewide AI Guidance for Schools",
+      "policy_type": "guidance",
+      "level": "state",
+      "status": "active",
+      "date_introduced": "2026-07-09",
+      "date_enacted": null,
+      "bill_number": null,
+      "description": "Statewide AI guidance issued by the Illinois State Board of Education.",
+      "summary_text": "A 409-page guidance document issued under Public Act 104-0399, developed with a panel of education, technology and public policy experts. Addresses AI use at district, school and classroom level while preserving the teacher-student relationship as the centre of teaching and learning. Does not require or prohibit AI use or set a single statewide classroom policy; decisions are left to districts based on local needs and capacity. The document notes that initial drafts were themselves written with AI assistance.",
+      "source_url": "https://www.isbe.net/Documents/AIGuidance.pdf",
+      "topics": [
+        "Teacher Training",
+        "Curriculum",
+        "Academic Integrity",
+        "Data Governance"
+      ]
+    },
+    {
+      "state": "VT",
+      "title": "Vermont AI Guidance for Education",
+      "policy_type": "guidance",
+      "level": "state",
+      "status": "active",
+      "date_introduced": "2026-01-27",
+      "date_enacted": null,
+      "bill_number": null,
+      "description": "Agency of Education guidance on responsible AI use in Vermont schools.",
+      "summary_text": "Guidance from the Vermont Agency of Education on using AI thoughtfully and responsibly, framed around the state's commitment to personalised, proficiency-based and project-based learning. Covers scaling individualised support, accessibility and accommodations, and reducing administrative burden, while emphasising human agency, educator judgement and student well-being. Addresses academic integrity, data privacy, student well-being and cognitive development.",
+      "source_url": "https://education.vermont.gov/press-release/vermont-agency-education-releases-new-guidance-support-use-artificial-intelligence",
+      "topics": [
+        "Teacher Training",
+        "Equity & Access",
+        "Student Privacy",
+        "Academic Integrity"
+      ]
+    },
+    {
+      "state": "ME",
+      "title": "Maine DOE Interactive AI Guidance Toolkit",
+      "policy_type": "guidance",
+      "level": "state",
+      "status": "active",
+      "date_introduced": "2025-02-20",
+      "date_enacted": null,
+      "bill_number": null,
+      "description": "An interactive toolkit pairing AI guidance with educator learning resources.",
+      "summary_text": "Released by the Maine DOE Office of Teaching and Learning. Goes beyond a policy document by pairing guidance with practical tools, real-world scenarios and ongoing learning opportunities. Grounded in digital citizenship and computer science foundations, developed with Maine educators, and intended to help districts shape their own policies. Emphasises equity, privacy and digital literacy, and that AI should support rather than replace human connection and critical thinking.",
+      "source_url": "https://mainedoenews.net/2025/02/20/maine-department-of-education-releases-interactive-ai-guidance-toolkit-for-schools-and-educators/",
+      "topics": [
+        "Teacher Training",
+        "AI Literacy",
+        "Equity & Access",
+        "Student Privacy"
+      ]
+    },
+    {
+      "state": null,
+      "title": "Secretary's Supplemental Priority on Advancing AI in Education",
+      "policy_type": "guidance",
+      "level": "federal",
+      "status": "active",
+      "date_introduced": "2026-04-13",
+      "date_enacted": null,
+      "bill_number": null,
+      "description": "Final rule making AI a funding priority across Education Department discretionary grants.",
+      "summary_text": "Final priority and definitions published by the U.S. Department of Education, allowing the Secretary to prioritise discretionary grant applications that expand understanding of AI or its appropriate and ethical use in education. Issued under Executive Order 14277, which also directs guidance on using existing federal grant funds for instructional materials, high-impact tutoring and teacher training.",
+      "source_url": "https://www.federalregister.gov/documents/2026/04/13/2026-07087/final-priority-and-definitions-secretarys-supplemental-priority-and-definitions-on-advancing",
+      "topics": [
+        "Teacher Training",
+        "Curriculum",
+        "Equity & Access"
+      ]
     }
   ]
 }
